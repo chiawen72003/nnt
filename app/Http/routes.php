@@ -15,5 +15,10 @@ Blade::setRawTags('[!', '!]');	// for raw data
 */
 
 //會員管理
-Route::get('/Member/LoginPG', ['as' => 'member.loginpg', 'uses' => 'MemberController@LoginPage']);
+Route::get('/Mem/LoginPG', ['middleware' => 'IsLoginCheck','as' => 'mem.loginpg', 'uses' => 'MemberController@LoginPage']);
+Route::get('/Mem/LogOut', ['as' => 'mem.logout', 'uses' => 'MemberController@LogOut']);
+Route::post('/Mem/LoginChk', ['middleware' => 'LoginDataCheck','as' => 'mem.loginchk', 'uses' => 'MemberController@LoginChk']);
+
+//前端測驗
+Route::get('/Mem/Exam', ['middleware' => 'MemSessionCheck','as' => 'mem.exam', 'uses' => 'ExamController@index']);
 
