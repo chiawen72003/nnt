@@ -26,7 +26,11 @@ class MemberClass
 					'user_name' => $v['uname'],
 					'user_email' => $v['email'],
 					'school_grade' => $v['grade'],
-					'school_class' => $v['class'],
+                    'school_class' => $v['class'],
+                    'organization_id' => $v['organization_id'],
+                    'grade' => $v['grade'],
+                    'class' => $v['class'],
+
 				);
 				$user_data['level'] = self::get_Access_Level($v['user_id']);
 			}
