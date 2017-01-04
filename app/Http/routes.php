@@ -21,4 +21,5 @@ Route::post('/Mem/LoginChk', ['middleware' => 'LoginDataCheck','as' => 'mem.logi
 
 //前端測驗
 Route::get('/Mem/Exam', ['middleware' => 'MemSessionCheck','as' => 'mem.exam', 'uses' => 'ExamController@index']);
+Route::post('/Mem/Exam/TestPG', ['middleware' => 'MemSessionCheck','as' => 'mem.exam.testpg', 'uses' => 'ExamController@testPage']);
 
