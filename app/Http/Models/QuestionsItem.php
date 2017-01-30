@@ -148,4 +148,68 @@ class QuestionsItem extends BaseModel {
 
         return $msg;
     }
+
+    /**
+    * 刪除一個試題資料
+    *
+    */
+    public static function delete_data($msg)
+    {
+        $get_data = false;
+        $get_index = 0;
+        $item_obj = QuestionsItem::where('exam_paper_id',self::$item_data['exam_paper_id'])
+            ->orderBy('id','DESC');
+        $item_obj =  $item_obj->get();
+        if(count($item_obj) > 0){
+            foreach($item_obj as $key => $temp_obj)
+            {
+                if( $temp_obj['id'] ==  self::$item_data['id'])
+                {
+                    $msg['type'] = 'success';
+                    $get_index = $key;
+                }
+            }
+            $temp_index = $get_index + 1;
+            if(isset($item_obj[$temp_index]))
+            {
+                $msg['has_back'] = true;
+            }
+            $temp_index = $get_index - 1;
+            if(isset($item_obj[$temp_index]))
+            {
+                $msg['has_next'] = true;
+            }
+
+            //刪除實際資料
+            $item = QuestionsItem::find(self::$item_data['id']);
+            $item->delete();
+        }
+
+        return $msg;
+    }
+
+    /**
+     * 取得試卷內試題的數量
+     *
+     */
+    public static function get_paper_item_num($paper_id)
+    {
+        $return_data = array();
+
+        $item_obj = QuestionsItem::select('exam_paper_id')
+            ->whereIn('exam_paper_id',$paper_id)
+            ->orderBy('id','ASC')
+            ->get();
+        if($item_obj)
+        {
+            foreach ($item_obj as $value){
+                if(!isset($return_data[$value['exam_paper_id']])){
+                    $return_data[$value['exam_paper_id']] = 0;
+                }
+                $return_data[$value['exam_paper_id']]++;
+            }
+        }
+
+        return $return_data;
+    }
 }
