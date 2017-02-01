@@ -38,7 +38,7 @@
 				@if(isset($list_data) and count($list_data) > 0)
 					@foreach($list_data as $value)
 						<div class="select-unit-box">
-							<img src="[! ($value['img'] != '')?url('/upfire/image/'.$value['img']):'' !]" width="130" height="130" onclick='send("[!$value['pid']!]","[! $value['sid'] !]","[! $value['vid']!]","[! $value['uid']!]","[! $value['paper_vol']!]")'>
+							<img src="[! ($value['img'] != '')?url('/upfire/image/'.$value['img']):'' !]" width="130" height="130" onclick='send("[!$value['id']!]")'>
 							<p>[! $value['title'] !]</p>
 						</div>
 					@endforeach
