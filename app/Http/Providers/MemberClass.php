@@ -2,60 +2,97 @@
 
 namespace App\Http\Providers;
 
-use App\Http\Models\UserInfo;
-use App\Http\Models\UserStatus;
+use App\Http\Models\MemberAdmin;
+use App\Http\Models\MemberStudent;
+use \Input;
 
 class MemberClass
 {
-	//檢查使用者登入的資料
-	public static function chk_login_data($inputData){
-		$return_data = array(
-			'check_result' => false,
-			'user_data' => array(),
-		);
-		$user_id = $inputData['username'];
-		$pass = md5($inputData['password']);
-		$tempObj = UserInfo::where('user_id',$user_id)
-			->where('pass',$pass)
-			->get();
-		if(count($tempObj) == 1){
-			$user_data = array();
-			foreach($tempObj as $v){
-				$user_data = array(
-					'user_id' => $v['user_id'],
-					'user_name' => $v['uname'],
-					'user_email' => $v['email'],
-					'school_grade' => $v['grade'],
-                    'school_class' => $v['class'],
-                    'organization_id' => $v['organization_id'],
-                    'grade' => $v['grade'],
-                    'class' => $v['class'],
+    public static $input_data = array();
 
-				);
-				$user_data['level'] = self::get_Access_Level($v['user_id']);
-			}
-			$return_data['check_result'] = true;
-			$return_data['user_data'] = $user_data;
-		}
-		
+    public static function _init(){
+        $fp = Input::all();
+        foreach ($fp as $key => $value){
+            self::$input_data[$key] = $value;
+        }
+    }
+
+    /**
+     *  檢查學生登入的資料
+     *
+     *  @return array
+     */
+	public static function chk_login_data(){
+        $return_data = array(
+            'check_result' => false,
+            'user_data' => array(),
+        );
+        if(isset(self::$input_data['username']) AND isset(self::$input_data['password']))
+        {
+            $user_id = self::$input_data['username'];
+            $pass = md5(self::$input_data['password']);
+            $tempObj = MemberStudent::where('login_name',$user_id)
+                ->where('login_pw',$pass)
+                ->get();
+            if(count($tempObj) == 1){
+                $user_data = array();
+                foreach($tempObj as $v){
+                    $user_data = array(
+                        'user_id' => $v['user_id'],
+                        'user_name' => $v['uname'],
+                        'user_email' => $v['email'],
+                        'school_grade' => $v['grade'],
+                        'school_class' => $v['class'],
+                        'organization_id' => $v['organization_id'],
+                        'grade' => $v['grade'],
+                        'class' => $v['class'],
+
+                    );
+                }
+                $return_data['check_result'] = true;
+                $return_data['user_data'] = $user_data;
+            }
+        }
+
 		return $return_data;
 	}	
-	
-	//檢查使用者登入的資料
-	public static function get_Access_Level($user_id){
-		$level = 0;
-		$tempObj = UserStatus::where('user_id',$user_id)
-			->get();
-		if(count($tempObj) == 1){
-			foreach($tempObj as $v){
-				$level = $v['access_level'];
-			}
-		}
-		
-		return $level;
-	}	
-	
-	//取得 測驗系統的資料 每頁 15 筆
+
+    /**
+     * 檢查是否為管理員登入
+     *
+     *  @return array
+     */
+    public static function chk_ad_login_data()
+    {
+        $return_data = array(
+            'check_result' => false,
+            'user_data' => array(),
+        );
+        if(isset(self::$input_data['username']) AND isset(self::$input_data['password']))
+        {
+            $user_id = self::$input_data['username'];
+            $pass = base64_encode(self::$input_data['password']);
+            $tempObj = MemberAdmin::where('login_name',$user_id)
+                ->where('login_pw',$pass)
+                ->get();
+            if(count($tempObj) == 1){
+                $user_data = array();
+                foreach($tempObj as $v){
+                    $user_data = array(
+                        'login_name' => $v['login_name'],
+                        'name' => $v['name']
+                    );
+                }
+                $return_data['check_result'] = true;
+                $return_data['user_data'] = $user_data;
+            }
+        }
+
+		return $return_data;
+    }
+
+
+    //取得 測驗系統的資料 每頁 15 筆
 	public static function getListData_teacher($request,$groupArray=array()){
 		$tempObj = ExamList::whereIn('exam_type',array('quizzes','duankao'));
 		if(count($groupArray) > 0){
