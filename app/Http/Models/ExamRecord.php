@@ -3,8 +3,7 @@
 namespace App\Http\Models;
 
 class ExamRecord extends BaseModel {
-	//protected $connection = 'mysql_2';
 	protected $table = 'exam_record';
-	protected $primaryKey = 'exam_sn';
+	protected $primaryKey = 'id';
 	public $timestamps = false;
 }
