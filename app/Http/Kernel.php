@@ -51,6 +51,8 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'LoginDataCheck' => \App\Http\Middleware\LoginDataCheck::class,
         'MemSessionCheck' => \App\Http\Middleware\MemSessionCheck::class,
+        'AdSessionCheck' => \App\Http\Middleware\AdSessionCheck::class,
         'IsLoginCheck' => \App\Http\Middleware\IsLoginCheck::class,
+        'IsAdLoginCheck' => \App\Http\Middleware\IsAdLoginCheck::class,
     ];
 }
