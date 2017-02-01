@@ -5,12 +5,14 @@ namespace App\Http\Providers;
 use App\Http\Models\ExamPaperAccess;
 use App\Http\Models\ExamPaper;
 use App\Http\Models\ExamRecord;
-use App\Http\Models\ConceptInfo;
+use App\Http\Models\QuestionsItem;
+use App\Http\Models\UnitList;
 use App\Http\Models\ConceptItem;
 use App\Http\Models\ConceptOptionRule;
 use App\Http\Models\MadItem;
 use App\Http\Models\MadRule;
 use App\Http\Models\Subject;
+use App\Http\Models\ConceptInfo;
 
 class ExamClass
 {
@@ -41,12 +43,12 @@ class ExamClass
     public static function get_exam_list($mem_data)
     {
         $list_data = array();
-        $has_test_data[] = "000000000";//已經受測過得單元
+        $has_test_data = array();//已經受測過得單元
         $now_open_test = array();//目前開放的單元
-        $temp_obj = ExamRecord::where('user_id', $mem_data['user_id'])->get();
+        $temp_obj = ExamRecord::where('student_id', $mem_data['user_id'])->get();
         if ($temp_obj) {
             foreach ($temp_obj as $value) {
-                $has_test_data[] = $value['exam_title'] . sprintf("%02d", $value['type_id']);
+                $has_test_data[] = $value['unit_list_id'];
             }
         }
 
@@ -57,7 +59,7 @@ class ExamClass
             ->get();
         if ($temp_obj) {
             foreach ($temp_obj as $value) {
-                $now_open_test[] = $value['exam_paper_id'] . sprintf("%02d", $value['type_id']);
+                $now_open_test[] = $value['unit_list_id'];
             }
         } else {
 
@@ -67,62 +69,19 @@ class ExamClass
         sort($differ);   // $differ為目前已開放且尚未施測之試卷
         $whereIn = null;
         foreach ($differ as $v) {
-            $temp_data = array();
-            $cs_id = self::EPid2CSid($v);
-            $exam_paper_id = substr($v, 0, 11);
-            $exam_paper_info = self::explode_ep_id($exam_paper_id);
-            $temp_data['pid'] = intval($exam_paper_info[0]);
-            $temp_data['sid'] = intval($exam_paper_info[1]);
-            $temp_data['vid'] = intval($exam_paper_info[2]);
-            $temp_data['uid'] = intval($exam_paper_info[3]);
-            $temp_data['paper_vol'] = intval($exam_paper_info[4]);
-            $list_data[$cs_id] = $temp_data;
-            $whereIn[] = $cs_id;
+            $whereIn[] = $v;
         }
         if ($whereIn) {
             //取出示意圖
-            $temp_obj = ExamPaper::whereIn('cs_id', $whereIn)->get();
+            $temp_obj = UnitList::whereIn('id', $whereIn)->get();
             if ($temp_obj) {
                 foreach ($temp_obj as $value) {
-                    $list_data[$value['cs_id']]['img'] = $value['exam_year_img'];
-                }
-            }
-            //取出單元標題
-            $temp_obj = ConceptInfo::whereIn('cs_id', $whereIn)->get();
-            if ($temp_obj) {
-                foreach ($temp_obj as $value) {
-                    $list_data[$value['cs_id']]['title'] = $value['concept'];
+                    $list_data[] = $value;
                 }
             }
         }
 
         return $list_data;
-    }
-
-    /**
-     * 轉換出cs_id
-     *
-     * @param $ep_id
-     * @return string
-     */
-    public static function EPid2CSid($ep_id)
-    {
-        $data = substr($ep_id, 0, 9);   //前9碼為cs_id
-        return $data;
-    }
-
-    /**
-     * 轉換出版本、科目、冊、單元、卷別資料
-     *
-     */
-    public static function explode_ep_id($ep_id)
-    {
-        $data[0] = substr($ep_id, 0, 3);   //1,2,3碼為publisher_id(版本)
-        $data[1] = substr($ep_id, 3, 2);   //4,5碼為subject_id(科目)
-        $data[2] = substr($ep_id, 5, 2);   //6,7碼為vol(冊別)
-        $data[3] = substr($ep_id, 7, 2);   //8,9碼為unit(單元)
-        $data[4] = substr($ep_id, 9, 2);   //10,11碼為paper_vol(卷別)
-        return $data;
     }
 
     /**
@@ -495,16 +454,37 @@ class ExamClass
     public static function subject_list()
     {
         $subject_list = array();
-        $temp_obj = Subject::select('subject_id','name')->get();
+        $temp_obj = Subject::select('id','name')->get();
         if($temp_obj)
         {
             foreach ($temp_obj as $value){
-                $subject_list[$value['subject_id']] = $value['name'];
+                $subject_list[$value['id']] = $value['name'];
             }
         }
 
         return $subject_list;
     }
+
+    /**
+     * 取得指定試卷的試題數量
+     */
+    public static function get_questions_item_nums($paper_obj)
+    {
+        $subject_list = array();
+        $whereIn = array();
+        foreach($paper_obj as $temp_array){
+            foreach($temp_array as $value){
+                $whereIn[] = $value['id'];
+            }
+        }
+        if(count($whereIn) > 0){
+            $subject_list = QuestionsItem::get_paper_item_num($whereIn);
+        }
+
+        return $subject_list;
+    }
+
+
 
     /**
      * 單元列表
@@ -515,21 +495,21 @@ class ExamClass
         $subject_list = self::subject_list();
         $unit_list = array();
 
-        $temp_obj = ConceptInfo::select(
-            'cs_sn',
-            'cs_id',
-            'publisher_id',
-            'subject_id',
+        $temp_obj = UnitList::select(
+            'id',
+            'unit_key',
+            'module_type',
+            'subject',
             'vol',
+            'grade',
             'unit',
-            'concept'
+            'title'
             )
-            ->whereIn('publisher_id',array('19','20','21'))
             ->get();
         if($temp_obj)
         {
             foreach ($temp_obj as $value){
-                $value['subject_name'] = isset($subject_list[$value['subject_id']])?$subject_list[$value['subject_id']]:'';
+                $value['subject_name'] = isset($subject_list[$value['subject']])?$subject_list[$value['subject']]:'';
                 $unit_list[] = $value;
             }
         }
@@ -545,18 +525,18 @@ class ExamClass
     public static function get_unit($id)
     {
         $return_data = array();
-        $temp_obj = ConceptInfo::select(
-            'cs_sn',
-            'cs_id',
-            'publisher_id',
-            'subject_id',
+        $temp_obj = UnitList::select(
+            'id',
+            'unit_key',
+            'module_type',
+            'subject',
             'vol',
             'unit',
-            'concept',
+            'title',
             'grade',
             'indicator_nums'
         )
-            ->where('cs_sn',$id)
+            ->where('id',$id)
             ->get();
         if($temp_obj)
         {
@@ -575,11 +555,10 @@ class ExamClass
      */
     public static function unit_add($insert_data)
     {
-        $temp_obj = new ConceptInfo();
+        $temp_obj = new UnitList();
         foreach ($insert_data as $key => $value){
             $temp_obj->$key = $value;
         }
-        //$temp_obj->cs_id =
         $temp_obj->save();
 
         return ;
@@ -592,7 +571,7 @@ class ExamClass
      */
     public static function unit_update($id,$insert_data)
     {
-        $temp_obj = ConceptInfo::find($id);
+        $temp_obj = UnitList::find($id);
         if($temp_obj){
             foreach ($insert_data as $key => $value){
                 $temp_obj->$key = $value;
@@ -610,8 +589,99 @@ class ExamClass
      */
     public static function unit_delete($getID)
     {
-        ConceptInfo::destroy($getID);
+        UnitList::destroy($getID);
 
         return ;
     }
+
+    /**
+     * 取得單元列表內對應的試卷資料
+     *
+     *
+     */
+    public static function get_exam_paper_data($unit_data)
+    {
+        $exam_list = array();
+        if(is_array($unit_data)){
+            $where_in = array();
+            foreach ($unit_data as $value){
+                if(isset($value['id'])){
+                    if(!in_array($value['id'],$where_in)){
+                        $where_in[] = $value['id'];
+                    }
+                }
+            }
+            if(count($where_in) > 0){
+                $temp_obj = ExamPaper::whereIn('unit_list_id',$where_in)->get();
+                if($temp_obj){
+                    foreach ($temp_obj as $v){
+                        $exam_list[$v['unit_list_id']][] = $v;
+                    }
+                }
+            }
+        }
+
+        return $exam_list;
+    }
+
+    /**
+     * 取得一筆試卷資料
+     *
+     * @param array $return_data
+     */
+    public static function get_exam_paper($id)
+    {
+        $return_data = array();
+        $temp_obj = ExamPaper::select(
+            'id',
+            'unit_list_id',
+            'unit_key',
+            'paper_vol',
+            'item_num',
+            'title',
+            'paper_img'
+        )
+            ->where('id',$id)
+            ->get();
+        if($temp_obj)
+        {
+            foreach ($temp_obj as $unit_data){
+                $return_data = $unit_data->toArray();
+            }
+        }
+
+        return $return_data;
+    }
+
+    /**
+    * 新增一筆試卷資料
+    *
+    * @param array $insert_data 要新增的資料
+    */
+    public static function exampaper_add($insert_data)
+    {
+        $temp_obj = new ExamPaper();
+        foreach ($insert_data as $key => $value){
+            $temp_obj->$key = $value;
+        }
+        //$temp_obj->cs_id =
+        $temp_obj->save();
+
+        return ;
+    }
+
+    /**
+     * 移除一個試卷
+     *
+     * @param int/string $getID 要移除單元的id
+     */
+    public static function exampaper_delete($getID)
+    {
+        ExamPaper::destroy($getID);
+
+        return ;
+    }
+
+
+
 }
