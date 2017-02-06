@@ -12,7 +12,7 @@
     [! Html::script('admin/js/ckeditor/ckeditor.js') !]
     <script>
         $( document ).ready(function() {
-            @if($unit_data['module_type'] == 0)
+            @if($unit_data['module_type'] == 1)
             //單代理人頭像對話
             var temp_obj = $('#avatar_single_switch').clone().attr('id','single_switch').show();
             $('#tab_1').append(temp_obj);
@@ -263,7 +263,7 @@
 <div class="chat" id="avatar_single_switch" style="display: none">
     <span>代理人頭像設定</span><br>
     <span>教師：</span>
-    <select name="avatar_type">
+    <select name="avatar_type[]">
         <option value="0"></option>
         <option value="1">Anna</option>
         <option value="2">Susan</option>
