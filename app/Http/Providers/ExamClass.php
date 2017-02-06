@@ -639,7 +639,7 @@ class ExamClass
             'paper_vol',
             'item_num',
             'title',
-            'paper_img'
+            'img'
         )
             ->where('id',$id)
             ->get();
