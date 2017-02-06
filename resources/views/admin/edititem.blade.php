@@ -56,7 +56,7 @@
         <tr>
             <td class="question" width="30%">
                 <p>能力指標說明</p>
-                <textarea name="questions_dsc" id="questions_dsc"></textarea>
+                <textarea id="power_dsc"></textarea>
             </td>
             <!--右中讓使用者選擇模組的區域-->
             <td class="main" width="70%" rowspan="2">
@@ -87,22 +87,6 @@
                     </ul>
                     <div class="tab_container">
                         <div id="tab_1" class="tab_content" style="display: block">
-                            <div class="chat">
-                                <span>配分</span>
-                                <select id="score">
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="2.5">2.5</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                    <option value="6">6</option>
-                                    <option value="7">7</option>
-                                    <option value="8">8</option>
-                                    <option value="9">9</option>
-                                    <option value="10">10</option>
-                                </select>
-                            </div>
                             <div class="chat">
                                 <span>建構反應題型</span>
                                 <select id="model_item_id">
@@ -392,6 +376,7 @@
         temp_obj.push({'feedback_type':$('#feedback_type').val()});
         temp_obj.push({'feedback_dsc':$('#feedback_dsc').val()});
         temp_obj.push({'abbreviation':$('#abbreviation').val()});
+        temp_obj.push({'power_dsc':$('#power_dsc').val()});
         temp_obj.push({'id':item_id});
         //正確答案區
         var correct_obj = [];
@@ -602,6 +587,7 @@
         $('#feedback_type').val('0');
         $('#feedback_dsc').val('');
         $('#abbreviation').val('');
+        $('#power_dsc').val('');
         item_id = 0;
         //代理人頭像設定
         $('#tab_1 select[name="avatar_type[]"]').each(function(){
@@ -663,6 +649,7 @@
         $('#feedback_type').val(item_data['feedback_type']);
         $('#feedback_dsc').val(item_data['feedback_dsc']);
         $('#abbreviation').val(item_data['abbreviation']);
+        $('#power_dsc').val(item_data['power_dsc']);
         item_id = item_data['id'];
         //代理人頭像設定
         var json_item = JSON.parse(item_data['avatar_type']);
