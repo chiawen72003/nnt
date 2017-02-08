@@ -40,6 +40,12 @@ Route::post('/Mem/Admin/Add', ['as' => 'mem.admin.add', 'uses' => 'MemberControl
 Route::post('/Mem/Admin/Update', ['as' => 'mem.admin.update', 'uses' => 'MemberController@adminUpdate']);
 Route::delete('/Mem/Admin/Delete', ['as' => 'mem.admin.delete', 'uses' => 'MemberController@adminDelete']);
 
+//管理員端 學校列表
+Route::get('/Ad/School/List', ['as' => 'ad.school.list', 'uses' => 'AdController@schoolList']);
+Route::post('/Ad/School/Add', ['as' => 'ad.school.add', 'uses' => 'AdController@schoolAdd']);
+Route::post('/Ad/School/Update', ['as' => 'ad.school.update', 'uses' => 'AdController@schoolUpdate']);
+Route::delete('/Ad/School/Delete', ['as' => 'ad.school.delete', 'uses' => 'AdController@schoolDelete']);
+
 //管理員端 單元列表
 Route::get('/Ad', ['middleware' => 'AdSessionCheck','as' => 'ad.index', 'uses' => 'AdController@index']);
 Route::get('/Ad/Subject/List', ['middleware' => 'AdSessionCheck','as' => 'ad.subject.list', 'uses' => 'AdController@subjectList']);
