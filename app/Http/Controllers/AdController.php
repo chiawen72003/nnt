@@ -11,6 +11,7 @@ use \DB;
 use \Response;
 use App\Http\Providers\ExamClass;
 use App\Http\Models\QuestionsItem;
+use App\Http\Models\Organization;
 
 class AdController extends Controller
 {
@@ -338,6 +339,67 @@ class AdController extends Controller
         $fp = Input::all();
         Subject::_init($fp);
         Subject::delete_data();
+
+        return ;
+    }
+
+    /**
+     * 學校列表
+     *
+     */
+    public function schoolList()
+    {
+        $data = array();
+        $data['user_data'] = app('request')->session()->get('user_data');
+        $organization = new Organization();
+        $data['list_data'] = $organization->get_list();
+
+        return view('admin.school_list', $data);
+    }
+
+    /**
+     * 新增一筆學校的資料
+     *
+     * 備註：先檢查id是否重複，沒有重複在新增
+     */
+    public function schoolAdd()
+    {
+        $fp = Input::all();
+        $organization = new Organization();
+        $organization->_init($fp);
+        $isAdd = $organization->add();
+        if($isAdd){
+
+            return 'success';
+        }
+
+        return 'error';
+    }
+
+    /**
+     * 更新一筆單元的資料
+     *
+     */
+    public function schoolUpdate()
+    {
+        $fp = Input::all();
+        $organization = new Organization();
+        $organization->_init($fp);
+        $organization->update_data();
+
+        return ;
+    }
+
+    /**
+     * 移除一個單元
+     *
+     */
+    public function schoolDelete()
+    {
+        $fp = Input::all();
+        $organization = new Organization();
+        $organization->_init($fp);
+        $organization->delete_data();
 
         return ;
     }
