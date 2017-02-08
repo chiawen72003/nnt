@@ -25,6 +25,7 @@
         <li><a href="[! route('ad.index') !]" title="單元列表"><img src="[! url('images/icon_add.png')  !]"/>單元列表</a></li>
         <li><a href="[! route('ad.subject.list') !]" title="科目列表"><img src="[! url('images/icon_add.png')  !]"/>科目列表</a></li>
         <li><a href="[! route('mem.admin.list') !]" title="管理員列表"><img src="[! url('images/icon_add.png')  !]"/>管理員列表</a></li>
+        <li><a href="[! route('ad.school.list') !]" title="學校列表"><img src="[! url('images/icon_add.png')  !]"/>學校列表</a></li>
         <li><a href="[! route('ad.logout') !]" title="登出系統"><img src="[! url('images/icon_logout.png')  !]"/>登出系統</a></li>
     </ul>
 </aside>
