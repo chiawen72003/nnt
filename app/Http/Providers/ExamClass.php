@@ -19,6 +19,7 @@ class ExamClass
     const _SPLIT_SYMBOL = '@XX@';
 
     public static $url_path = 'http://210.240.188.161/chineseautotutor/Multi_Agent_test_show.php?a=b';
+    public static $paper_id = null;
     public static $cs_id = null;
     public static $paper_vol = null;
     public static $item_num = null;
@@ -231,7 +232,7 @@ class ExamClass
     }
 
     /**
-     * 回傳item_num使用的filename
+     * 回傳模組item_num使用的filename
      *
      */
     public static function get_item_filename()
@@ -683,5 +684,39 @@ class ExamClass
     }
 
 
+    /**
+     * 取得 受測學生 觀看紀錄
+     *
+     * @param Array $mem_data 學生個人資料
+     *
+     * @return Array $list_data 可測驗的單元資料
+     */
+    public static function get_review_data($mem_data)
+    {
+        $temp_obj = new ExamRecord();
 
+        return $temp_obj->get_review_data($mem_data['user_id']);
+    }
+
+    /**
+     * 取得 受測學生 觀看紀錄
+     *
+     * @param Array $mem_data 學生個人資料
+     *
+     * @return Array $list_data 可測驗的單元資料
+     */
+    public static function set_exam_record($mem_id, $exam_paper_id)
+    {
+        $t_array = array(
+            'student_id' => $mem_id,
+            'exam_paper_id' => $exam_paper_id,
+
+        );
+
+        $temp_obj = new ExamRecord();
+        $temp_obj->_init($t_array);
+        $temp_obj->set_record();
+
+        return '';
+    }
 }
