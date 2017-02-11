@@ -18,7 +18,7 @@ class ExamController extends Controller
     }
 
     /**
-     * 測驗單元列表
+     * 首頁
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
@@ -28,24 +28,41 @@ class ExamController extends Controller
         $data['user_data'] = app('request')->session()->get('user_data');
         $data['list_data'] = ExamClass::get_exam_list($data['user_data']);
 
+        return view('student.exam.index', $data);
+    }
+
+    /**
+     * 測驗單元列表
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function examList()
+    {
+        $data = array();
+        $data['user_data'] = app('request')->session()->get('user_data');
+        $data['list_data'] = ExamClass::get_exam_list($data['user_data']);
+        $data['subject_list'] = ExamClass::subject_list();
+        $data['exam_review_data'] = ExamClass::get_review_data($data['user_data']);
+
         return view('student.exam.list', $data);
     }
 
     /**
      * 受測頁面的外框部份
      *
+     * 備註：暫時取消實做，先在record插入假資料即可
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function testPage()
     {
-        $cs_id = str_pad(app('request')->get('ep_item_0'), 3, '0', STR_PAD_LEFT);
-        $cs_id .= str_pad(app('request')->get('ep_item_1'), 2, '0', STR_PAD_LEFT);
-        $cs_id .= str_pad(app('request')->get('ep_item_2'), 2, '0', STR_PAD_LEFT);
-        $cs_id .= str_pad(app('request')->get('ep_item_3'), 2, '0', STR_PAD_LEFT);
-        $paper_vol = str_pad(app('request')->get('ep_item_4'), 2, '0', STR_PAD_LEFT);
+        $paper_id = app('request')->get('paper_id');
+        $user_data = app('request')->session()->get('user_data');
+        ExamClass::set_exam_record($user_data['user_id'], $paper_id);
+/*
         ExamClass::init(
             array(
-                'cs_id' => $cs_id,
+                'cs_id' => $paper_id,
                 'paper_vol' => $paper_vol,
                 'item_num' => '1',
             )
@@ -59,6 +76,8 @@ class ExamController extends Controller
         $data['item_num_filename'] = ExamClass::get_item_filename();
 
         return view('student.exam.test_page', $data);
+*/
+        return redirect()->route('mem.exam');
     }
 
     /**
