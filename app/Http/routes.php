@@ -22,7 +22,8 @@ Route::get('/Mem/LogOut', ['as' => 'mem.logout', 'uses' => 'MemberController@Log
 Route::post('/Mem/LoginChk', ['middleware' => 'LoginDataCheck','as' => 'mem.loginchk', 'uses' => 'MemberController@LoginChk']);
 
 //學生端 測驗
-Route::get('/Mem/Exam', ['middleware' => 'MemSessionCheck','as' => 'mem.exam', 'uses' => 'ExamController@index']);
+Route::get('/Mem', ['middleware' => 'MemSessionCheck','as' => 'mem.index', 'uses' => 'ExamController@index']);
+Route::get('/Mem/Exam', ['middleware' => 'MemSessionCheck','as' => 'mem.exam', 'uses' => 'ExamController@examList']);
 Route::post('/Mem/Exam/TestPG', ['middleware' => 'MemSessionCheck','as' => 'mem.exam.testpg', 'uses' => 'ExamController@testPage']);
 Route::post('/Mem/Exam/ansAnaly', ['middleware' => 'MemSessionCheck','as' => 'mem.exam.ansanaly', 'uses' => 'ExamController@ansAnaly']);
 Route::post('/Mem/Exam/GetModelPage', ['middleware' => 'MemSessionCheck','as' => 'mem.exam.getmodelpage', 'uses' => 'ExamController@GetModelPage']);
