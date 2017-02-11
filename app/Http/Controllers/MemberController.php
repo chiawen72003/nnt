@@ -32,7 +32,7 @@ class MemberController extends Controller
             $user_data = $check_data['user_data'];
             session(['user_data' => $user_data]);
 
-            return redirect()->route('mem.exam');
+            return redirect()->route('mem.index');
 		}
 		
 		return redirect()->back()->with('error', ['your message,here']); 
