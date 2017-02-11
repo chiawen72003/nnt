@@ -38,7 +38,7 @@ class MemberClass
                 $user_data = array();
                 foreach($tempObj as $v){
                     $user_data = array(
-                        'user_id' => $v['user_id'],
+                        'user_id' => $v['id'],
                         'user_name' => $v['uname'],
                         'user_email' => $v['email'],
                         'school_grade' => $v['grade'],
