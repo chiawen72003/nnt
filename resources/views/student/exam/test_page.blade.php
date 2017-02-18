@@ -21,18 +21,22 @@
         <div id="header-logo"></div>
     </div>
     <div id="boad-wrap" class="boad-wrap">
+        <div id="boad-nav">
+            <a href="#">系統公告</a>
+            <a href="[! route('mem.exam') !]">學習</a>
+            <a href="#">成果查詢</a>
+            <a href="[! route('mem.logout') !]">登出</a>
+        </div>
         <div class="boad-detail-wrap">
             <p>台中市臺中教育大學[! $user_data['school_grade'] !]年[! $user_data['school_class'] !]班<span class="txt-yellow">[! $user_data['user_name'] !]</span>
             </p>
-            <div class="button-wrap">
-                <input class="btn btn-yellow" type="button" value="學習">
-                <input class="btn btn-green" type="button" value="登出">
-            </div>
         </div>
         <div class="img-chalk"></div>
     </div>
 </div>
 <div id="page-container">
+    <input type="button" onclick="go_next()" value="下一題">
+
     <div id="page-body">
         <!-- 測驗資料會透過ajax塞到此處 -->
     </div>
@@ -40,76 +44,85 @@
 [! Html::script('js/jquery-1.11.3.js') !]
 <script>
     var token = "[! csrf_token() !]";
-    var analy_correct = {};//分析正確時，拿下一個item_num
-    var analy_error = {};//分析錯誤時，拿下一個item_num
-    var item_filename = {};//item_num 對應的 模組名稱
-    var model_obj = {};//模組資料
-    var now_sw_item_num = 1;//現在的item_num
-@foreach($exam_option_rule as $key => $value)
-    analy_correct[ '[! $key !]' ] = "[! $value['correct'] !]";
-    analy_error[ '[! $key !]' ] = "[! $value['error'] !]";
-@endforeach
-@foreach($item_num_filename as $key => $value)
-    item_filename[ '[! $key !]' ] = "[! $value !]";
-@endforeach
+    var model_obj = [];//模組資料
+    var now_item_index = 0;//現在試題的index
+    var now_paper_index = 0;//現在試卷的index
+    var paper_data = [];//試卷資料
+    var item_data = [];//試題資料
+    var item_id = 0;
 
-    //分析結果
-    function ans_analy() {
-        $.ajax({
-            url: "[! route('mem.exam.ansanaly') !]",
-            type: 'POST',
-            data: {
-                _token: token,
-                csID: "[! $cs_id !]",
-                paperVol: "[! $paper_vol !]",
-                itemNum: now_sw_item_num
-            },
-            success: function (data) {
-                get_next_item(data);
-            }
-        });
-    }
-    
-    //根據分析結果，載入新的模組頁面
-    function get_next_item(analy_result) {
-        if(analy_result == 'correct'){
-            if (now_sw_item_num in analy_correct) {
-                now_sw_item_num = analy_correct[now_sw_item_num];
-                load_module_page(now_sw_item_num);
+    @foreach($paper_data as $key => $value)
+        paper_data.push("[! $value !]");
+    @endforeach
+    @foreach($questions_item_data as $id => $v)
+        @foreach($v as $key => $value)
+        item_data.push(
+        {
+            'paper_id': '[! $id !]',
+            'item_index': '[! $key !]',
+            'item_id': '[! $value["id"] !]',
+        }
+    );
+    @endforeach
+    @endforeach
+
+    /** todo 系統可以循環到結束，接下來測試試題正確與錯誤時，index不規則變動的狀況。 **/
+
+    function go_next() {
+        var has_item = false;
+        for (var x = 0; x < item_data.length; x++) {
+            if (item_data[x].paper_id == paper_data[now_paper_index] && item_data[x].item_index == now_item_index) {
+                item_id = item_data[x].item_id;
+                has_item = true;
             }
         }
-        if(analy_result == 'error'){
-            if (now_sw_item_num in analy_error) {
-                now_sw_item_num = analy_error[now_sw_item_num];
-                load_module_page(now_sw_item_num);
+        if (has_item) {
+            now_item_index++;//設計完就可以移除了
+            load_module_page(item_id);
+        } else {
+            //設計完以後，這邊修改成為測驗結束，回到單元list
+            now_paper_index++;
+            now_item_index = 0;
+            if (paper_data[now_paper_index] == undefined) {
+                now_paper_index = 0;
+                alert('沒有試卷了，重新循環一次');
             }
+            go_next();
         }
+
     }
 
     //載入模組頁面
-    function load_module_page(item_num) {
-        if (item_num in model_obj) {
-            $('#page-body').html('').append(model_obj[ now_sw_item_num ]);
-        }else{
+    function load_module_page(id) {
+        var has_model = false;
+        for(var x=0;x<model_obj.length;x++){
+            if(model_obj[x].id == item_id ){
+                $('#page-body').html('').append(model_obj[x].model_data);
+                has_model = true;
+            }
+        }
+        if(!has_model){
             $.ajax({
                 url: "[! route('mem.exam.getmodelpage') !]",
                 type: 'POST',
                 data: {
                     _token: token,
-                    csID: "[! $cs_id !]",
-                    paperVol: "[! $paper_vol !]",
-                    itemNum: item_num
+                    item_id: id
                 },
                 success: function (data) {
-                    model_obj[ now_sw_item_num ] = data;//註冊載入的模組資料
+                    model_obj.push({
+                        'id':item_id,
+                        'model_data':data
+                    });
+                    console.log('網路取檔:'+item_id);
                     $('#page-body').html('').append(data);
                 }
             });
         }
     }
-    
-    $( document ).ready(function() {
-        load_module_page(now_sw_item_num);
+
+    $(document).ready(function () {
+        go_next();
     });
 </script>
 </body>
