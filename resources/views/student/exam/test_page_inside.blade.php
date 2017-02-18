@@ -6,12 +6,8 @@
         </div>
     </div>
     <div id="question-right">
-        <p align="center">
-            <iframe width=800 height=125 frameborder=0 scrolling=no
-                    src="[! $exam_data['iframe_path'] !]"></iframe>
-        </p>
+        <iframe width=800 height=125 frameborder=0 scrolling=no
+            src="[! $exam_data['iframe_path'] !]"></iframe>
     </div>
 </div>
-<div class="title-answer-wrap" id="item_area">
-    [! $exam_item !]
-</div>
+[! $exam_item !]
