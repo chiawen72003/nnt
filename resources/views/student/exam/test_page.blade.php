@@ -161,18 +161,20 @@
      *
      */
     function update_record() {
-        $.ajax({
-            url: "[! route('mem.exam.updateRecord') !]",
-            type: 'POST',
-            data: {
-                _token: token,
-                unit_id: '[! $unit_id !]',
-                record:operating_array
-            },
-            success: function (data) {
+        @if(!$is_view_record)
+            $.ajax({
+                url: "[! route('mem.exam.updateRecord') !]",
+                type: 'POST',
+                data: {
+                    _token: token,
+                    unit_id: '[! $unit_id !]',
+                    record:operating_array
+                },
+                success: function (data) {
 
-            }
-        });
+                }
+            });
+        @endif
     }
 
     $(document).ready(function () {
