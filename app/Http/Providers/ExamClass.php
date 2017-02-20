@@ -26,6 +26,9 @@ class ExamClass
     public static $InputCode = null;//學生輸入的答案
     public static $at_error = null;//試題錯誤答案的集合
     public static $at_answer = null;//試題正確答案的集合
+    public static $unit_id = null;//單元id
+    public static $item_id = null;//試題id
+
 
     public static function init($use_data)
     {
@@ -45,40 +48,22 @@ class ExamClass
     {
         $list_data = array();
         $has_test_data = array();//已經受測過得單元
-        $now_open_test = array();//目前開放的單元
         $temp_obj = ExamRecord::where('student_id', $mem_data['user_id'])->get();
         if ($temp_obj) {
             foreach ($temp_obj as $value) {
-                $has_test_data[] = $value['unit_list_id'];
+                $has_test_data[] = $value['unit_id'];
             }
         }
 
-        //指定學校、班級可以受測的單元
-        $temp_obj = ExamPaperAccess::where('school_id', $mem_data['organization_id'])
-            ->where('grade', $mem_data['grade'])
-            ->where('class', $mem_data['class'])
-            ->get();
+        $temp_obj = UnitList::get();
         if ($temp_obj) {
             foreach ($temp_obj as $value) {
-                $now_open_test[] = $value['unit_list_id'];
-            }
-        } else {
-
-            return $list_data;
-        }
-        $differ = array_diff($now_open_test, $has_test_data);   //元素少者在前，找兩陣列相異之值
-        sort($differ);   // $differ為目前已開放且尚未施測之試卷
-        $whereIn = null;
-        foreach ($differ as $v) {
-            $whereIn[] = $v;
-        }
-        if ($whereIn) {
-            //取出示意圖
-            $temp_obj = UnitList::whereIn('id', $whereIn)->get();
-            if ($temp_obj) {
-                foreach ($temp_obj as $value) {
-                    $list_data[] = $value;
+                if(!in_array($value['id'], $has_test_data)){
+                    $value['has_exam_record'] = true;
+                }else{
+                    $value['has_exam_record'] = false;
                 }
+                $list_data[] = $value;
             }
         }
 
@@ -94,41 +79,26 @@ class ExamClass
         $item_sn = null;
         $publisher_id = null;
         $return_data = array(
-            'cs_id' => self::$cs_id,
+            'id' => self::$item_id,
             'title' => null,
+            'correct_answer' => null,
+            'error_answer' => null,
             'load_module' => null,
             'iframe_path' => '',
         );
-        $temp_obj = ConceptInfo::where('cs_id', self::$cs_id)
-            ->get()
-            ->first();
-        if ($temp_obj) {
-            $publisher_id = $temp_obj['publisher_id'];
-        }
-        $temp_obj = ConceptItem::where('cs_id', self::$cs_id)
-            ->where('item_num', self::$item_num)
-            ->get()
-            ->first();
-        if ($temp_obj) {
-            $return_data['title'] = $temp_obj['test_title'];
-            $item_sn = $temp_obj['item_sn'];
-            $feedback_array = explode(ExamClass::_SPLIT_SYMBOL, $temp_obj['feedback']);
-            array_pop($feedback_array);
-            $feedback_order = json_decode($temp_obj['feedback_order']);
-            $computer_agent = json_decode($temp_obj['computer_agent']);
-            $return_data['iframe_path'] = self::get_iframe_path($publisher_id, $feedback_array, $feedback_order, $computer_agent);
-
-            $temp_obj = MadItem::where('item_sn', $item_sn)
-                ->get()
-                ->first();
-            if ($temp_obj) {
-                $mad_rule_obj = MadRule::where('mad_type_id', $temp_obj['mad_type_id'])
-                    ->orderBy('block_id', 'ASC')
-                    ->get()
-                    ->first();
-                if ($mad_rule_obj) {
-                    $return_data['load_module'] = substr($mad_rule_obj['filename'], 0, -4);
-                }
+        $t = QuestionsItem::where('id',self::$item_id)->get();
+        if($t){
+            foreach ($t as $v){
+                $return_data['title'] = $v['title'];
+                $correct_answer = json_decode($v['correct_answer'],true);
+                $return_data['correct_answer']['answer'] = $correct_answer[0]['answer'];
+                $return_data['correct_answer']['jump'] = $correct_answer[1]['jump'];
+                $return_data['correct_answer']['keyword'] = $correct_answer[2]['keyword'];
+                $error_answer = json_decode($v['error_answer'],true);
+                $return_data['error_answer']['answer'] = $error_answer[0]['answer'];
+                $return_data['error_answer']['jump'] = $error_answer[1]['jump'];
+                $return_data['error_answer']['number'] = $error_answer[2]['number'];
+                $return_data['error_answer']['keyword'] = $error_answer[3]['keyword'];
             }
         }
 
@@ -217,6 +187,7 @@ class ExamClass
     public static function get_option_rule()
     {
         $return_data = array();
+        /*
         $exam_paper_id = self::$cs_id . self::$paper_vol;
         $temp_obj = ConceptOptionRule::where('exam_paper_id', $exam_paper_id)
             ->get();
@@ -227,7 +198,7 @@ class ExamClass
                 $return_data[$item_num]['error'] = $value['error'];
             }
         }
-
+*/
         return $return_data;
     }
 
@@ -699,24 +670,69 @@ class ExamClass
     }
 
     /**
-     * 取得 受測學生 觀看紀錄
+     * 新增 操作紀錄
      *
      * @param Array $mem_data 學生個人資料
      *
      * @return Array $list_data 可測驗的單元資料
      */
-    public static function set_exam_record($mem_id, $exam_paper_id)
+    public static function set_exam_record($mem_id,$inputData)
     {
-        $t_array = array(
-            'student_id' => $mem_id,
-            'exam_paper_id' => $exam_paper_id,
-
-        );
-
+        $inputData['student_id'] = $mem_id;
         $temp_obj = new ExamRecord();
-        $temp_obj->_init($t_array);
+        $temp_obj->_init($inputData);
         $temp_obj->set_record();
 
         return '';
+    }
+
+    /**
+     * 取得指定單元下的所有試卷資料
+     */
+    public static function get_paper_by_unit_id($unit_id){
+        $return_data = array();
+        $temp_obj = ExamPaper::where('unit_list_id',$unit_id)
+                    ->select('id','title')
+                    ->orderBy('id')
+                    ->get();
+        foreach ($temp_obj as $t){
+            $return_data[] = $t['id'];
+        }
+
+        return $return_data;
+    }
+
+    /**
+     * 取得試卷下的試題資料
+     */
+    public static function get_questions_item_paper_id($paper_id_array){
+        $return_data = array();
+        $temp_obj = QuestionsItem::whereIn('exam_paper_id',$paper_id_array)
+            ->orderBy('id')
+            ->get();
+        foreach ($temp_obj as $t){
+            $return_data[$t['exam_paper_id']][] = $t;
+        }
+
+        return $return_data;
+    }
+
+    /**
+     *  取得單元操作紀錄
+     */
+    public static function get_exam_record($mem_id,$id)
+    {
+        $return_data = array();
+        $temp_obj = ExamRecord::where('student_id', $mem_id['user_id'])
+            ->where('unit_id',$id)
+            ->select('id', 'unit_id', 'record')
+            ->get();
+        foreach ($temp_obj as $t){
+            $return_data['id'] = $t['id'];
+            $return_data['unit_id'] = $t['unit_id'];
+            $return_data['record'] = json_decode($t['record'],true);
+        }
+
+        return $return_data;
     }
 }
