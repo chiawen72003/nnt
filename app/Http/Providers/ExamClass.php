@@ -86,7 +86,10 @@ class ExamClass
             'load_module' => null,
             'iframe_path' => '',
         );
-        $t = QuestionsItem::where('id',self::$item_id)->get();
+        $t = QuestionsItem::where('questions_item.id',self::$item_id)
+            ->leftJoin('model_item', 'model_item.id', '=', 'questions_item.model_item_id')
+            ->select('questions_item.title', 'questions_item.correct_answer', 'questions_item.error_answer', 'model_item.file_name')
+            ->get();
         if($t){
             foreach ($t as $v){
                 $return_data['title'] = $v['title'];
@@ -99,6 +102,7 @@ class ExamClass
                 $return_data['error_answer']['jump'] = $error_answer[1]['jump'];
                 $return_data['error_answer']['number'] = $error_answer[2]['number'];
                 $return_data['error_answer']['keyword'] = $error_answer[3]['keyword'];
+                $return_data['load_module'] = $v['file_name'];
             }
         }
 
