@@ -27,6 +27,8 @@ Route::get('/Mem/Exam', ['middleware' => 'MemSessionCheck','as' => 'mem.exam', '
 Route::post('/Mem/Exam/TestPG', ['middleware' => 'MemSessionCheck','as' => 'mem.exam.testpg', 'uses' => 'ExamController@testPage']);
 Route::post('/Mem/Exam/ansAnaly', ['middleware' => 'MemSessionCheck','as' => 'mem.exam.ansanaly', 'uses' => 'ExamController@ansAnaly']);
 Route::post('/Mem/Exam/GetModelPage', ['middleware' => 'MemSessionCheck','as' => 'mem.exam.getmodelpage', 'uses' => 'ExamController@GetModelPage']);
+Route::post('/Mem/Exam/UpdateRecord', ['middleware' => 'MemSessionCheck','as' => 'mem.exam.updateRecord', 'uses' => 'ExamController@setExamRecord']);
+Route::get('/Mem/Exam/View/Record/{id}', ['middleware' => 'MemSessionCheck','as' => 'mem.exam.viewrecord', 'uses' => 'ExamController@viewExamRecord']);
 
 //給前端直接呼叫模組修改用
 Route::get('/Mem/Exam/modelPage/{modelName}', ['as' => 'mem.exam.modelpage', 'uses' => 'ExamController@modelPage']);
