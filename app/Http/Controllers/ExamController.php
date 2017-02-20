@@ -91,9 +91,10 @@ class ExamController extends Controller
         $data['item_num'] = 1;
         $data['exam_data'] = ExamClass::get_exam_item_data();
         $data['exam_item'] = '';
-        //if ($data['exam_data']['load_module'] != null) {
-        $data['exam_item'] = view('student.exam.modules.computation_stacked_1_day' ,$data);
-        //}
+        if ($data['exam_data']['load_module'] != null) {
+
+            $data['exam_item'] = view('student.exam.modules.'.$data['exam_data']['load_module'] ,$data);
+        }
 
         return view('student.exam.test_page_inside', $data);
     }
