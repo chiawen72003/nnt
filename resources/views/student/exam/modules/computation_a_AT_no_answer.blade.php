@@ -31,7 +31,7 @@
      * 往下一試題移動
      */
 	function doNext() {
-        if (right_ans[0].keyword > '' && ans.match(right_ans[0].keyword) != null)
+        if (right_ans[0].jump != null)
 		{
             if (right_ans[0].jump == '999') {
                 now_paper_index++;
@@ -40,13 +40,29 @@
                 operating_record({'fun': 'setItemIndex', 'value': '0'});
             } else {
                 now_item_index = right_ans[0].jump - 1;
-                operating_record({'fun': 'setItemIndex', 'value': 'now_item_index'});
+                operating_record({'fun': 'setItemIndex', 'value': now_item_index});
             }
-			operating_record({'fun': 'doNext', 'value': ''});
+            operating_record({'fun':'go_next','value':''});
 			go_next();
 		}
     }
 
     $( document ).ready(function() {
     });
+
+    /**
+     * record播放專用
+     * @param getIndex
+     */
+    function setItemIndex(getIndex) {
+        now_item_index = getIndex;
+    }
+
+    /**
+     * record播放專用
+     * @param getIndex
+     */
+    function setPaperIndex(getIndex) {
+        now_paper_index = getIndex;
+    }
 </script>
