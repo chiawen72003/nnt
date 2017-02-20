@@ -35,8 +35,6 @@
     </div>
 </div>
 <div id="page-container">
-    <input type="button" onclick="go_next()" value="下一題">
-
     <div id="page-body">
         <!-- 測驗資料會透過ajax塞到此處 -->
     </div>
@@ -77,28 +75,26 @@
             }
         }
         if (has_item) {
-            now_item_index++;//設計完就可以移除了
             load_module_page(item_id);
-        } else {
-            //設計完以後，這邊修改成為測驗結束，回到單元list
-            now_paper_index++;
-            now_item_index = 0;
-            if (paper_data[now_paper_index] == undefined) {
-                now_paper_index = 0;
-                alert('沒有試卷了，重新循環一次');
-            }
-            go_next();
         }
-
+        if (paper_data[now_paper_index] == undefined) {
+           //將紀錄送出後結束，以後由各試題送出自己的操作紀錄
+            update_record();
+            alert('單元測驗結束!!');
+            location.href="[! route('mem.exam') !]";
+        }
     }
 
     //載入模組頁面
+    var module_is_load = false;
     function load_module_page(id) {
+        module_is_load = false;
         var has_model = false;
         for(var x=0;x<model_obj.length;x++){
             if(model_obj[x].id == item_id ){
                 $('#page-body').html('').append(model_obj[x].model_data);
                 has_model = true;
+                module_is_load = true;
             }
         }
         if(!has_model){
@@ -114,15 +110,74 @@
                         'id':item_id,
                         'model_data':data
                     });
-                    console.log('網路取檔:'+item_id);
                     $('#page-body').html('').append(data);
+                    module_is_load = true;
                 }
             });
         }
     }
 
+    /**
+     * 操作存檔
+     */
+    var operating_array = [];
+    @if($is_view_record)
+        @foreach($exam_record['record'] as $v)
+            operating_array.push({'fun':'[! $v["fun"] !]','value':'[! $v["value"] !]'});
+        @endforeach
+    @endif
+    function operating_record(getObj) {
+        @if(!$is_view_record)
+            operating_array.push(getObj);
+        @endif
+    }
+
+    /**
+     * 播放操作紀錄
+     *
+     * 備註：
+     * 所有播放動作都需要在模組確定載入完畢後才能執行，若尚未載入完畢，則延遲時間等到確定載入完畢才繼續執行。
+     */
+    var record_index = 0;
+    function replay_record() {
+        @if($is_view_record)
+            if(module_is_load){
+                if (operating_array[record_index] == undefined) {
+                    record_index = 0;
+                    alert('紀錄播放完畢!');
+                }else{
+                    window[operating_array[record_index].fun](operating_array[record_index].value);
+                    record_index++;
+                    setTimeout('replay_record( )', 1000);
+                }
+            }else{
+                setTimeout('replay_record( )', 1000);
+            }
+        @endif
+    }
+
+    /**
+     * 上傳操作紀錄
+     *
+     */
+    function update_record() {
+        $.ajax({
+            url: "[! route('mem.exam.updateRecord') !]",
+            type: 'POST',
+            data: {
+                _token: token,
+                unit_id: '[! $unit_id !]',
+                record:operating_array
+            },
+            success: function (data) {
+
+            }
+        });
+    }
+
     $(document).ready(function () {
         go_next();
+        replay_record();
     });
 </script>
 </body>
