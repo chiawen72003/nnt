@@ -6,11 +6,11 @@ class ExamRecord extends BaseModel
 {
     protected $table = 'exam_record';
     protected $primaryKey = 'id';
-    public $timestamps = false;
 
     private $item_data = array(
         'student_id' => null,
-        'exam_paper_id' => null,
+        'unit_id' => null,
+        'record' => null,
     );
 
     public function _init($input_data)
@@ -28,7 +28,7 @@ class ExamRecord extends BaseModel
     {
         $return_data = array();
 
-        $item_obj = ExamRecord::select('exam_paper_id','has_review')
+        $item_obj = ExamRecord::select('unit_id','has_review')
             ->where('student_id',$student_id)
             ->get();
         if($item_obj)
@@ -48,12 +48,15 @@ class ExamRecord extends BaseModel
     public function set_record()
     {
         if( $this->item_data['student_id']
-            AND $this->item_data['exam_paper_id'] )
+            AND $this->item_data['unit_id']
+            AND $this->item_data['record']
+        )
         {
 
             $t_obj = new ExamRecord();
             $t_obj->student_id =  $this->item_data['student_id'];
-            $t_obj->exam_paper_id =  $this->item_data['exam_paper_id'];
+            $t_obj->unit_id =  $this->item_data['unit_id'];
+            $t_obj->record =  json_encode($this->item_data['record']);
             $t_obj->save();
         }
 
