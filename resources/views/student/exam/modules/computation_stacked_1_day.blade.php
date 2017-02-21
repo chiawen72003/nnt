@@ -101,6 +101,7 @@
 	@foreach($exam_data['error_answer']['answer'] as $key => $value )
 	error_ans.push({
         "answer":"[! $exam_data['error_answer']['answer'][$key] !]",
+        "number":"[! $exam_data['error_answer']['number'][$key] !]",
         "jump":"[! $exam_data['error_answer']['jump'][$key] !]",
         "keyword":"[! $exam_data['error_answer']['keyword'][$key] !]"
     });
@@ -239,7 +240,7 @@
                 go_next();
                 break;
             }
-            if(error_ans[x].keyword > '' && ans.match(error_ans[x].keyword)!=null)
+            if(error_ans[x].keyword > '' && ans.match(error_ans[x].keyword)!=null && error_ans[x].number != '999')
             {
                 if(error_ans[x].jump == '999'){
                     now_paper_index++;
@@ -255,6 +256,26 @@
                 break;
             }
         }
+
+        //如果都比對不出答案時，使用錯誤區錯誤號碼為999的選項當跳題
+        for(var x=0;x<error_ans.length;x++){
+            if(error_ans[x].number == '999')
+            {
+                if(error_ans[x].jump == '999'){
+                    now_paper_index++;
+                    now_item_index = 0;
+                    operating_record({'fun':'setPaperIndex','value':now_paper_index});
+                    operating_record({'fun':'setItemIndex','value':'0'});
+                }else{
+                    now_item_index = error_ans[x].jump - 1;
+                    operating_record({'fun':'setItemIndex','value':now_item_index});
+                }
+                operating_record({'fun':'go_next','value':''});
+                go_next();
+                break;
+            }
+        }
+
     }
 
     /**
