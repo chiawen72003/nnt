@@ -48,23 +48,20 @@ class ExamClass
     {
         $list_data = array();
         $has_test_data = array();//已經受測過得單元
-        $temp_obj = ExamRecord::where('student_id', $mem_data['user_id'])->get();
-        if ($temp_obj) {
-            foreach ($temp_obj as $value) {
-                $has_test_data[] = $value['unit_id'];
-            }
+        $temp_obj = ExamRecord::where('student_id', $mem_data['user_id'])
+            ->where('is_finish','1')
+            ->get();
+        foreach ($temp_obj as $value) {
+            $has_test_data[] = $value['unit_id'];
         }
-
         $temp_obj = UnitList::get();
-        if ($temp_obj) {
-            foreach ($temp_obj as $value) {
-                if(!in_array($value['id'], $has_test_data)){
-                    $value['has_exam_record'] = true;
-                }else{
-                    $value['has_exam_record'] = false;
-                }
-                $list_data[] = $value;
+        foreach ($temp_obj as $value) {
+            if( in_array($value['id'], $has_test_data)){
+                $value['has_exam_record'] = true;
+            }else{
+                $value['has_exam_record'] = false;
             }
+            $list_data[] = $value;
         }
 
         return $list_data;
