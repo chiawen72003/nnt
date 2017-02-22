@@ -208,6 +208,13 @@ class ExamController extends Controller
         $data['questions_item_data'] = ExamClass::get_questions_item_paper_id($data['paper_data']);
         $data['begin_paper_index'] = 0;//起始試卷的index位置
         $data['begin_item_index'] = 0;//起始試題的index位置
+        $t = new ExamRecord();
+        $t->_init(
+            array(
+             'student_id' => app('request')->session()->get('user_data')['user_id'],
+             'unit_id' => $unit_id,
+            )
+        )->set_has_view_record();
 
         return view('student.exam.test_page', $data);
     }
