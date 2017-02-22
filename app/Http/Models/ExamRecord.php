@@ -122,4 +122,23 @@ class ExamRecord extends BaseModel
 
         return ;
     }
+
+    /**
+     * 設定操作紀錄已經讀取過
+     */
+    public function set_has_view_record()
+    {
+        $t_obj = ExamRecord::where('unit_id',$this->item_data['unit_id'])
+            ->where('student_id',$this->item_data['student_id'])
+            ->get();
+        foreach ($t_obj as $v){
+            $v['record'] = '';
+            $v['has_review'] = 0;
+            $v['use_item'] = '';
+            $v['is_finish'] = 0;
+            $v->save();
+        }
+
+        return ;
+    }
 }
