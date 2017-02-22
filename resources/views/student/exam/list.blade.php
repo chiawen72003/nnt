@@ -43,7 +43,7 @@
 						<p>[! isset($subject_list[$value['subject']])?$subject_list[$value['subject']]:'' !]</p>
 						<a class="select-img" onclick='send("[!$value['id']!]")'>
 							<img src="[! ($value['img'] != '')?url('/upfire/image/'.$value['img']):'' !]" width="206" height="130">
-							@if( !isset($exam_review_data[$value['id']]) )
+							@if( $value['has_exam_record'] === false  )
 								<div class="unlearnd-img-wrap"></div>
 							@endif
 						</a>
