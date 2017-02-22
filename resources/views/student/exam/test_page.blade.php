@@ -43,11 +43,13 @@
 <script>
     var token = "[! csrf_token() !]";
     var model_obj = [];//模組資料
-    var now_item_index = 0;//現在試題的index
-    var now_paper_index = 0;//現在試卷的index
+    var now_item_index = [! $begin_item_index !];//現在試題的index
+    var now_paper_index = [! $begin_paper_index !];//現在試卷的index
     var paper_data = [];//試卷資料
     var item_data = [];//試題資料
     var item_id = 0;
+    var operating_array = [];
+    var play_operating_record = [];
 
     @foreach($paper_data as $key => $value)
         paper_data.push("[! $value !]");
@@ -75,11 +77,14 @@
             }
         }
         if (has_item) {
+            update_record('0');
+            operating_array = [];//重置操作紀錄
             load_module_page(item_id);
         }
         if (paper_data[now_paper_index] == undefined) {
-           //將紀錄送出後結束，以後由各試題送出自己的操作紀錄
-            update_record();
+            item_id = 0;
+            update_record('1');
+            operating_array = [];//重置操作紀錄
             alert('單元測驗結束!!');
             location.href="[! route('mem.exam') !]";
         }
@@ -120,10 +125,9 @@
     /**
      * 操作存檔
      */
-    var operating_array = [];
     @if($is_view_record)
         @foreach($exam_record['record'] as $v)
-            operating_array.push({'fun':'[! $v["fun"] !]','value':'[! $v["value"] !]'});
+            play_operating_record.push({'fun':'[! $v["fun"] !]','value':'[! $v["value"] !]'});
         @endforeach
     @endif
     function operating_record(getObj) {
@@ -142,11 +146,11 @@
     function replay_record() {
         @if($is_view_record)
             if(module_is_load){
-                if (operating_array[record_index] == undefined) {
+                if (play_operating_record[record_index] == undefined) {
                     record_index = 0;
                     alert('紀錄播放完畢!');
                 }else{
-                    window[operating_array[record_index].fun](operating_array[record_index].value);
+                    window[play_operating_record[record_index].fun](play_operating_record[record_index].value);
                     record_index++;
                     setTimeout('replay_record( )', 1000);
                 }
@@ -160,7 +164,7 @@
      * 上傳操作紀錄
      *
      */
-    function update_record() {
+    function update_record(is_finish) {
         @if(!$is_view_record)
             $.ajax({
                 url: "[! route('mem.exam.updateRecord') !]",
@@ -168,7 +172,14 @@
                 data: {
                     _token: token,
                     unit_id: '[! $unit_id !]',
-                    record:operating_array
+                    record:operating_array,
+                    itemData : [{
+                        'item_id':item_id,
+                        'paper_index':now_paper_index,
+                        'item_index':now_item_index,
+                    }],
+                    isFinish : is_finish
+
                 },
                 success: function (data) {
 
@@ -179,7 +190,9 @@
 
     $(document).ready(function () {
         go_next();
+        @if($is_view_record)
         replay_record();
+        @endif
     });
 </script>
 </body>
