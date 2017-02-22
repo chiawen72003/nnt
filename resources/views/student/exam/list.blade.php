@@ -49,7 +49,7 @@
 						</a>
 						<div class="select-button-wrrap">
 							<a class="btn btn-yellow" onclick='send("[!$value['id']!]")'>學習</a>
-							@if(isset($exam_review_data[$value['id']]) AND $exam_review_data[$value['id']] == '1')
+							@if( isset($exam_review_data[$value['id']]) )
 								<a class="btn btn-green" href="[! route('mem.exam.viewrecord',[$value['id']]) !]">觀看紀錄</a>
 							@else
 								<a class="btn btn-gray" href="[! route('mem.exam.viewrecord',[$value['id']]) !]">觀看紀錄</a>
