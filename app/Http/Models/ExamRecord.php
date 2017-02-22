@@ -23,7 +23,7 @@ class ExamRecord extends BaseModel
     }
 
     /**
-     * 取得試卷內試題的數量
+     * 取得學生已經觀看過操作紀錄的資料
      *
      */
     public function get_review_data($student_id)
@@ -32,12 +32,10 @@ class ExamRecord extends BaseModel
 
         $item_obj = ExamRecord::select('unit_id','has_review')
             ->where('student_id',$student_id)
+            ->where('has_review','1')
             ->get();
-        if($item_obj)
-        {
-            foreach ($item_obj as $value){
-                $return_data[$value['exam_paper_id']] = $value['has_review'];
-            }
+        foreach ($item_obj as $value){
+            $return_data[$value['unit_id']] = true;
         }
 
         return $return_data;
