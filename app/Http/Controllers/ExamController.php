@@ -9,6 +9,7 @@ use \Session;
 use \DB;
 use \Response;
 use App\Http\Providers\ExamClass;
+use App\Http\Models\ExamRecord;
 
 class ExamController extends Controller
 {
@@ -69,8 +70,31 @@ class ExamController extends Controller
         $data['user_data'] = app('request')->session()->get('user_data');
         $data['paper_data'] = ExamClass::get_paper_by_unit_id($unit_id);
         $data['questions_item_data'] = ExamClass::get_questions_item_paper_id($data['paper_data']);
-        $data['begin_paper_index'] = 0;//起始試卷的index位置
-        $data['begin_item_index'] = 0;//起始試題的index位置
+        $examrecord = new ExamRecord();
+        $examrecord->_init(array(
+            'student_id'=>app('request')->session()->get('user_data')['user_id'],
+            'unit_id'=>$unit_id,
+            ));
+        $last_exam_record = $examrecord->get_one_record();
+        if(!is_null($last_exam_record)){
+            //如果已經操作完畢，就必須把紀錄重新清除在操作
+            if($last_exam_record['is_finish'] == 1){
+                $examrecord->set_clear_record();
+                $data['begin_paper_index'] = 0;//起始試卷的index位置
+                $data['begin_item_index'] = 0;//起始試題的index位置
+            }else{
+                $use_item = json_decode($last_exam_record['use_item'],true);
+                if(is_array($use_item)){
+                    foreach ($use_item as $v){
+                        $data['begin_paper_index'] = $v['paper_index'];//起始試卷的index位置
+                        $data['begin_item_index'] = $v['item_index'];//起始試題的index位置
+                    }
+                }
+            }
+        }else{
+            $data['begin_paper_index'] = 0;//起始試卷的index位置
+            $data['begin_item_index'] = 0;//起始試題的index位置
+        }
 
         return view('student.exam.test_page', $data);
     }
