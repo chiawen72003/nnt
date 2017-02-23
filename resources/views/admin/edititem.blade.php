@@ -92,7 +92,7 @@
                                 <select id="model_item_id">
                                     <option value="86">AT_選擇題</option>
                                     <option value="87">AT_區塊</option>
-                                    <option value="88">AT_填充題</option>
+                                    <option value="3">AT_填充題</option>
                                     <option value="2">AT_不作答</option>
                                     <option value="90">AT_語意</option>
                                     <option value="91">AT_直式(乘法)</option>
