@@ -214,7 +214,8 @@ class ExamController extends Controller
              'student_id' => app('request')->session()->get('user_data')['user_id'],
              'unit_id' => $unit_id,
             )
-        )->set_has_view_record();
+        );
+        $t->set_has_view_record();
 
         return view('student.exam.test_page', $data);
     }
