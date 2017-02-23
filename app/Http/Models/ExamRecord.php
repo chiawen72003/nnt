@@ -132,10 +132,7 @@ class ExamRecord extends BaseModel
             ->where('student_id',$this->item_data['student_id'])
             ->get();
         foreach ($t_obj as $v){
-            $v['record'] = '';
-            $v['has_review'] = 0;
-            $v['use_item'] = '';
-            $v['is_finish'] = 0;
+            $v['has_review'] = 1;
             $v->save();
         }
 
