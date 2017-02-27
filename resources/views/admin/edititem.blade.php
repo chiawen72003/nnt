@@ -89,16 +89,16 @@
                         <div id="tab_1" class="tab_content" style="display: block">
                             <div class="chat">
                                 <span>建構反應題型</span>
-                                <select id="model_item_id">
-                                    <option value="86">AT_選擇題</option>
-                                    <option value="87">AT_區塊</option>
-                                    <option value="3">AT_填充題</option>
+                                <select id="model_item_id" onchange="show_option_area()">
+                                    <option value="1">AT_直式(日時)</option>
                                     <option value="2">AT_不作答</option>
+                                    <option value="3">AT_填充題</option>
+                                    <option value="4">AT_選擇題</option>
+                                    <option value="87">AT_區塊</option>
                                     <option value="90">AT_語意</option>
                                     <option value="91">AT_直式(乘法)</option>
                                     <option value="92">AT_直式(除法)</option>
                                     <option value="93">AT_直式(四則)</option>
-                                    <option value="1">AT_直式(日時)</option>
                                     <option value="95">AT_直式(時分)</option>
                                     <option value="96">AT_直式(分秒)</option>
                                     <option value="97">AT_直式_除(日時)</option>
@@ -109,6 +109,13 @@
                                     <option value="102">AT_區塊2</option>
                                     <option value="103">AT_語意(句子縮寫)</option>
                                 </select>
+                            </div>
+                            <div class="" id="multiple_choice_questions_area" style="display: none;">
+                                <span>選擇題選項</span>
+                                <br>
+                                <p class="add" id="add_option_button" >
+                                    <a class="button" title="新增選項" onclick="add_multiple_choice_questions_div()">新增</a>
+                                </p>
                             </div>
                             <div class="chat">
                                 <span>回饋類型</span>
@@ -360,6 +367,10 @@
     </div>
 </div>
 <!-- 雙代理人對話區  結束-->
+<div class="" id="module_option_item" style="display: none">
+    選項 ：
+    <input type="text" class="c_title" placeholder="請輸入內容" name="multiple_choice_questions[]"  value="">
+</div>
 <script type="text/javascript">
     CKEDITOR.replace('c_ckedit1', {});
     CKEDITOR.replace('c_ckedit1_memo', {});
@@ -440,6 +451,13 @@
         });
         avatar_dsc_obj.push({'dsc':temp_array});
         temp_obj.push({'avatar_dsc':avatar_dsc_obj});
+
+        //選擇題的選項
+        temp_array = [];
+        $('#tab_1 input[name="multiple_choice_questions[]"]').each(function(){
+            temp_array.push($(this).val());
+        });
+        temp_obj.push({'model_item_options':temp_array});
 
         return temp_obj;
     }
@@ -638,6 +656,12 @@
         $('#tab_3 input[name="error_keyword[]"]').each(function(){
             $(this).val('');
         });
+        //清除選擇題 選項
+        $('#tab_1 input[name="multiple_choice_questions[]"]').each(function(){
+            $(this).parent().remove();
+        });
+        $('#multiple_choice_questions_area').hide();
+
     }
 
     //套用試題資料
@@ -723,6 +747,23 @@
             item_index++;
         });
 
+        //選擇題 選項
+        if(item_data['model_item_options'] != ''){
+            json_item = JSON.parse(item_data['model_item_options']);
+            if(json_item.length >0){
+                for(var x=0;x < json_item.length;x++){
+                    var t_obj = $('#module_option_item').clone().attr('id','').show();
+                    $('#add_option_button').before(t_obj);
+                }
+                item_index=0;
+                $('#tab_1 input[name="multiple_choice_questions[]"]').each(function(){
+                    $(this).val(json_item[item_index]);
+                    item_index++;
+                });
+            }
+            $('#multiple_choice_questions_area').show();
+        }
+
         //更新按鈕
         if(item_data['has_next']){
             $('#next_btn').html('下一個試題');
@@ -796,6 +837,31 @@
         temp_obj.find('a').attr('onclick','$("#error_'+correct_num+'").remove()');
         $('#error_btn').before(temp_obj);
         error_num++;
+    }
+
+    /**
+     * 根據選擇的模組，判斷是否顯示額外的選項區域
+     * 
+     */
+    function show_option_area()
+    {
+        var getIndex = $('#model_item_id').val();
+        //選擇題
+        if(getIndex == '4'){
+            $('#multiple_choice_questions_area').show();
+        }else{
+            $('#multiple_choice_questions_area').hide();
+        }
+    }
+
+    /**
+     * 增加一個選擇題選項輸入
+     *
+     */
+    function add_multiple_choice_questions_div()
+    {
+        var t_obj = $('#module_option_item').clone().attr('id','').show();
+        $('#add_option_button').before(t_obj);
     }
 </script>
 <audio src="" id="playAudio" autoplay>
