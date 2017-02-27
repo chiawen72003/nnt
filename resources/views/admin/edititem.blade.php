@@ -455,7 +455,9 @@
         //選擇題的選項
         temp_array = [];
         $('#tab_1 input[name="multiple_choice_questions[]"]').each(function(){
-            temp_array.push($(this).val());
+            if($(this).val() != ''){
+                temp_array.push($(this).val());
+            }
         });
         temp_obj.push({'model_item_options':temp_array});
 
@@ -748,7 +750,7 @@
         });
 
         //選擇題 選項
-        if(item_data['model_item_options'] != ''){
+        if(item_data['model_item_options'] != '' && $('#model_item_id').val() == '4'){
             json_item = JSON.parse(item_data['model_item_options']);
             if(json_item.length >0){
                 for(var x=0;x < json_item.length;x++){
