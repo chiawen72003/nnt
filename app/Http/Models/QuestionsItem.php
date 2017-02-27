@@ -21,9 +21,11 @@ class QuestionsItem extends BaseModel {
      *
      */
     public static function add(){
+        dd(self::$item_data);
         $add_obj = new QuestionsItem();
         $add_obj -> title =  self::$item_data['title'];
         $add_obj -> model_item_id =  self::$item_data['model_item_id'];
+        $add_obj -> model_item_options =   json_encode(self::$item_data['model_item_options']);
         $add_obj -> feedback_type =  self::$item_data['feedback_type'];
         $add_obj -> feedback_dsc =  self::$item_data['feedback_dsc'];
         $add_obj -> abbreviation =  self::$item_data['abbreviation'];
@@ -46,6 +48,7 @@ class QuestionsItem extends BaseModel {
         $add_obj = QuestionsItem::find(self::$item_data['id']);
         $add_obj -> title =  self::$item_data['title'];
         $add_obj -> model_item_id =  self::$item_data['model_item_id'];
+        $add_obj -> model_item_options =   json_encode(self::$item_data['model_item_options']);
         $add_obj -> feedback_type =  self::$item_data['feedback_type'];
         $add_obj -> feedback_dsc =  self::$item_data['feedback_dsc'];
         $add_obj -> abbreviation =  self::$item_data['abbreviation'];
