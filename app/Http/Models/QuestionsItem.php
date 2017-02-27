@@ -7,6 +7,7 @@ class QuestionsItem extends BaseModel {
     //public $timestamps = false;
 
     private $item_data = array(
+        'id'=>'',
         'title'=>'',
         'power_dsc'=>'',
         'model_item_id'=>'0',
@@ -27,6 +28,10 @@ class QuestionsItem extends BaseModel {
             $this->item_data[$key] = $value;
         }
     }
+
+    /**
+     *
+     */
 
     /**
      * 新增一個試題資料
