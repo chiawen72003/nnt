@@ -2,17 +2,11 @@
 
 namespace App\Http\Providers;
 
-use App\Http\Models\ExamPaperAccess;
 use App\Http\Models\ExamPaper;
 use App\Http\Models\ExamRecord;
 use App\Http\Models\QuestionsItem;
 use App\Http\Models\UnitList;
-use App\Http\Models\ConceptItem;
-use App\Http\Models\ConceptOptionRule;
-use App\Http\Models\MadItem;
-use App\Http\Models\MadRule;
 use App\Http\Models\Subject;
-use App\Http\Models\ConceptInfo;
 
 class ExamClass
 {
