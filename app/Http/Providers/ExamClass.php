@@ -176,7 +176,9 @@ class ExamClass
             }
         }
         if(count($whereIn) > 0){
-            $subject_list = QuestionsItem::get_paper_item_num($whereIn);
+            $t = new QuestionsItem();
+            $t -> _init(array('exam_paper_id'=>$whereIn));
+            $subject_list = $t -> get_paper_item_num($whereIn);
         }
 
         return $subject_list;
