@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Models\Subject;
-use Illuminate\Http\Request;
 use \Input;
 use \Validator;
 use \Session;
@@ -205,8 +204,13 @@ class AdController extends Controller
     public function questionsAdd(){
         $fp = Input::all();
         if(isset($fp['add_data'])){
-            QuestionsItem::_init($fp['add_data']);
-            $id = QuestionsItem::add();
+            $get_input = array();
+            foreach($fp['add_data'] as $v){
+                $get_input = array_merge($get_input,$v);
+            }
+            $t = new QuestionsItem();
+            $t -> _init($get_input);
+            $id = $t -> add();
         }
 
 
@@ -219,8 +223,13 @@ class AdController extends Controller
     public function questionsUpdate(){
         $fp = Input::all();
         if(isset($fp['update_data'])){
-            QuestionsItem::_init($fp['update_data']);
-            $id = QuestionsItem::update_data();
+            $get_input = array();
+            foreach($fp['update_data'] as $v){
+                $get_input = array_merge($get_input,$v);
+            }
+            $t = new QuestionsItem();
+            $t -> _init($get_input);
+            $id = $t -> update_data();
         }
 
         return $id;
@@ -241,8 +250,9 @@ class AdController extends Controller
 
         $fp = Input::all();
         if(isset($fp['question_id'])){
-            QuestionsItem::_init(array(array('id'=>$fp['question_id'],'exam_paper_id'=>$paper_id)));
-            $return_data = QuestionsItem::next_data($return_data);
+            $t = new QuestionsItem();
+            $t -> _init(array('id'=>$fp['question_id'],'exam_paper_id'=>$paper_id));
+            $return_data = $t -> next_data($return_data);
         }
 
         return json_encode($return_data);
@@ -263,8 +273,9 @@ class AdController extends Controller
 
         $fp = Input::all();
         if(isset($fp['question_id'])){
-            QuestionsItem::_init(array(array('id'=>$fp['question_id'],'exam_paper_id'=>$paper_id)));
-            $return_data = QuestionsItem::back_data($return_data);
+            $t = new QuestionsItem();
+            $t -> _init(array('id'=>$fp['question_id'],'exam_paper_id'=>$paper_id));
+            $return_data = $t -> back_data($return_data);
         }
 
         return json_encode($return_data);
@@ -283,8 +294,9 @@ class AdController extends Controller
 
         $fp = Input::all();
         if(isset($fp['question_id'])){
-            QuestionsItem::_init(array(array('id'=>$fp['question_id'],'exam_paper_id'=>$paper_id)));
-            $return_data = QuestionsItem::delete_data($return_data);
+            $t = new QuestionsItem();
+            $t -> _init(array('id'=>$fp['question_id'],'exam_paper_id'=>$paper_id));
+            $return_data = $t -> delete_data($return_data);
         }
 
         return json_encode($return_data);
