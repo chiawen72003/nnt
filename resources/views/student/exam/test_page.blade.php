@@ -40,6 +40,7 @@
     </div>
 </div>
 [! Html::script('js/jquery-1.11.3.js') !]
+[! Html::script('js/webtoolkit.base64.js') !]
 <script>
     var token = "[! csrf_token() !]";
     var model_obj = [];//模組資料
@@ -127,7 +128,7 @@
      */
     @if($is_view_record)
         @foreach($exam_record['record'] as $v)
-            play_operating_record.push({'fun':'[! $v["fun"] !]','value':'[! $v["value"] !]'});
+            play_operating_record.push({'fun':'[! $v["fun"] !]','value':'[! base64_encode($v["value"]) !]'});
         @endforeach
     @endif
     function operating_record(getObj) {
@@ -150,12 +151,13 @@
                     record_index = 0;
                     alert('紀錄播放完畢!');
                 }else{
-                    window[play_operating_record[record_index].fun](play_operating_record[record_index].value);
+                    var fun_value = Base64.decode(play_operating_record[record_index].value);
+                    window[play_operating_record[record_index].fun](fun_value);
                     record_index++;
-                    setTimeout('replay_record( )', 1000);
+                    setTimeout('replay_record( )', 800);
                 }
             }else{
-                setTimeout('replay_record( )', 1000);
+                setTimeout('replay_record( )', 800);
             }
         @endif
     }
