@@ -60,7 +60,7 @@
                     operating_record({'fun':'setItemIndex','value':'0'});
                 }else{
                     now_item_index = right_ans[x].jump - 1;
-                    operating_record({'fun':'setItemIndex','value':'now_item_index'});
+                    operating_record({'fun':'setItemIndex','value':now_item_index});
                 }
                 operating_record({'fun':'go_next','value':''});
                 go_next();
@@ -75,7 +75,7 @@
                     operating_record({'fun':'setItemIndex','value':'0'});
                 }else{
                     now_item_index = right_ans[x].jump - 1;
-                    operating_record({'fun':'setItemIndex','value':'now_item_index'});
+                    operating_record({'fun':'setItemIndex','value':now_item_index});
                 }
                 operating_record({'fun':'go_next','value':''});
                 go_next();
@@ -92,7 +92,7 @@
                     operating_record({'fun':'setItemIndex','value':'0'});
                 }else{
                     now_item_index = error_ans[x].jump - 1;
-                    operating_record({'fun':'setItemIndex','value':'now_item_index'});
+                    operating_record({'fun':'setItemIndex','value':now_item_index});
                 }
                 operating_record({'fun':'go_next','value':''});
                 go_next();
@@ -107,7 +107,7 @@
                     operating_record({'fun':'setItemIndex','value':'0'});
                 }else{
                     now_item_index = error_ans[x].jump - 1;
-                    operating_record({'fun':'setItemIndex','value':'now_item_index'});
+                    operating_record({'fun':'setItemIndex','value':now_item_index});
                 }
                 operating_record({'fun':'go_next','value':''});
                 go_next();
