@@ -13,6 +13,7 @@ class Semantic
     private $input_data = array(
         'student_ans' => null,
         'item_id' => null,
+        'paper_index' => null,
     );
     private $user_id = 'kbc';
 
@@ -29,6 +30,7 @@ class Semantic
     public function get_item_data()
     {
         $t = QuestionsItem::where('id', $this->input_data['item_id'])
+            ->where('exam_paper_id',$this->input_data['paper_index'])
             ->get();
         foreach ($t as $v) {
             $this->item_data = $v;
@@ -43,7 +45,6 @@ class Semantic
         if ($this->input_data['item_id'] AND $this->input_data['student_ans'] AND $this->item_data) {
             $right_ans = json_decode($this->item_data['correct_answer'],true);
             $error_ans = json_decode($this->item_data['error_answer'],true);
-            dd($error_ans);
             $ckipclient_obj = new Ckipclient(
                 env('CKIP_SERVER'),
                 env('CKIP_PORT'),
