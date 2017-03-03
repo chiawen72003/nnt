@@ -24,6 +24,7 @@
 	error_ans.push({
         "answer":"[! $exam_data['error_answer']['answer'][$key] !]",
         "jump":"[! $exam_data['error_answer']['jump'][$key] !]",
+        "number":"[! $exam_data['error_answer']['number'][$key] !]",
         "keyword":"[! $exam_data['error_answer']['keyword'][$key] !]"
     });
 	@endforeach
