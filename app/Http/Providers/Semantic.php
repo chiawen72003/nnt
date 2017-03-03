@@ -3,6 +3,8 @@
 namespace App\Http\Providers;
 
 use App\Http\Models\QuestionsItem;
+use App\Http\Models\Lsa_Term;
+use App\Http\Models\Lsa_U;
 
 class Semantic
 {
@@ -12,6 +14,7 @@ class Semantic
         'student_ans' => null,
         'item_id' => null,
     );
+    private $user_id = 'kbc';
 
     public function __construct($data)
     {
@@ -38,9 +41,15 @@ class Semantic
     public function analy()
     {
         if ($this->input_data['item_id'] AND $this->input_data['student_ans'] AND $this->item_data) {
-            $right_ans = json_decode($this->item_data['correct_answer']);
-            $error_ans = json_decode($this->item_data['error_answer']);
-            $ckipclient_obj = new Ckipclient();
+            $right_ans = json_decode($this->item_data['correct_answer'],true);
+            $error_ans = json_decode($this->item_data['error_answer'],true);
+            dd($error_ans);
+            $ckipclient_obj = new Ckipclient(
+                env('CKIP_SERVER'),
+                env('CKIP_PORT'),
+                env('CKIP_USERNAME'),
+                env('CKIP_PASSWORD')
+            );
             $return_text = $ckipclient_obj->send($this->input_data['student_ans']);    //----進行斷詞----//
             $return_sentences = $ckipclient_obj->getSentence();
             $stuans_return_terms = $ckipclient_obj->getTerm();
@@ -62,13 +71,14 @@ class Semantic
             $stu_ans_term = explode(",", $stu_ans_new);
             $Answer_vector = $this->document_vector($stu_ans_term);     //---學生答案向量 BayesianTest/lsa_compute.php
             //-----中文句子剖析處理-----//
-            $parser_text_stu = $this->sentence_parser_stu($stu_ans, $user_id);   //學生答案 BayesianTest/segmentation.php
+            $parser_text_stu = $this->sentence_parser_stu($this->input_data['student_ans'], $this->user_id);   //學生答案 BayesianTest/segmentation.php
             $parser_text_stu = $this->parser_process($parser_text_stu);//BayesianTest/segmentation.php
             $document_stu = str_replace('(', ',', $parser_text_stu);
             $document_stu = str_replace(':', ',', $document_stu);
             $document_stu = str_replace(')', ',', $document_stu);
             $stu_doc = explode(",", $document_stu);
             $num = 0;
+            $stu_nodes = array();
             for ($j = 0; $j < count($stu_doc); $j++) {
                 if (preg_match("/[\x{4e00}-\x{9fa5}]/u", $stu_doc[$j])) {
                 } else {
@@ -76,8 +86,9 @@ class Semantic
                     $num++;
                 }
             }
-            for ($x = 0; $x < (count($right_ans) - 1); $x++) {           //---與預期答案比對---//
-                $sentence2 = $right_ans[$x];
+            $t_num = count($right_ans[0]['answer']);
+            for ($x = 0; $x < $t_num; $x++) {           //---與預期答案比對---//
+                $sentence2 = $right_ans[0]['answer'][$x];
                 //----斷字----//
                 for ($j = 0; $j < mb_strlen($sentence2, 'utf8'); $j++) {
                     $split_sentence2[$j] = mb_substr($sentence2, $j, 1, 'utf-8');
@@ -108,7 +119,7 @@ class Semantic
                 $expect_ans_vector = $this->document_vector($expect_ans_term);//BayesianTest/lsa_compute.php
                 $getValue = round($this->document_sim($Answer_vector, $expect_ans_vector), 4);     //LSA cosine值
                 //-----中文句子剖析處理-----//
-                $parser_text_ans = $this->sentence_parser($sentence2, $user_id);//BayesianTest/segmentation.php   //學生答案
+                $parser_text_ans = $this->sentence_parser($sentence2, $this->user_id);//BayesianTest/segmentation.php   //學生答案
                 $parser_text_ans = $this->parser_process($parser_text_ans);//BayesianTest/segmentation.php
                 $parser_text_ans = str_replace('(', ',', $parser_text_ans);
                 $parser_text_ans = str_replace(':', ',', $parser_text_ans);
@@ -124,280 +135,78 @@ class Semantic
                     }
                 }
                 $syntax_similarity = $this->syntax_sim($stu_nodes, $ans_nodes);//BayesianTest/cohmetrix_indices.php
-                switch ($unit_id) {                      //不同單元使用不同的參數與公式
-                    case '020010801':
-                        $getValue = (0.4 * $contentword_overlap_value + 0.3 * $getValue + 0.3 * $syntax_similarity);
-                        $threshold = 0.85;
-                        break;
-                    case '019010801':
-                        $getValue = (0.4 * $contentword_overlap_value + 0.3 * $getValue + 0.3 * $syntax_similarity);
-                        $threshold = 0.85;
-                        break;
-                    case '020010802':
-                        $getValue = (0.4 * $contentword_overlap_value + 0.3 * $getValue + 0.3 * $syntax_similarity);
-                        $threshold = 0.82;
-                        break;
-                    case '019010802':
-                        $getValue = (0.4 * $contentword_overlap_value + 0.3 * $getValue + 0.3 * $syntax_similarity);
-                        $threshold = 0.82;
-                        break;
-                    case '020010803':
-                        $getValue = (0.4 * $contentword_overlap_value + 0.3 * $getValue + 0.3 * $syntax_similarity);
-                        $threshold = 0.83;
-                        break;
-                    case '019010803':
-                        //$getValue=(0.25*$contentword_overlap_value+0.25*$getValue+0.25*$word_med+0.25*$syntax_similarity);
-                        $getValue = (0.4 * $contentword_overlap_value + 0.3 * $getValue + 0.3 * $syntax_similarity);
-                        $threshold = 0.83;
-                        break;
-                    case '020010804':
-                        //$getValue=(0.25*$contentword_overlap_value+0.25*$getValue+0.25*$word_med+0.25*$syntax_similarity);
-                        $getValue = (0.4 * $contentword_overlap_value + 0.3 * $getValue + 0.3 * $syntax_similarity);
-                        $threshold = 0.83;
-                        break;
-                    case '019010804':
-                        //$getValue=(0.25*$contentword_overlap_value+0.25*$getValue+0.25*$word_med+0.25*$syntax_similarity);
-                        $getValue = (0.4 * $contentword_overlap_value + 0.3 * $getValue + 0.3 * $syntax_similarity);
-                        $threshold = 0.83;
-                        break;
-                    case '020010805':
-                        //$getValue=(0.25*$contentword_overlap_value+0.25*$getValue+0.25*$word_med+0.25*$syntax_similarity);
-                        $getValue = (0.4 * $contentword_overlap_value + 0.3 * $getValue + 0.3 * $syntax_similarity);
-                        $threshold = 0.83;
-                        break;
-                    case '019010805':
-                        //$getValue=(0.25*$contentword_overlap_value+0.25*$getValue+0.25*$word_med+0.25*$syntax_similarity);
-                        $getValue = (0.4 * $contentword_overlap_value + 0.3 * $getValue + 0.3 * $syntax_similarity);
-                        $threshold = 0.83;
-                        break;
-                    case '019010901':
-                        //$getValue=(0.25*$contentword_overlap_value+0.25*$getValue+0.25*$word_med+0.25*$syntax_similarity);
-                        $getValue = (0.4 * $contentword_overlap_value + 0.3 * $getValue + 0.3 * $syntax_similarity);
-                        $threshold = 0.80;
-                        break;
-                    case '019010902':
-                        //$getValue=(0.25*$contentword_overlap_value+0.25*$getValue+0.25*$word_med+0.25*$syntax_similarity);
-                        $getValue = (0.4 * $contentword_overlap_value + 0.3 * $getValue + 0.3 * $syntax_similarity);
-                        $threshold = 0.80;
-                        break;
-                }
-                //      echo "調整後=".$getValue."<br>";
-                if ($getValue > $max_value) {
-                    $max_value = $getValue;
-                    $return_value = $right_ans[$x];
+                /** todo 從資料庫取得單元的公式乘法資料，在計算=>建議從for外面取，在帶進來避免重複取值 */
+                $getValue = (0.4 * $contentword_overlap_value + 0.3 * $getValue + 0.3 * $syntax_similarity);
+                $threshold = 0.85;
+
+                if ($getValue > $threshold) {
+                   return array(
+                       'type' => 'right',
+                       'index' => $right_ans[1]['jump'][$x],
+                   );
                 }
 
             }
-            //跟預期答案做比對後，與各單元的權重做比對，超過就代表找到正確答案，沒有超過就針對錯誤答案做分析
-            if ($max_value > $threshold) {
-                $at_stu_answer_sol = 1;
-                //$selected_item_at = $response_at[$_SESSION['selected_item']][$at_stu_answer_sol];
-                $selected_item_at_all = explode(_SPLIT_SYMBOL, $response_at[$_SESSION['selected_item']][$at_stu_answer_sol]);
-                $selected_item_at = $selected_item_at_all[0];
 
+            //開始分析錯誤答案
+            /** todo 從資料庫取得單元的公式乘法資料，在計算=>建議從for外面取，在帶進來避免重複取值 */
+            $content_par = 0.4;
+            $lsa_par = 0.3;
+            $syntax_pay=0.4;
+
+            $stu_ans = $this->input_data['student_ans'];
+            $max_value = -1; //初始 max_value
+            $at_stu_answer_sol = 0;
+            $at_expection_error = $error_ans;  //-----錯誤bug
+            $sentence_num = (count($at_expection_error));
+            if ($stu_ans == null) {
+                return array(
+                    'type' => 'no_match',
+                    'index' => $error_ans[1]['jump'][$x],
+                );
             } else {
-                switch ($unit_id) {
-                    case '020010801':
-                        $bug1_threshold = 0.48;
-                        $bug1_threshold2 = 0.55;
-                        $bug1_threshold3 = 0.52;
-                        $bug3_threshold = 0.5;
-                        $bug4_threshold = 0.5;
-                        $bug2_threshold = 0.6;
-                        $bug5_threshold = 0.5;
-                        $bug6_threshold = 0.5;
-                        $content_par = 0.4;
-                        $lsa_par = 0.3;
-                        $syntax_pay = 0.3;
-                        break;
-                    case '019010801':
-                        $bug1_threshold = 0.48;
-                        $bug1_threshold2 = 0.55;
-                        $bug1_threshold3 = 0.52;
-                        $bug3_threshold = 0.5;
-                        $bug4_threshold = 0.5;
-                        $bug2_threshold = 0.6;
-                        $bug5_threshold = 0.5;
-                        $bug6_threshold = 0.5;
-                        $content_par = 0.4;
-                        $lsa_par = 0.3;
-                        $syntax_pay = 0.3;
-                        break;
-                    case '020010802':
-                        $bug1_threshold = 0.49;
-                        $bug1_threshold2 = 0.56;
-                        $bug1_threshold3 = 0.53;
-                        $bug3_threshold = 0.5;
-                        $bug4_threshold = 0.5;
-                        $bug2_threshold = 0.75;
-                        $bug5_threshold = 0.5;
-                        $bug6_threshold = 0.5;
-                        $content_par = 0.4;
-                        $lsa_par = 0.3;
-                        $syntax_pay = 0.3;
-                        break;
-                    case '019010802':
-                        $bug1_threshold = 0.49;
-                        $bug1_threshold2 = 0.56;
-                        $bug1_threshold3 = 0.53;
-                        $bug3_threshold = 0.5;
-                        $bug4_threshold = 0.5;
-                        $bug2_threshold = 0.75;
-                        $bug5_threshold = 0.5;
-                        $bug6_threshold = 0.5;
-                        $content_par = 0.4;
-                        $lsa_par = 0.3;
-                        $syntax_pay = 0.3;
-                        break;
-                    case '020010803':
-                        $bug1_threshold = 0.45;
-                        $bug1_threshold2 = 0.56;
-                        $bug1_threshold3 = 0.52;
-                        $bug3_threshold = 0.4;
-                        $bug4_threshold = 0.4;
-                        $bug2_threshold = 0.6;
-                        $bug5_threshold = 0.4;
-                        $bug6_threshold = 0.4;
-                        $content_par = 0.4;
-                        $lsa_par = 0.3;
-                        $syntax_pay = 0.3;
-                        break;
-                    case '019010803':
-                        $bug1_threshold = 0.45;
-                        $bug1_threshold2 = 0.56;
-                        $bug1_threshold3 = 0.52;
-                        $bug3_threshold = 0.4;
-                        $bug4_threshold = 0.4;
-                        $bug2_threshold = 0.6;
-                        $bug5_threshold = 0.4;
-                        $bug6_threshold = 0.4;
-                        $content_par = 0.4;
-                        $lsa_par = 0.3;
-                        $syntax_pay = 0.3;
-                        break;
-                    case '020010804':
-                        $bug1_threshold = 0.3;
-                        $bug1_threshold2 = 0.48;
-                        $bug1_threshold3 = 0.35;
-                        $bug3_threshold = 0.3;
-                        $bug4_threshold = 0.3;
-                        $bug2_threshold = 0.3;
-                        $bug5_threshold = 0.3;
-                        $bug6_threshold = 0.3;
-                        $content_par = 0.4;
-                        $lsa_par = 0.3;
-                        $syntax_pay = 0.3;
-                        break;
-                    case '019010804':
-                        $bug1_threshold = 0.3;
-                        $bug1_threshold2 = 0.48;
-                        $bug1_threshold3 = 0.4;
-                        $bug3_threshold = 0.3;
-                        $bug4_threshold = 0.3;
-                        $bug2_threshold = 0.3;
-                        $bug5_threshold = 0.3;
-                        $bug6_threshold = 0.3;
-                        $content_par = 0.4;
-                        $lsa_par = 0.3;
-                        $syntax_pay = 0.3;
-                        break;
-                    case '020010805':
-                        $bug1_threshold = 0.45;
-                        $bug1_threshold2 = 0.56;
-                        $bug1_threshold3 = 0.52;
-                        $bug3_threshold = 0.4;
-                        $bug4_threshold = 0.4;
-                        $bug2_threshold = 0.6;
-                        $bug5_threshold = 0.4;
-                        $bug6_threshold = 0.4;
-                        $content_par = 0.4;
-                        $lsa_par = 0.3;
-                        $syntax_pay = 0.3;
-                        break;
-                    case '019010805':
-                        $bug1_threshold = 0.45;
-                        $bug1_threshold2 = 0.56;
-                        $bug1_threshold3 = 0.52;
-                        $bug3_threshold = 0.4;
-                        $bug4_threshold = 0.4;
-                        $bug2_threshold = 0.6;
-                        $bug5_threshold = 0.4;
-                        $bug6_threshold = 0.4;
-                        $content_par = 0.4;
-                        $lsa_par = 0.2;
-                        $syntax_pay = 0.4;
-                        break;
-                    case '019010901':
-                        $content_par = 0.4;
-                        $lsa_par = 0.2;
-                        $syntax_pay = 0.4;
-                        break;
-                    case '019010902':
-                        $content_par = 0.4;
-                        $lsa_par = 0.2;
-                        $syntax_pay = 0.4;
-                        break;
-                }
-
-                $stu_ans = $InputCode_at[3];
-                $max_value = -1; //初始 max_value
-                $getValue = 0;
-                $return_value = "";
-                $at_stu_answer_sol = 0;
-                $at_expection_error = explode("@XX@", $at_error);  //-----錯誤bug
-                //  print_r($at_expection_error);
-                $sentence_num = (count($at_expection_error));
-                if ($stu_ans == null) {
-                    $return_bug = 'bug500';
-                } else {
-                    for ($sen_num = 0; $sen_num < $sentence_num; $sen_num = $sen_num + 2) {
-                        $error_sentence = $at_expection_error[$sen_num + 1];
-                        $return_text = $ckipclient_obj->send($error_sentence);      //----進行斷詞----//
-                        $return_sentences = $ckipclient_obj->getSentence();
-                        $error_return_terms = $ckipclient_obj->getTerm();
-                        $error_ans_term = $this->sentence_revise($error_return_terms);
-                        $expect_error_vector = $this->document_vector($error_ans_term);
-                        $lsa = round($this->document_sim($Answer_vector, $expect_error_vector), 4);        //LSA cosine
-                        $contentword_overlap_value = $this->contentword_overlap($stuans_return_terms, $error_return_terms);     //---content words overlap---//
-                        //-----中文句子剖析處理-----//
-                        $parser_text_ans = $this->sentence_parser($error_sentence, $user_id);   //學生答案
-                        $parser_text_ans = $this->parser_process($parser_text_ans);
-                        $parser_text_ans = str_replace('(', ',', $parser_text_ans);
-                        $parser_text_ans = str_replace(':', ',', $parser_text_ans);
-                        $parser_text_ans = str_replace(')', ',', $parser_text_ans);
-                        $ans_doc = explode(",", $parser_text_ans);
-                        $num = 0;
-                        for ($j = 0; $j < count($ans_doc); $j++) {
-                            if (preg_match("/[\x{4e00}-\x{9fa5}]/u", $ans_doc[$j])) {
-                            } else {
-                                $ans_nodes[$num] = $ans_doc[$j];
-                                $num++;
-                            }
-                        }
-                        $syntax_similarity = $this->syntax_sim($stu_nodes, $ans_nodes);
-                        $getValue = $content_par * $contentword_overlap_value + $lsa_par * $lsa + $syntax_par * $syntax_similarity;
-                        //   echo '句子:'.$error_sentence.'<br>';
-                        //   echo 'bug matach score:'.$getValue.'<br>';
-                        if ($getValue > $max_value and $getValue > 0.5) {
-                            $max_value = $getValue;
-                            $return_bug = $at_expection_error[$sen_num];
-                            //echo $return_bug.'<br>';
+                $t_num = count($error_ans[0]['answer']);
+                for ($x = 0; $x < $t_num; $x++) {
+                    $error_sentence = $error_ans[0]['answer'][$x];
+                    $return_text = $ckipclient_obj->send($error_sentence);      //----進行斷詞----//
+                    $return_sentences = $ckipclient_obj->getSentence();
+                    $error_return_terms = $ckipclient_obj->getTerm();
+                    $error_ans_term = $this->sentence_revise($error_return_terms);
+                    $expect_error_vector = $this->document_vector($error_ans_term);
+                    $lsa = round($this->document_sim($Answer_vector, $expect_error_vector), 4);        //LSA cosine
+                    $contentword_overlap_value = $this->contentword_overlap($stuans_return_terms, $error_return_terms);     //---content words overlap---//
+                    //-----中文句子剖析處理-----//
+                    $parser_text_ans = $this->sentence_parser($error_sentence, $this->user_id);   //學生答案
+                    $parser_text_ans = $this->parser_process($parser_text_ans);
+                    $parser_text_ans = str_replace('(', ',', $parser_text_ans);
+                    $parser_text_ans = str_replace(':', ',', $parser_text_ans);
+                    $parser_text_ans = str_replace(')', ',', $parser_text_ans);
+                    $ans_doc = explode(",", $parser_text_ans);
+                    $num = 0;
+                    $ans_nodes = array();
+                    for ($j = 0; $j < count($ans_doc); $j++) {
+                        if (preg_match("/[\x{4e00}-\x{9fa5}]/u", $ans_doc[$j])) {
                         } else {
-                            $return_bug = 'bug500';
+                            $ans_nodes[$num] = $ans_doc[$j];
+                            $num++;
                         }
                     }
+                    $syntax_similarity = $this->syntax_sim($stu_nodes, $ans_nodes);
+                    $getValue = $content_par * $contentword_overlap_value + $lsa_par * $lsa + $syntax_pay * $syntax_similarity;
+                    if ($getValue > $max_value and $getValue > 0.5) {
+                        return array(
+                            'type' => 'right',
+                            'index' => $error_ans[1]['jump'][$x],
+                        );
+                    }
                 }
-                $at_stu_bug_type = $return_bug . _SPLIT_SYMBOL;
-                $_SESSION['$at_stu_bug_type'] = $at_stu_bug_type;
-                $at_error_block = explode(_SPLIT_SYMBOL, $response_at[$_SESSION['selected_item']][$at_stu_answer_sol]);
-                $return_key = array_search($return_bug, $at_error_block);
-                $selected_item_at = $at_error_block[$return_key + 1];
-                $at_stu_bug_type = $return_bug . _SPLIT_SYMBOL;
-                $_SESSION['$at_stu_bug_type'] = $at_stu_bug_type;
-                $at_error_block = explode(_SPLIT_SYMBOL, $response_at[$_SESSION['selected_item']][$at_stu_answer_sol]);
-                $return_key = array_search($return_bug, $at_error_block);
-                $selected_item_at = $at_error_block[$return_key + 1];
             }
+
+            //正確、錯誤答案都沒有比對成功，直接讓前端去處理
+            return array(
+                'type' => 'no_match',
+                'index' => $error_ans[1]['jump'][$x],
+            );
         }
     }
 
@@ -621,39 +430,29 @@ class Semantic
      */
     private function document_vector($str)
     {
-        /** todo 需要改拉資料庫 **/
         $dimension = 300;
         $word = array_values(array_unique($str));
         $a = array_count_values($word);
         $document_vector = array();
         $vector = array();
         for ($i = 0; $i < count($word); $i++) {
-            mysql_query('SET NAMES utf8');                    // 解決網頁顯示中文字是亂碼
-            mysql_query('SET CHARACTER_SET_CLIENT=utf8');     // 解決網頁顯示中文字是亂碼
-            mysql_query('SET CHARACTER_SET_RESULTS=utf8');    // 解決網頁顯示中文字是亂碼
-            $sql = "SELECT * from lsa_term WHERE word = binary '$word[$i]' ";
-            $result = mysql_query($sql) or die("無法執行SQL");
-            $row = mysql_fetch_array($result);
-            $num = mysql_num_rows($result);
-            $term_id = $row['id'];
-            $term = $word[$i];
-            $sql_u = "SELECT * from lsa_u WHERE id='$term_id' ";
-            $result2 = mysql_query($sql_u) or die("無法執行SQL2");
-            $row2 = mysql_fetch_row($result2);
-            //  echo log($a[$term]+1)*$row['global_weight']*$row2[2]."<br>";
-            for ($k = 1; $k <= $dimension; $k++) {
-                $vector[$k][$i] = log($a[$term] + 1) * $row['global_weight'] * $row2[$k];
+            $t = Lsa_Term::where('word', DB::raw("binary '$word[$i]'"))
+                ->get();
+            foreach($t as $v){
+                $t2 = Lsa_U::where('id',$v['id'])->get();
+                foreach($t2 as $v2){
+                    for ($k = 1; $k <= $dimension; $k++) {
+                        $vector[$k][$i] = log($a[$word[$i]] + 1) * $v['global_weight'] * $v2[$k];
+                    }
+                }
             }
         }
         $b = 0;
-        //   print_r($vector[1])."<br>";
-        //   echo array_sum($vector[1])."<br>";
         for ($k = 1; $k <= $dimension; $k++) {
             $document_vector[$k] = array_sum($vector[$k]);
             $c = $document_vector[$k] * $document_vector[$k];
             $b = $b + $c;
         }
-        // print_r($document_vector);
         $txt_vector_length = sqrt($b);
         $txt_vector['text_vector'] = $document_vector;
         $txt_vector['text_vector_length'] = $txt_vector_length;
@@ -668,20 +467,20 @@ class Semantic
      * @param $user_id
      * @return mixed|string
      */
-    private function sentence_parser_stu($stu_response, $user_id)
+    public function sentence_parser_stu($stu_response, $user_id)
     {
-        /**todo 需要檢查這方法到底在做啥？ **/
+        $path = base_path('segmentation');
         $response = mb_convert_encoding($stu_response, "big5", "utf-8");
-        $filename = "D:/xampp/htdocs/ReadCO/user//" . $user_id . "/input/stuans.txt";
-        $ckipjar = "D:/xampp/htdocs/ReadCO/user//" . $user_id . "/CkipClient.jar";
-        $ckipsockets = "user/" . $user_id . "//ckipsocket.propeties";
-        $inputfilename = "D:/xampp/htdocs/ReadCO/user//" . $user_id . "/input";
-        $outputfilename = "D:/xampp/htdocs/ReadCO/user//" . $user_id . "/output";
+        $filename = $path .'/'. $user_id . "/input/stuans.txt";
+        $ckipjar = $path .'/' . $user_id . "/CkipClient.jar";
+        $ckipsockets = "segmentation/" . $user_id . "//ckipsocket.propeties";
+        $inputfilename = $path .'/' . $user_id . "/input";
+        $outputfilename = $path .'/' . $user_id . "/output";
         $fp = fopen($filename, "w");
         fputs($fp, $response);
         fclose($fp);
         exec("java -jar $ckipjar $ckipsockets $inputfilename $outputfilename");
-        $str = file_get_contents("D:/xampp/htdocs/ReadCO/user//" . $user_id . "/output/stuans.txt");
+        $str = file_get_contents($path .'/' . $user_id . "/output/stuans.txt");
         $content = mb_convert_encoding($str, "utf-8", "big5");
 
         return $content;
@@ -897,17 +696,18 @@ class Semantic
 
     private function sentence_parser($stu_response, $user_id)
     {
+        $path = base_path('segmentation');
         $response = mb_convert_encoding($stu_response, "big5", "utf-8");
-        $filename = "D:/xampp/htdocs/ReadCO/user//" . $user_id . "/input/document.txt";
-        $ckipjar = "D:/xampp/htdocs/ReadCO/user//" . $user_id . "/CkipClient.jar";
-        $ckipsockets = "D:/xampp/htdocs/ReadCO/user//" . $user_id . "/ckipsocket.propeties";
-        $inputfilename = "D:/xampp/htdocs/ReadCO/user//" . $user_id . "/input";
-        $outputfilename = "D:/xampp/htdocs/ReadCO/user//" . $user_id . "/output";
+        $filename = $path .'/'  . $user_id . "/input/document.txt";
+        $ckipjar = $path .'/'  . $user_id . "/CkipClient.jar";
+        $ckipsockets = $path .'/'  . $user_id . "/ckipsocket.propeties";
+        $inputfilename = $path .'/'  . $user_id . "/input";
+        $outputfilename = $path .'/'  . $user_id . "/output";
         $fp = fopen($filename, "w");
         fputs($fp, $response);
         fclose($fp);
         exec("java -jar $ckipjar $ckipsockets $inputfilename $outputfilename");
-        $str = file_get_contents("D:/xampp/htdocs/ReadCO/user//" . $user_id . "/output/document.txt");
+        $str = file_get_contents($path .'/'  . $user_id . "/output/document.txt");
         $content = mb_convert_encoding($str, "utf-8", "big5");
 
         return $content;
