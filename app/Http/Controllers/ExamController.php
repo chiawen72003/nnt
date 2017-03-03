@@ -9,6 +9,7 @@ use \Session;
 use \DB;
 use \Response;
 use App\Http\Providers\ExamClass;
+use App\Http\Providers\Semantic;
 use App\Http\Models\ExamRecord;
 
 class ExamController extends Controller
@@ -133,7 +134,7 @@ class ExamController extends Controller
         $t_input = array(
             'student_ans' => app('request')->get('student_ans'),
             'item_id' => app('request')->get('item_id'),
-            'paper_index' => app('request')->get('paper_index'),
+            'exam_paper_id' => app('request')->get('exam_paper_id'),
         );
         $t = new Semantic($t_input);
         $t->get_item_data();
