@@ -124,24 +124,22 @@ class ExamController extends Controller
     }
 
     /**
-     * 分析作答資料是否正確或錯誤
+     * 使用語意分析作答資料
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function ansAnaly()
+    public function getSemanticAnalysis()
     {
-        $cs_id = app('request')->get('csID');
-        $item_num = app('request')->get('itemNum');
-        $paper_vol = app('request')->get('paperVol');
-        $data = array(
-            'cs_id' => $cs_id,
-            'paper_vol' => $paper_vol,
-            'item_num' => $item_num,
+        $t_input = array(
+            'student_ans' => app('request')->get('student_ans'),
+            'item_id' => app('request')->get('item_id'),
+            'paper_index' => app('request')->get('paper_index'),
         );
-        ExamClass::init($data);
-        $analy_result = ExamClass::get_analy_result();
+        $t = new Semantic($t_input);
+        $t->get_item_data();
+        $analy_result = $t->analy();
 
-        return $analy_result;
+        return json_encode($analy_result);
     }
 
     /**
