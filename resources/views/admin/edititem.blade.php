@@ -94,8 +94,8 @@
                                     <option value="2">AT_不作答</option>
                                     <option value="3">AT_填充題</option>
                                     <option value="4">AT_選擇題</option>
+                                    <option value="5">AT_語意</option>
                                     <option value="87">AT_區塊</option>
-                                    <option value="90">AT_語意</option>
                                     <option value="91">AT_直式(乘法)</option>
                                     <option value="92">AT_直式(除法)</option>
                                     <option value="93">AT_直式(四則)</option>
@@ -104,10 +104,6 @@
                                     <option value="97">AT_直式_除(日時)</option>
                                     <option value="98">AT_直式_除(時分)</option>
                                     <option value="99">AT_直式_除(分秒)</option>
-                                    <option value="100">AT_選擇題(2)</option>
-                                    <option value="101">AT_選擇題(3)</option>
-                                    <option value="102">AT_區塊2</option>
-                                    <option value="103">AT_語意(句子縮寫)</option>
                                 </select>
                             </div>
                             <div class="" id="multiple_choice_questions_area" style="display: none;">
