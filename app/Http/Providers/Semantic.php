@@ -13,7 +13,7 @@ class Semantic
     private $input_data = array(
         'student_ans' => null,
         'item_id' => null,
-        'paper_index' => null,
+        'exam_paper_id' => null,
     );
     private $user_id = 'kbc';
 
@@ -30,7 +30,7 @@ class Semantic
     public function get_item_data()
     {
         $t = QuestionsItem::where('id', $this->input_data['item_id'])
-            ->where('exam_paper_id',$this->input_data['paper_index'])
+            ->where('exam_paper_id',$this->input_data['exam_paper_id'])
             ->get();
         foreach ($t as $v) {
             $this->item_data = $v;
@@ -42,143 +42,87 @@ class Semantic
      */
     public function analy()
     {
-        if ($this->input_data['item_id'] AND $this->input_data['student_ans'] AND $this->item_data) {
-            $right_ans = json_decode($this->item_data['correct_answer'],true);
-            $error_ans = json_decode($this->item_data['error_answer'],true);
-            $ckipclient_obj = new Ckipclient(
-                env('CKIP_SERVER'),
-                env('CKIP_PORT'),
-                env('CKIP_USERNAME'),
-                env('CKIP_PASSWORD')
-            );
-            $return_text = $ckipclient_obj->send($this->input_data['student_ans']);    //----進行斷詞----//
-            $return_sentences = $ckipclient_obj->getSentence();
-            $stuans_return_terms = $ckipclient_obj->getTerm();
-
-            for ($i = 0; $i < count($stuans_return_terms); $i++) {
-                $stu_ans_terms[$i] = $stuans_return_terms[$i]['term'];
-            }
-            for ($i = 0, $num = 0; $i < count($stuans_return_terms); $i++) {
-                $stu_ans_sentence[$num] = $stuans_return_terms[$i]['term'];
-                $stu_ans_sentence[$num + 1] = "(" . $stuans_return_terms[$i]['tag'] . ")";
-                $num += 2;
-            }
-            $stu_ans_sentence = $this->parts_of_speech_change($stu_ans_sentence);//BayesianTest/segmentation.php
-            $stu_ans_new = '';
-            for ($i = 0; $i < count($stu_ans_sentence); $i++) {
-                $stu_ans_new = $stu_ans_new . $stu_ans_sentence[$i];
-            }
-            $stu_ans_new = $this->words_segmentation($stu_ans_new);//BayesianTest/segmentation.php
-            $stu_ans_term = explode(",", $stu_ans_new);
-            $Answer_vector = $this->document_vector($stu_ans_term);     //---學生答案向量 BayesianTest/lsa_compute.php
-            //-----中文句子剖析處理-----//
-            $parser_text_stu = $this->sentence_parser_stu($this->input_data['student_ans'], $this->user_id);   //學生答案 BayesianTest/segmentation.php
-            $parser_text_stu = $this->parser_process($parser_text_stu);//BayesianTest/segmentation.php
-            $document_stu = str_replace('(', ',', $parser_text_stu);
-            $document_stu = str_replace(':', ',', $document_stu);
-            $document_stu = str_replace(')', ',', $document_stu);
-            $stu_doc = explode(",", $document_stu);
-            $num = 0;
-            $stu_nodes = array();
-            for ($j = 0; $j < count($stu_doc); $j++) {
-                if (preg_match("/[\x{4e00}-\x{9fa5}]/u", $stu_doc[$j])) {
-                } else {
-                    $stu_nodes[$num] = $stu_doc[$j];
-                    $num++;
-                }
-            }
-            $t_num = count($right_ans[0]['answer']);
-            for ($x = 0; $x < $t_num; $x++) {           //---與預期答案比對---//
-                $sentence2 = $right_ans[0]['answer'][$x];
-                //----斷字----//
-                for ($j = 0; $j < mb_strlen($sentence2, 'utf8'); $j++) {
-                    $split_sentence2[$j] = mb_substr($sentence2, $j, 1, 'utf-8');
-                }
-                $return_text = $ckipclient_obj->send($sentence2);      //----進行斷詞----//
+        try{
+            if ($this->input_data['item_id'] AND $this->input_data['student_ans'] AND $this->item_data) {
+                $right_ans = json_decode($this->item_data['correct_answer'],true);
+                $error_ans = json_decode($this->item_data['error_answer'],true);
+                $ckipclient_obj = new Ckipclient(
+                    env('CKIP_SERVER'),
+                    env('CKIP_PORT'),
+                    env('CKIP_USERNAME'),
+                    env('CKIP_PASSWORD')
+                );
+                $return_text = $ckipclient_obj->send($this->input_data['student_ans']);    //----進行斷詞----//
                 $return_sentences = $ckipclient_obj->getSentence();
-                $expect_return_terms = $ckipclient_obj->getTerm();
-                $contentword_overlap_value = $this->contentword_overlap($stuans_return_terms, $expect_return_terms); //BayesianTest/cohmetrix_indices.php    //---content words overlap---//
-                $num = 0;
-                for ($i = 0; $i < count($expect_return_terms); $i++) {
-                    $expect_ans_sentence[$num] = $expect_return_terms[$i]['term'];
-                    $expect_ans_sentence[$num + 1] = "(" . $expect_return_terms[$i]['tag'] . ")";
-                    $num = $num + 2;
+                $stuans_return_terms = $ckipclient_obj->getTerm();
+
+                for ($i = 0; $i < count($stuans_return_terms); $i++) {
+                    $stu_ans_terms[$i] = $stuans_return_terms[$i]['term'];
                 }
-                $expect_ans_sentence = $this->parts_of_speech_change($expect_ans_sentence);//BayesianTest/segmentation.php
-                $expect_ans_new = '';
-                for ($i = 0; $i < count($expect_ans_sentence); $i++) {
-                    $expect_ans_new = $expect_ans_new . $expect_ans_sentence[$i];
+                for ($i = 0, $num = 0; $i < count($stuans_return_terms); $i++) {
+                    $stu_ans_sentence[$num] = $stuans_return_terms[$i]['term'];
+                    $stu_ans_sentence[$num + 1] = "(" . $stuans_return_terms[$i]['tag'] . ")";
+                    $num += 2;
                 }
-                $expect_ans_new = $this->words_segmentation($expect_ans_new);//BayesianTest/segmentation.php
-                $expect_ans_term = explode(",", $expect_ans_new);
-                for ($i = 0; $i < count($expect_return_terms); $i++) {
-                    $expect_ans[$i] = $expect_return_terms[$i]['term'];
+                $stu_ans_sentence = $this->parts_of_speech_change($stu_ans_sentence);//BayesianTest/segmentation.php
+                $stu_ans_new = '';
+                for ($i = 0; $i < count($stu_ans_sentence); $i++) {
+                    $stu_ans_new = $stu_ans_new . $stu_ans_sentence[$i];
                 }
-                $word_med = $this->word_MED($stu_ans_terms, $expect_ans);//BayesianTest/cohmetrix_indices.php               //---詞彙最小編輯距離---//
-                $MED_parts_of_speech = $this->parts_of_speech_MED($stuans_return_terms, $expect_return_terms); //BayesianTest/cohmetrix_indices.php      //---詞彙最小編輯距離(詞性)---//
-                $word_med = 1 - (($word_med + $MED_parts_of_speech) / 2);
-                $expect_ans_vector = $this->document_vector($expect_ans_term);//BayesianTest/lsa_compute.php
-                $getValue = round($this->document_sim($Answer_vector, $expect_ans_vector), 4);     //LSA cosine值
+                $stu_ans_new = $this->words_segmentation($stu_ans_new);//BayesianTest/segmentation.php
+                $stu_ans_term = explode(",", $stu_ans_new);
+                $Answer_vector = $this->document_vector($stu_ans_term);     //---學生答案向量 BayesianTest/lsa_compute.php
                 //-----中文句子剖析處理-----//
-                $parser_text_ans = $this->sentence_parser($sentence2, $this->user_id);//BayesianTest/segmentation.php   //學生答案
-                $parser_text_ans = $this->parser_process($parser_text_ans);//BayesianTest/segmentation.php
-                $parser_text_ans = str_replace('(', ',', $parser_text_ans);
-                $parser_text_ans = str_replace(':', ',', $parser_text_ans);
-                $parser_text_ans = str_replace(')', ',', $parser_text_ans);
-                $ans_doc = explode(",", $parser_text_ans);
+                $parser_text_stu = $this->sentence_parser_stu($this->input_data['student_ans'], $this->user_id);   //學生答案 BayesianTest/segmentation.php
+                $parser_text_stu = $this->parser_process($parser_text_stu);//BayesianTest/segmentation.php
+                $document_stu = str_replace('(', ',', $parser_text_stu);
+                $document_stu = str_replace(':', ',', $document_stu);
+                $document_stu = str_replace(')', ',', $document_stu);
+                $stu_doc = explode(",", $document_stu);
                 $num = 0;
-                $ans_nodes = array();
-                for ($j = 0; $j < count($ans_doc); $j++) {
-                    if (preg_match("/[\x{4e00}-\x{9fa5}]/u", $ans_doc[$j])) {
+                $stu_nodes = array();
+                for ($j = 0; $j < count($stu_doc); $j++) {
+                    if (preg_match("/[\x{4e00}-\x{9fa5}]/u", $stu_doc[$j])) {
                     } else {
-                        $ans_nodes[$num] = $ans_doc[$j];
+                        $stu_nodes[$num] = $stu_doc[$j];
                         $num++;
                     }
                 }
-                $syntax_similarity = $this->syntax_sim($stu_nodes, $ans_nodes);//BayesianTest/cohmetrix_indices.php
-                /** todo 從資料庫取得單元的公式乘法資料，在計算=>建議從for外面取，在帶進來避免重複取值 */
-                $getValue = (0.4 * $contentword_overlap_value + 0.3 * $getValue + 0.3 * $syntax_similarity);
-                $threshold = 0.85;
-
-                if ($getValue > $threshold) {
-                   return array(
-                       'type' => 'right',
-                       'index' => $right_ans[1]['jump'][$x],
-                   );
-                }
-
-            }
-
-            //開始分析錯誤答案
-            /** todo 從資料庫取得單元的公式乘法資料，在計算=>建議從for外面取，在帶進來避免重複取值 */
-            $content_par = 0.4;
-            $lsa_par = 0.3;
-            $syntax_pay=0.4;
-
-            $stu_ans = $this->input_data['student_ans'];
-            $max_value = -1; //初始 max_value
-            $at_stu_answer_sol = 0;
-            $at_expection_error = $error_ans;  //-----錯誤bug
-            $sentence_num = (count($at_expection_error));
-            if ($stu_ans == null) {
-                return array(
-                    'type' => 'no_match',
-                    'index' => $error_ans[1]['jump'][$x],
-                );
-            } else {
-                $t_num = count($error_ans[0]['answer']);
-                for ($x = 0; $x < $t_num; $x++) {
-                    $error_sentence = $error_ans[0]['answer'][$x];
-                    $return_text = $ckipclient_obj->send($error_sentence);      //----進行斷詞----//
+                $t_num = count($right_ans[0]['answer']);
+                for ($x = 0; $x < $t_num; $x++) {           //---與預期答案比對---//
+                    $sentence2 = $right_ans[0]['answer'][$x];
+                    //----斷字----//
+                    for ($j = 0; $j < mb_strlen($sentence2, 'utf8'); $j++) {
+                        $split_sentence2[$j] = mb_substr($sentence2, $j, 1, 'utf-8');
+                    }
+                    $return_text = $ckipclient_obj->send($sentence2);      //----進行斷詞----//
                     $return_sentences = $ckipclient_obj->getSentence();
-                    $error_return_terms = $ckipclient_obj->getTerm();
-                    $error_ans_term = $this->sentence_revise($error_return_terms);
-                    $expect_error_vector = $this->document_vector($error_ans_term);
-                    $lsa = round($this->document_sim($Answer_vector, $expect_error_vector), 4);        //LSA cosine
-                    $contentword_overlap_value = $this->contentword_overlap($stuans_return_terms, $error_return_terms);     //---content words overlap---//
+                    $expect_return_terms = $ckipclient_obj->getTerm();
+                    $contentword_overlap_value = $this->contentword_overlap($stuans_return_terms, $expect_return_terms); //BayesianTest/cohmetrix_indices.php    //---content words overlap---//
+                    $num = 0;
+                    for ($i = 0; $i < count($expect_return_terms); $i++) {
+                        $expect_ans_sentence[$num] = $expect_return_terms[$i]['term'];
+                        $expect_ans_sentence[$num + 1] = "(" . $expect_return_terms[$i]['tag'] . ")";
+                        $num = $num + 2;
+                    }
+                    $expect_ans_sentence = $this->parts_of_speech_change($expect_ans_sentence);//BayesianTest/segmentation.php
+                    $expect_ans_new = '';
+                    for ($i = 0; $i < count($expect_ans_sentence); $i++) {
+                        $expect_ans_new = $expect_ans_new . $expect_ans_sentence[$i];
+                    }
+                    $expect_ans_new = $this->words_segmentation($expect_ans_new);//BayesianTest/segmentation.php
+                    $expect_ans_term = explode(",", $expect_ans_new);
+                    for ($i = 0; $i < count($expect_return_terms); $i++) {
+                        $expect_ans[$i] = $expect_return_terms[$i]['term'];
+                    }
+                    $word_med = $this->word_MED($stu_ans_terms, $expect_ans);//BayesianTest/cohmetrix_indices.php               //---詞彙最小編輯距離---//
+                    $MED_parts_of_speech = $this->parts_of_speech_MED($stuans_return_terms, $expect_return_terms); //BayesianTest/cohmetrix_indices.php      //---詞彙最小編輯距離(詞性)---//
+                    $word_med = 1 - (($word_med + $MED_parts_of_speech) / 2);
+                    $expect_ans_vector = $this->document_vector($expect_ans_term);//BayesianTest/lsa_compute.php
+                    $getValue = round($this->document_sim($Answer_vector, $expect_ans_vector), 4);     //LSA cosine值
                     //-----中文句子剖析處理-----//
-                    $parser_text_ans = $this->sentence_parser($error_sentence, $this->user_id);   //學生答案
-                    $parser_text_ans = $this->parser_process($parser_text_ans);
+                    $parser_text_ans = $this->sentence_parser($sentence2, $this->user_id);//BayesianTest/segmentation.php   //學生答案
+                    $parser_text_ans = $this->parser_process($parser_text_ans);//BayesianTest/segmentation.php
                     $parser_text_ans = str_replace('(', ',', $parser_text_ans);
                     $parser_text_ans = str_replace(':', ',', $parser_text_ans);
                     $parser_text_ans = str_replace(')', ',', $parser_text_ans);
@@ -192,21 +136,84 @@ class Semantic
                             $num++;
                         }
                     }
-                    $syntax_similarity = $this->syntax_sim($stu_nodes, $ans_nodes);
-                    $getValue = $content_par * $contentword_overlap_value + $lsa_par * $lsa + $syntax_pay * $syntax_similarity;
-                    if ($getValue > $max_value and $getValue > 0.5) {
+                    $syntax_similarity = $this->syntax_sim($stu_nodes, $ans_nodes);//BayesianTest/cohmetrix_indices.php
+                    /** todo 從資料庫取得單元的公式乘法資料，在計算=>建議從for外面取，在帶進來避免重複取值 */
+                    $getValue = (0.4 * $contentword_overlap_value + 0.3 * $getValue + 0.3 * $syntax_similarity);
+                    $threshold = 0.85;
+
+                    if ($getValue > $threshold) {
                         return array(
                             'type' => 'right',
-                            'index' => $error_ans[1]['jump'][$x],
+                            'index' => $right_ans[1]['jump'][$x],
                         );
                     }
-                }
-            }
 
-            //正確、錯誤答案都沒有比對成功，直接讓前端去處理
+                }
+
+                //開始分析錯誤答案
+                /** todo 從資料庫取得單元的公式乘法資料，在計算=>建議從for外面取，在帶進來避免重複取值 */
+                $content_par = 0.4;
+                $lsa_par = 0.3;
+                $syntax_pay=0.4;
+
+                $stu_ans = $this->input_data['student_ans'];
+                $max_value = -1; //初始 max_value
+                $at_stu_answer_sol = 0;
+                $at_expection_error = $error_ans;  //-----錯誤bug
+                $sentence_num = (count($at_expection_error));
+                if ($stu_ans == null) {
+                    return array(
+                        'type' => 'no_match',
+                        'index' => $error_ans[1]['jump'][$x],
+                    );
+                } else {
+                    $t_num = count($error_ans[0]['answer']);
+                    for ($x = 0; $x < $t_num; $x++) {
+                        $error_sentence = $error_ans[0]['answer'][$x];
+                        $return_text = $ckipclient_obj->send($error_sentence);      //----進行斷詞----//
+                        $return_sentences = $ckipclient_obj->getSentence();
+                        $error_return_terms = $ckipclient_obj->getTerm();
+                        $error_ans_term = $this->sentence_revise($error_return_terms);
+                        $expect_error_vector = $this->document_vector($error_ans_term);
+                        $lsa = round($this->document_sim($Answer_vector, $expect_error_vector), 4);        //LSA cosine
+                        $contentword_overlap_value = $this->contentword_overlap($stuans_return_terms, $error_return_terms);     //---content words overlap---//
+                        //-----中文句子剖析處理-----//
+                        $parser_text_ans = $this->sentence_parser($error_sentence, $this->user_id);   //學生答案
+                        $parser_text_ans = $this->parser_process($parser_text_ans);
+                        $parser_text_ans = str_replace('(', ',', $parser_text_ans);
+                        $parser_text_ans = str_replace(':', ',', $parser_text_ans);
+                        $parser_text_ans = str_replace(')', ',', $parser_text_ans);
+                        $ans_doc = explode(",", $parser_text_ans);
+                        $num = 0;
+                        $ans_nodes = array();
+                        for ($j = 0; $j < count($ans_doc); $j++) {
+                            if (preg_match("/[\x{4e00}-\x{9fa5}]/u", $ans_doc[$j])) {
+                            } else {
+                                $ans_nodes[$num] = $ans_doc[$j];
+                                $num++;
+                            }
+                        }
+                        $syntax_similarity = $this->syntax_sim($stu_nodes, $ans_nodes);
+                        $getValue = $content_par * $contentword_overlap_value + $lsa_par * $lsa + $syntax_pay * $syntax_similarity;
+                        if ($getValue > $max_value and $getValue > 0.5) {
+                            return array(
+                                'type' => 'error',
+                                'index' => $error_ans[1]['jump'][$x],
+                            );
+                        }
+                    }
+                }
+
+                //正確、錯誤答案都沒有比對成功，直接讓前端去處理
+                return array(
+                    'type' => 'no_match',
+                    'jump' => '',
+                );
+            }
+        }catch (\Exception $e){
             return array(
                 'type' => 'no_match',
-                'index' => $error_ans[1]['jump'][$x],
+                'jump' => '',
             );
         }
     }
