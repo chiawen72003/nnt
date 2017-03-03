@@ -44,7 +44,7 @@ class Ckipclient
 
             $this->raw_text = $raw_text;
 
-            $xw = new XMLWriter();
+            $xw = new \XMLWriter();
             $xw->openMemory();
             $xw->startDocument('1.0');
             $xw->startElement('wordsegmentation');
