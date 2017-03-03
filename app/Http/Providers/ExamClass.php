@@ -79,22 +79,28 @@ class ExamClass
         );
         $t = QuestionsItem::where('questions_item.id',self::$item_id)
             ->leftJoin('model_item', 'model_item.id', '=', 'questions_item.model_item_id')
-            ->select('questions_item.title', 'questions_item.correct_answer', 'questions_item.error_answer', 'model_item.file_name')
+            ->select(
+                'questions_item.title',
+                'questions_item.correct_answer',
+                'questions_item.error_answer',
+                'questions_item.model_item_options',
+                'model_item.file_name'
+            )
             ->get();
-        if($t){
-            foreach ($t as $v){
-                $return_data['title'] = $v['title'];
-                $correct_answer = json_decode($v['correct_answer'],true);
-                $return_data['correct_answer']['answer'] = $correct_answer[0]['answer'];
-                $return_data['correct_answer']['jump'] = $correct_answer[1]['jump'];
-                $return_data['correct_answer']['keyword'] = $correct_answer[2]['keyword'];
-                $error_answer = json_decode($v['error_answer'],true);
-                $return_data['error_answer']['answer'] = $error_answer[0]['answer'];
-                $return_data['error_answer']['jump'] = $error_answer[1]['jump'];
-                $return_data['error_answer']['number'] = $error_answer[2]['number'];
-                $return_data['error_answer']['keyword'] = $error_answer[3]['keyword'];
-                $return_data['load_module'] = $v['file_name'];
-            }
+        foreach ($t as $v){
+            $return_data['title'] = $v['title'];
+            $correct_answer = json_decode($v['correct_answer'],true);
+            $return_data['correct_answer']['answer'] = $correct_answer[0]['answer'];
+            $return_data['correct_answer']['jump'] = $correct_answer[1]['jump'];
+            $return_data['correct_answer']['keyword'] = $correct_answer[2]['keyword'];
+            $error_answer = json_decode($v['error_answer'],true);
+            $return_data['error_answer']['answer'] = $error_answer[0]['answer'];
+            $return_data['error_answer']['jump'] = $error_answer[1]['jump'];
+            $return_data['error_answer']['number'] = $error_answer[2]['number'];
+            $return_data['error_answer']['keyword'] = $error_answer[3]['keyword'];
+            $return_data['load_module'] = $v['file_name'];
+            $return_data['model_item_options'] = json_decode($v['model_item_options'],true);
+
         }
 
         return $return_data;
