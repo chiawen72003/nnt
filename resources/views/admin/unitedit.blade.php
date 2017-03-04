@@ -41,7 +41,7 @@
             [! Form::open(array('url'=>route($form_path),'id'=>'addForm', 'name'=>'addForm', 'files' => true)) !]
             [! Form::hidden('domain', 'addForm') !]
 
-            <div class="select-group">
+                <div class="select-group">
                     <div class="label-title">代理人類別</div>
                     <select name="module_type" id="module_type">
                         <option value="">請選擇代理人類別</option>
