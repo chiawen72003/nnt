@@ -26,7 +26,7 @@ class AdController extends Controller
     }
 
     /**
-     * 首頁
+     * 首頁 單元列表
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
@@ -35,26 +35,10 @@ class AdController extends Controller
         $data = array();
         $data['user_data'] = app('request')->session()->get('user_data');
         $data['list_data'] = ExamClass::unit_list();
-        $data['exam_list'] = ExamClass::get_exam_paper_data($data['list_data']);
-        $data['questions_item_nums'] = ExamClass::get_questions_item_nums($data['exam_list']);
         $data['subject_list'] = ExamClass::subject_list();
         $data['module_type'] = self::$module_type;
 
-        return view('admin.list', $data);
-    }
-
-    /**
-     * 單元列表
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function unitList()
-    {
-        $data = array();
-        $data['user_data'] = app('request')->session()->get('user_data');
-        $data['list_data'] = ExamClass::unit_list();
-
-        return view('admin.unitlist', $data);
+        return view('admin.unit_list', $data);
     }
 
     /**
@@ -66,6 +50,7 @@ class AdController extends Controller
         $data = array();
         $data['title'] = '新增 ';
         $data['subject_list'] = ExamClass::subject_list();
+        $data['form_path'] = 'ad.unit.add.data';
 
         return view('admin.unitedit', $data);
     }
@@ -80,6 +65,7 @@ class AdController extends Controller
         $data['title'] = '編輯 ';
         $data['subject_list'] = ExamClass::subject_list();
         $data['old_data'] = ExamClass::get_unit($id);
+        $data['form_path'] = 'ad.unit.update.data';
 
         return view('admin.unitedit', $data);
     }
@@ -107,7 +93,7 @@ class AdController extends Controller
         }
         ExamClass::unit_add($data);
 
-        return '';
+        return redirect()->route('ad.index')->with('message', '單元結構新增完畢!');
     }
 
     /**
@@ -148,13 +134,27 @@ class AdController extends Controller
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function examPaperList()
+    public function examPaperList($unit_id)
     {
         $data = array();
         $data['user_data'] = app('request')->session()->get('user_data');
-        $data['list_data'] = ExamClass::unit_list();
+        $data['list_data'] = ExamClass::get_exam_paper_data($unit_id);
+        $data['questions_item_nums'] = ExamClass::get_questions_item_nums($data['list_data']);
+        $data['unit_id'] = $unit_id;
 
-        return view('admin.index', $data);
+        return view('admin.paper_list', $data);
+    }
+
+    /**
+     * 新增一個試卷的頁面
+     *
+     */
+    public function examPaperAddPage($unit_id)
+    {
+        $data = array();
+        $data['unit_id'] = $unit_id;
+
+        return view('admin.paper_edit', $data);
     }
 
     /**
