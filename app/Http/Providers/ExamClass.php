@@ -465,12 +465,15 @@ class ExamClass
         $return_data = array();
         $temp_obj = ExamRecord::where('student_id', $mem_id['user_id'])
             ->where('unit_id',$id)
-            ->select('id', 'unit_id', 'record')
+            ->select('id', 'unit_id', 'record', 'use_item')
             ->get();
         foreach ($temp_obj as $t){
             $return_data['id'] = $t['id'];
             $return_data['unit_id'] = $t['unit_id'];
             $return_data['record'] = json_decode($t['record'],true);
+            $use_item = json_decode($t['use_item'],true);
+            array_pop($use_item);
+            $return_data['use_item'] = $use_item;
         }
 
         return $return_data;
