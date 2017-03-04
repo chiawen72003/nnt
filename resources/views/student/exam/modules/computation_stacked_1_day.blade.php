@@ -192,7 +192,9 @@
 		        ans = ans + $('#input_'+x).val();
 			}
 		}
-		//絕對答案或關鍵字分析，index由0開始所以需要減1
+        student_ans = ans;
+
+        //絕對答案或關鍵字分析，index由0開始所以需要減1
         for(var x=0;x<right_ans.length;x++){
             if(right_ans[x].answer > '' && right_ans[x].answer == ans){
                 if(right_ans[x].jump == '999'){
