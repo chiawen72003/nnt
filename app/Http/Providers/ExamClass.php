@@ -169,6 +169,7 @@ class ExamClass
     public static function get_questions_item_nums($paper_obj)
     {
         $subject_list = array();
+        $whereIn = array();
         foreach($paper_obj as $temp_array){
             $whereIn[] = $temp_array['id'];
         }
