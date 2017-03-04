@@ -49,7 +49,7 @@
      */
     function analysis() {
         var ans = $('#module_text_area').val();
-        console.log(ans);
+        student_ans = $('#module_text_area').val();
 
         //絕對答案或關鍵字分析，index由0開始所以需要減1
         for(var x=0;x<right_ans.length;x++){
