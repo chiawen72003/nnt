@@ -184,6 +184,36 @@ class ExamController extends Controller
         return ;
     }
 
+
+    /**
+     * 觀看學生操作紀錄的list
+     */
+    public function viewExamRecordList($id)
+    {
+        $data = array();
+        $mem_id = app('request')->session()->get('user_data');
+        $data['exam_record'] = ExamClass::get_exam_record($mem_id,$id);
+        $unit_id = $data['exam_record']['unit_id'];
+        ExamClass::init(
+            array(
+                'unit_id' => $unit_id
+            )
+        );
+
+        $data['unit_id'] = $unit_id;
+        $data['user_data'] = app('request')->session()->get('user_data');
+        $t = new ExamRecord();
+        $t->_init(
+            array(
+                'student_id' => app('request')->session()->get('user_data')['user_id'],
+                'unit_id' => $unit_id,
+            )
+        );
+        $t->set_has_view_record();
+
+        return view('student.exam.record_view_list', $data);
+    }
+
     /**
      * 觀看學生操作紀錄
      */
