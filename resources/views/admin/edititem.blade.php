@@ -42,7 +42,7 @@
                 <ul>
                     <!--<li>能力指標說明<input type="text" size="25" /></li>
                     <li>作答時間<input type="text" size="4" maxlength="3" />分</li>-->
-                    <li><a href="[! route('ad.index') !]" class="button_g" title="取消">取消</a></li>
+                    <li><a onclick="history.back()" class="button_g" title="取消">取消</a></li>
                     <li><a class="button_g" title="新增試題資料" onclick="add_item()" id="add_data_btn">新增試題資料</a></li>
                     <li><a class="button_g" title="更新試題資料" onclick="update_item()" id="update_data_btn" style="display: none">更新試題資料</a></li>
 				    <li><a class="button" title="上一試題" onclick="item_Back()" id="back_btn" style="display: none">上一試題</a></li>
