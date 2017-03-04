@@ -51,6 +51,7 @@
      * 答案分析
      */
     function analysis() {
+        student_ans = $('#module_show_area').html();
         var ans = $('#module_show_area').html();
 
         //絕對答案或關鍵字分析，index由0開始所以需要減1
