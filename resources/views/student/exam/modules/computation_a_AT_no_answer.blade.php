@@ -34,6 +34,7 @@
 	function doNext() {
         if (right_ans[0].jump != null)
 		{
+            student_ans = '';
             if (right_ans[0].jump == '999') {
                 now_paper_index++;
                 now_item_index = 0;
