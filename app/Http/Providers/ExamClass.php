@@ -310,7 +310,9 @@ class ExamClass
                 }
             }
             if(count($where_in) > 0){
-                $temp_obj = ExamPaper::whereIn('unit_list_id',$where_in)->get();
+                $temp_obj = ExamPaper::whereIn('unit_list_id',$where_in)
+                    ->orderBy('id','ASC')
+                    ->get();
                 if($temp_obj){
                     foreach ($temp_obj as $v){
                         $exam_list[$v['unit_list_id']][] = $v;
@@ -321,7 +323,9 @@ class ExamClass
 
         if(is_numeric($unit_data))
         {
-            $temp_obj = ExamPaper::where('unit_list_id',$unit_data)->get();
+            $temp_obj = ExamPaper::where('unit_list_id',$unit_data)
+                ->orderBy('id','ASC')
+                ->get();
             if($temp_obj){
                 foreach ($temp_obj as $v){
                     $exam_list[] = $v;
