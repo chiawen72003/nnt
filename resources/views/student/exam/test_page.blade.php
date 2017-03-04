@@ -51,6 +51,7 @@
     var item_id = 0;
     var operating_array = [];
     var play_operating_record = [];
+    var student_ans = '';//學生的答案
 
     @foreach($paper_data as $key => $value)
         paper_data.push("[! $value !]");
@@ -177,8 +178,8 @@
                     record:operating_array,
                     itemData : [{
                         'item_id':item_id,
-                        'paper_index':now_paper_index,
-                        'item_index':now_item_index,
+                        'paper_id':paper_data[now_paper_index],
+                        'student_ans':student_ans
                     }],
                     isFinish : is_finish
 
@@ -187,6 +188,7 @@
 
                 }
             });
+            student_ans = '';
         @endif
     }
 
