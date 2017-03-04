@@ -169,11 +169,8 @@ class ExamClass
     public static function get_questions_item_nums($paper_obj)
     {
         $subject_list = array();
-        $whereIn = array();
         foreach($paper_obj as $temp_array){
-            foreach($temp_array as $value){
-                $whereIn[] = $value['id'];
-            }
+            $whereIn[] = $temp_array['id'];
         }
         if(count($whereIn) > 0){
             $t = new QuestionsItem();
@@ -317,6 +314,16 @@ class ExamClass
                     foreach ($temp_obj as $v){
                         $exam_list[$v['unit_list_id']][] = $v;
                     }
+                }
+            }
+        }
+
+        if(is_numeric($unit_data))
+        {
+            $temp_obj = ExamPaper::where('unit_list_id',$unit_data)->get();
+            if($temp_obj){
+                foreach ($temp_obj as $v){
+                    $exam_list[] = $v;
                 }
             }
         }
