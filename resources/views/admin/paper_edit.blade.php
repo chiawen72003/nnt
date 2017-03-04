@@ -44,7 +44,7 @@
             </div>
             <div class="form-button-wrap">
                 <input class="btn-yellow" type="button" onclick='history.back()' value="回上一頁" />
-                <input class="btn-yellow" type="button"  value="輸入完畢，建立結構" onclick="up_exampaper()"/>
+                <input class="btn-yellow" type="button"  value="輸入完畢，建立試卷" onclick="up_exampaper()"/>
             </div>
         </div>
     </div>
