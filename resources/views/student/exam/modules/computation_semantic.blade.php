@@ -50,6 +50,8 @@
      */
     function analysis() {
         if($('#module_text_area').val() != ''){
+            student_ans = $('#module_text_area').val();
+
             $.ajax({
                 url: "[! route('mem.exam.semantic.analysis') !]",
                 type: 'POST',
