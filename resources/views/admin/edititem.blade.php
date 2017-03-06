@@ -116,51 +116,9 @@
                             <div class="chat">
                                 <span>回饋類型</span>
                                 <select id="feedback_type">
-                                    <option value="0">main question1</option>
-                                    <option value="1">main question2</option>
-                                    <option value="2">main question3</option>
-                                    <option value="3">Summary</option>
-                                    <option value="4">hint</option>
-                                    <option value="5">prompt</option>
-                                    <option value="6">teaching</option>
-                                    <option value="7">pump</option>
-                                    <option value="8">short feedback</option>
-                                    <option value="9">PComp</option>
-                                    <option value="10">Assertion</option>
-                                    <option value="11">T &amp; S Opening</option>
-                                    <option value="12">Tutor main Question</option>
-                                    <option value="13">Answer</option>
-                                    <option value="14">Closing</option>
-                                    <option value="15">Tutor Pos Fdbk</option>
-                                    <option value="16">Tutor Neut Fdbk</option>
-                                    <option value="17">Tutor Neg Fdbk</option>
-                                    <option value="18">Student Pos Fdbk</option>
-                                    <option value="19">Student Neut Fdbk</option>
-                                    <option value="20">T &amp; S MtCog Fdbk</option>
-                                    <option value="21">T &amp; S Neut Fdbk</option>
-                                    <option value="22">Tutor Answer</option>
-                                    <option value="23">Student Good Answer</option>
-                                    <option value="24">Student Bad Answer + Tutor Neg Fdbk</option>
-                                    <option value="25">Student Correct Answer</option>
-                                    <option value="26">Tutor Question</option>
-                                    <option value="27">Tutor Pos Fdbk + Tutor Ans</option>
-                                    <option value="28">Student Neut Fdbk + Tutor Ans</option>
-                                    <option value="29">Tutor Pump</option>
-                                    <option value="30">T &amp; S Hint</option>
-                                    <option value="31">Student Pos Fdbk + Tutor Pos Fdbk + Tutor Assertion</option>
-                                    <option value="32">T &amp; S Prompt</option>
-                                    <option value="33">Tutor Pos Fdbk + Tutor Ans + Tutor Assertion</option>
-                                    <option value="34">Tutor Summary + T &amp; S Closing</option>
-                                    <option value="35">Pos Fdbk + Summary</option>
-                                    <option value="36">Pos Fdbk + Assertion</option>
-                                    <option value="37">Pos Fdbk + Tutor Answer + Assertion</option>
-                                    <option value="38">Neut Fdbk + Hint</option>
-                                    <option value="39">Neut Fdbk + prompt</option>
-                                    <option value="40">Neg Fdbk + Tutor Answer + Assertion</option>
-                                    <option value="41">Meta Cog Fdbk + Neut Fdbk + Hint</option>
-                                    <option value="42">hint + shortfeedback</option>
-                                    <option value="43">pump + shortfeedback</option>
-                                    <option value="44">Opening</option>
+                                    @foreach($feedback_list as $key => $v)
+                                        <option value="[! $key !]">[! $v !]</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="chat">
