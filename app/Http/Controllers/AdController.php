@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Models\FeedbackList;
 use App\Http\Models\Subject;
 use \Input;
 use \Validator;
@@ -193,7 +194,8 @@ class AdController extends Controller
         $data = array();
         $data['exampaper_data'] = ExamClass::get_exam_paper($id);
         $data['unit_data'] = ExamClass::get_unit($data['exampaper_data']['unit_list_id']);
-
+        $t = new FeedbackList();
+        $data['feedback_list'] = $t->get_list_data();
 
         return view('admin.edititem', $data);
     }
