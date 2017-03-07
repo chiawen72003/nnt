@@ -13,7 +13,6 @@ class QuestionsItem extends BaseModel {
         'model_item_id'=>'0',
         'model_item_options'=>array(),
         'feedback_type'=>'0',
-        'abbreviation'=>'',
         'exam_paper_id'=>'0',
         'avatar_type'=>array(),
         'avatar_dsc'=>array(),
@@ -42,7 +41,6 @@ class QuestionsItem extends BaseModel {
         $add_obj -> model_item_id =  $this->item_data['model_item_id'];
         $add_obj -> model_item_options =   json_encode($this->item_data['model_item_options']);
         $add_obj -> feedback_type =  $this->item_data['feedback_type'];
-        $add_obj -> abbreviation =  $this->item_data['abbreviation'];
         $add_obj -> exam_paper_id =  $this->item_data['exam_paper_id'];
         $add_obj -> avatar_type =  json_encode($this->item_data['avatar_type']);
         $add_obj -> avatar_dsc =  json_encode($this->item_data['avatar_dsc']);
@@ -64,7 +62,6 @@ class QuestionsItem extends BaseModel {
         $add_obj -> model_item_id =  $this->item_data['model_item_id'];
         $add_obj -> model_item_options =   json_encode($this->item_data['model_item_options']);
         $add_obj -> feedback_type =  $this->item_data['feedback_type'];
-        $add_obj -> abbreviation =  $this->item_data['abbreviation'];
         $add_obj -> exam_paper_id =  $this->item_data['exam_paper_id'];
         $add_obj -> avatar_type =  json_encode($this->item_data['avatar_type']);
         $add_obj -> avatar_dsc =  json_encode($this->item_data['avatar_dsc']);
