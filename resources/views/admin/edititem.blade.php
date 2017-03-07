@@ -121,10 +121,6 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="chat">
-                                <span>句子縮寫內容</span>
-                                <input type="text" class="c_title" placeholder="請輸入句子縮寫內容" id="abbreviation" >
-                            </div>
                         </div>
                         <div id="tab_2" class="tab_content" style="display: none">
                             <div class="chat" >
@@ -335,7 +331,6 @@
         temp_obj.push({'score':$('#score').val()});
         temp_obj.push({'model_item_id':$('#model_item_id').val()});
         temp_obj.push({'feedback_type':$('#feedback_type').val()});
-        temp_obj.push({'abbreviation':$('#abbreviation').val()});
         temp_obj.push({'power_dsc':$('#power_dsc').val()});
         temp_obj.push({'id':item_id});
         //正確答案區
@@ -554,7 +549,6 @@
         $('#score').val('1');
         $('#model_item_id').val('1');
         $('#feedback_type').val('1');
-        $('#abbreviation').val('');
         $('#power_dsc').val('');
         item_id = 0;
         //代理人頭像設定
@@ -621,7 +615,6 @@
         $('#score').val(item_data['score']);
         $('#model_item_id').val(item_data['model_item_id']);
         $('#feedback_type').val(item_data['feedback_type']);
-        $('#abbreviation').val(item_data['abbreviation']);
         $('#power_dsc').val(item_data['power_dsc']);
         item_id = item_data['id'];
         //代理人頭像設定
