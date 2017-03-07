@@ -222,6 +222,8 @@ class ExamController extends Controller
     public function viewExamRecord($id)
     {
         $data = array();
+        $t = new FeedbackList();
+        $data['feedback_list'] = $t->get_list_data();//回饋類型
         $mem_id = app('request')->session()->get('user_data');
         $data['exam_record'] = ExamClass::get_exam_record($mem_id,$id);
         $unit_id = $data['exam_record']['unit_id'];
