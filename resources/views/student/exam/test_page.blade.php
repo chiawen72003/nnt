@@ -54,6 +54,7 @@
     var student_ans = '';//學生的答案
     var feedback_list = [];//回饋類型
     var feedback_dsc = '';
+    var can_update_record = false;//可否上傳操作紀錄，需要在答案分析時變true，換試卷後變成false
 
     @foreach($paper_data as $key => $value)
         paper_data.push("[! $value !]");
@@ -79,26 +80,33 @@
 
     function go_next() {
         var has_item = false;
+        var new_item_id = 0;
         for (var x = 0; x < item_data.length; x++) {
             if (item_data[x].paper_id == paper_data[now_paper_index] && item_data[x].item_index == now_item_index) {
-                item_id = item_data[x].item_id;
+                new_item_id = item_data[x].item_id;
                 feedback_dsc = feedback_list[item_data[x].feedback_type];
                 has_item = true;
             }
         }
         if (has_item) {
-            update_record('0');
+            if(can_update_record)
+            {
+                update_record('0');
+            }
+            item_id = new_item_id;
             operating_array = [];//重置操作紀錄
             load_module_page(item_id);
         }
         if (paper_data[now_paper_index] == undefined) {
+            update_record('1');
             item_id = 0;
             feedback_dsc = '';
-            update_record('1');
             operating_array = [];//重置操作紀錄
             alert('單元測驗結束!!');
             location.href="[! route('mem.exam') !]";
         }
+        can_update_record = false;
+
     }
 
     //載入模組頁面
