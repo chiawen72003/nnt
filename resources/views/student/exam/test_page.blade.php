@@ -52,6 +52,8 @@
     var operating_array = [];
     var play_operating_record = [];
     var student_ans = '';//學生的答案
+    var feedback_list = [];//回饋類型
+    var feedback_dsc = '';
 
     @foreach($paper_data as $key => $value)
         paper_data.push("[! $value !]");
@@ -59,13 +61,18 @@
     @foreach($questions_item_data as $id => $v)
         @foreach($v as $key => $value)
         item_data.push(
-        {
-            'paper_id': '[! $id !]',
-            'item_index': '[! $key !]',
-            'item_id': '[! $value["id"] !]',
-        }
-    );
+            {
+                'paper_id': '[! $id !]',
+                'item_index': '[! $key !]',
+                'item_id': '[! $value["id"] !]',
+                'feedback_type': '[! $value["feedback_type"] !]'
+            }
+        );
+        @endforeach
     @endforeach
+        feedback_list.push('');
+    @foreach($feedback_list as $v)
+        feedback_list.push('[! $v !]');
     @endforeach
 
     /** todo 系統可以循環到結束，接下來測試試題正確與錯誤時，index不規則變動的狀況。 **/
@@ -75,6 +82,7 @@
         for (var x = 0; x < item_data.length; x++) {
             if (item_data[x].paper_id == paper_data[now_paper_index] && item_data[x].item_index == now_item_index) {
                 item_id = item_data[x].item_id;
+                feedback_dsc = feedback_list[item_data[x].feedback_type];
                 has_item = true;
             }
         }
@@ -85,6 +93,7 @@
         }
         if (paper_data[now_paper_index] == undefined) {
             item_id = 0;
+            feedback_dsc = '';
             update_record('1');
             operating_array = [];//重置操作紀錄
             alert('單元測驗結束!!');
@@ -177,9 +186,12 @@
                     unit_id: '[! $unit_id !]',
                     record:operating_array,
                     itemData : [{
-                        'item_id':item_id,
+                        'paper_index':now_paper_index,
                         'paper_id':paper_data[now_paper_index],
-                        'student_ans':student_ans
+                        'item_index':now_item_index,
+                        'item_id':item_id,
+                        'student_ans':student_ans,
+                        'feedback_dsc':feedback_dsc
                     }],
                     isFinish : is_finish
 
@@ -197,6 +209,7 @@
         @if($is_view_record)
         replay_record();
         @endif
+
     });
 </script>
 </body>
