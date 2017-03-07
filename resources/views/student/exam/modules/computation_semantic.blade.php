@@ -49,9 +49,9 @@
      *
      */
     function analysis() {
-        if($('#module_text_area').val() != ''){
+        if($('#module_text_area').val() != '')
+        {
             student_ans = $('#module_text_area').val();
-
             $.ajax({
                 url: "[! route('mem.exam.semantic.analysis') !]",
                 type: 'POST',
@@ -63,6 +63,7 @@
                     item_id:item_id
                 },
 				error:function (data) {
+                    can_update_record = true;
                     //如果都比對不出答案時，使用錯誤區錯誤號碼為999的選項當跳題
                     for(var x=0;x<error_ans.length;x++){
                         if(error_ans[x].number == '999')
@@ -83,7 +84,7 @@
                     }
 				},
                 success: function (data) {
-                    console.log(data['type']);
+                    can_update_record = true;
                     if(data['type'] == 'no_match'){
                         //如果都比對不出答案時，使用錯誤區錯誤號碼為999的選項當跳題
                         for(var x=0;x<error_ans.length;x++){
