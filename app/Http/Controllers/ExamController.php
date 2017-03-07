@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Models\FeedbackList;
 use Illuminate\Http\Request;
 use \Input;
 use \Validator;
@@ -64,9 +65,10 @@ class ExamController extends Controller
                 'unit_id' => $unit_id
             )
         );
-
         $data = array();
         $data['is_view_record'] = false;//是否為操作紀錄觀看模式
+        $t = new FeedbackList();
+        $data['feedback_list'] = $t->get_list_data();//回饋類型
         $data['unit_id'] = $unit_id;
         $data['user_data'] = app('request')->session()->get('user_data');
         $data['paper_data'] = ExamClass::get_paper_by_unit_id($unit_id);
