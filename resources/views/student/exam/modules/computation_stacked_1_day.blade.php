@@ -186,6 +186,8 @@
 	 * 答案分析
      */
     function analysis() {
+        can_update_record = true;
+        var has_result = false;
 		var ans = '';
 		for(var x=14;x<38;x++){
 		    if($('#input_'+x).val() != ''){
@@ -193,7 +195,6 @@
 			}
 		}
         student_ans = ans;
-
         //絕對答案或關鍵字分析，index由0開始所以需要減1
         for(var x=0;x<right_ans.length;x++){
             if(right_ans[x].answer > '' && right_ans[x].answer == ans){
@@ -207,6 +208,7 @@
                     operating_record({'fun':'setItemIndex','value':now_item_index});
                 }
                 operating_record({'fun':'go_next','value':''});
+                has_result = true;
                 go_next();
                 break;
             }
@@ -222,62 +224,70 @@
                     operating_record({'fun':'setItemIndex','value':now_item_index});
                 }
                 operating_record({'fun':'go_next','value':''});
+                has_result = true;
                 go_next();
                 break;
             }
         }
-        //絕對錯誤答案或關鍵字分析，index由0開始所以需要減1
-        for(var x=0;x<error_ans.length;x++){
-            if(error_ans[x].answer > '' && error_ans[x].answer == ans){
-                if(error_ans[x].jump == '999'){
-                    now_paper_index++;
-                    now_item_index = 0;
-                    operating_record({'fun':'setPaperIndex','value':now_paper_index});
-                    operating_record({'fun':'setItemIndex','value':'0'});
-                }else{
-                    now_item_index = error_ans[x].jump - 1;
-                    operating_record({'fun':'setItemIndex','value':now_item_index});
+        if(!has_result)
+        {
+            //絕對錯誤答案或關鍵字分析，index由0開始所以需要減1
+            for(var x=0;x<error_ans.length;x++){
+                if(error_ans[x].answer > '' && error_ans[x].answer == ans){
+                    if(error_ans[x].jump == '999'){
+                        now_paper_index++;
+                        now_item_index = 0;
+                        operating_record({'fun':'setPaperIndex','value':now_paper_index});
+                        operating_record({'fun':'setItemIndex','value':'0'});
+                    }else{
+                        now_item_index = error_ans[x].jump - 1;
+                        operating_record({'fun':'setItemIndex','value':now_item_index});
+                    }
+                    operating_record({'fun':'go_next','value':''});
+                    has_result = true;
+                    go_next();
+                    break;
                 }
-                operating_record({'fun':'go_next','value':''});
-                go_next();
-                break;
-            }
-            if(error_ans[x].keyword > '' && ans.match(error_ans[x].keyword)!=null && error_ans[x].number != '999')
-            {
-                if(error_ans[x].jump == '999'){
-                    now_paper_index++;
-                    now_item_index = 0;
-                    operating_record({'fun':'setPaperIndex','value':now_paper_index});
-                    operating_record({'fun':'setItemIndex','value':'0'});
-                }else{
-                    now_item_index = error_ans[x].jump - 1;
-                    operating_record({'fun':'setItemIndex','value':now_item_index});
+                if(error_ans[x].keyword > '' && ans.match(error_ans[x].keyword)!=null && error_ans[x].number != '999')
+                {
+                    if(error_ans[x].jump == '999'){
+                        now_paper_index++;
+                        now_item_index = 0;
+                        operating_record({'fun':'setPaperIndex','value':now_paper_index});
+                        operating_record({'fun':'setItemIndex','value':'0'});
+                    }else{
+                        now_item_index = error_ans[x].jump - 1;
+                        operating_record({'fun':'setItemIndex','value':now_item_index});
+                    }
+                    operating_record({'fun':'go_next','value':''});
+                    has_result = true;
+                    go_next();
+                    break;
                 }
-                operating_record({'fun':'go_next','value':''});
-                go_next();
-                break;
             }
-        }
-
-        //如果都比對不出答案時，使用錯誤區錯誤號碼為999的選項當跳題
-        for(var x=0;x<error_ans.length;x++){
-            if(error_ans[x].number == '999')
-            {
-                if(error_ans[x].jump == '999'){
-                    now_paper_index++;
-                    now_item_index = 0;
-                    operating_record({'fun':'setPaperIndex','value':now_paper_index});
-                    operating_record({'fun':'setItemIndex','value':'0'});
-                }else{
-                    now_item_index = error_ans[x].jump - 1;
-                    operating_record({'fun':'setItemIndex','value':now_item_index});
+		}
+        if(!has_result)
+		{
+            //如果都比對不出答案時，使用錯誤區錯誤號碼為999的選項當跳題
+            for(var x=0;x<error_ans.length;x++){
+                if(error_ans[x].number == '999')
+                {
+                    if(error_ans[x].jump == '999'){
+                        now_paper_index++;
+                        now_item_index = 0;
+                        operating_record({'fun':'setPaperIndex','value':now_paper_index});
+                        operating_record({'fun':'setItemIndex','value':'0'});
+                    }else{
+                        now_item_index = error_ans[x].jump - 1;
+                        operating_record({'fun':'setItemIndex','value':now_item_index});
+                    }
+                    operating_record({'fun':'go_next','value':''});
+                    console.log('ans_4');
+                    go_next();
+                    break;
                 }
-                operating_record({'fun':'go_next','value':''});
-                go_next();
-                break;
             }
-        }
-
+		}
     }
 
     /**
