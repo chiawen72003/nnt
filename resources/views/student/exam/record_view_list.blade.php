@@ -45,11 +45,13 @@
 				<tr>
 					<th>試卷id</th>
 					<th>學生答案</th>
+					<th>回饋類型</th>
 				</tr>
 				@foreach($exam_record['use_item'] as $key => $v)
 					<tr>
 						<td>[! $v['item_id'] !]</td>
 						<td>[! $v['student_ans'] !]</td>
+						<td>[! $v['feedback_dsc'] !]</td>
 					</tr>
 				@endforeach
 			</table>
