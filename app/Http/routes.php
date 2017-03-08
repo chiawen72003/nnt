@@ -31,6 +31,10 @@ Route::post('/Mem/Exam/UpdateRecord', ['middleware' => 'MemSessionCheck','as' =>
 Route::get('/Mem/Exam/View/Record/{id}', ['middleware' => 'MemSessionCheck','as' => 'mem.exam.viewrecord', 'uses' => 'ExamController@viewExamRecord']);
 Route::post('/Mem/Exam/semantic/analysis', ['middleware' => 'MemSessionCheck','as' => 'mem.exam.semantic.analysis', 'uses' => 'ExamController@getSemanticAnalysis']);
 
+//學生端 成果查詢
+Route::get('/Mem/Achievement', ['middleware' => 'MemSessionCheck','as' => 'mem.achievement', 'uses' => 'ExamController@AchievementList']);
+
+
 //給前端直接呼叫模組修改用
 Route::get('/Mem/Exam/modelPage/{modelName}', ['as' => 'mem.exam.modelpage', 'uses' => 'ExamController@modelPage']);
 
