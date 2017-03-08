@@ -24,7 +24,7 @@
 		<div id="boad-nav">
 			<a href="#">系統公告</a>
 			<a href="[! route('mem.exam') !]">學習</a>
-			<a href="#">成果查詢</a>
+			<a href="[! route('mem.achievement') !]">成果查詢</a>
 			<a href="[! route('mem.logout') !]">登出</a>
 		</div>
 		<div class="boad-detail-wrap">
@@ -40,7 +40,7 @@
 			@if(isset($subject_list) and count($subject_list) > 0)
 				@foreach($subject_list as $key => $value)
 					<div class="select-unit-box">
-						<a class="select-img" onclick='send("[! $key !]")'>
+						<a class="select-img" href="[! route('mem.achievement.list',array($key)) !]">
 							<img src="[! url('/images/img_select01.png') !]" width="206" height="130">
 						</a>
 						<div class="select-button-wrrap">
