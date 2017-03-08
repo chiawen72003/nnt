@@ -252,4 +252,17 @@ class ExamController extends Controller
 
         return view('student.exam.test_page', $data);
     }
+
+
+    /**
+     * 學生端 成果查詢 第一層 科目列表
+     */
+    public function AchievementList()
+    {
+        $data = array();
+        $data['subject_list'] = ExamClass::subject_list();
+        $data['user_data'] = app('request')->session()->get('user_data');
+
+        return view('student.exam.achievement_level_one', $data);
+    }
 }
