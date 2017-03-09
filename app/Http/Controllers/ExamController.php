@@ -188,7 +188,7 @@ class ExamController extends Controller
 
 
     /**
-     * 觀看學生操作紀錄的list
+     * 成果查詢 第三層 查看學生操作某單元的細項資訊
      */
     public function viewExamRecordList($id)
     {
@@ -257,7 +257,7 @@ class ExamController extends Controller
     /**
      * 學生端 成果查詢 第一層 科目列表
      */
-    public function AchievementList()
+    public function Achievement()
     {
         $data = array();
         $data['subject_list'] = ExamClass::subject_list();
@@ -265,4 +265,21 @@ class ExamController extends Controller
 
         return view('student.exam.achievement_level_one', $data);
     }
+
+    /**
+     * 學生端 成果查詢 第二層 指定科目內有完成的單元列表
+     */
+    public function AchievementList($unit_id)
+    {
+        $data = array();
+        $data['subject_list'] = ExamClass::subject_list();
+        $data['user_data'] = app('request')->session()->get('user_data');
+        $mem_id = app('request')->session()->get('user_data');
+        $data['list_data'] = ExamClass::get_record_list_by_subject($mem_id, $unit_id);
+        //dd($data['list_data']);
+        $data['unit_id'] = $unit_id;
+
+        return view('student.exam.achievement_level_two', $data);
+    }
+
 }
