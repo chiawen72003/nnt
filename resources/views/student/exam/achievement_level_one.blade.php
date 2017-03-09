@@ -35,17 +35,13 @@
 </div>
 <div id="page-container">
 	<div id="page-body">
-		<h1 class="section-title title-use">成果查詢</h1>
-		<div class="select-unit-wrap">
+		<h1 class="section-title title-result">成果查詢</h1>
+		<div class="result-wrap">
 			@if(isset($subject_list) and count($subject_list) > 0)
 				@foreach($subject_list as $key => $value)
-					<div class="select-unit-box">
-						<a class="select-img" href="[! route('mem.achievement.list',array($key)) !]">
-							<img src="[! url('/images/img_select01.png') !]" width="206" height="130">
-						</a>
-						<div class="select-button-wrrap">
-							[! $value !]
-						</div>
+					<div class="result-box">
+						<a href="[! route('mem.achievement.list',array($key)) !]"><img src="[!  url('/images/img_select01.png') !]" width="140"></a>
+						<p><a href="[! route('mem.achievement.list',array($key)) !]">[! $value !]</a></p>
 					</div>
 				@endforeach
 			@endif
