@@ -458,7 +458,7 @@ class ExamClass
     }
 
     /**
-     *  取得單元操作紀錄
+     *  取出一筆指定的單元操作紀錄
      */
     public static function get_exam_record($mem_id,$id)
     {
@@ -474,6 +474,27 @@ class ExamClass
             $use_item = json_decode($t['use_item'],true);
             $return_data['use_item'] = $use_item;
         }
+
+        return $return_data;
+    }
+
+
+    /**
+     *  取出指定科目內，已經學習過得單元資料
+     */
+    public static function get_record_list_by_subject($mem_id,$subject_id)
+    {
+        $return_data = array();
+        $temp_obj = ExamRecord::
+            leftJoin('unit_list', 'exam_record.unit_id', '=', 'unit_list.id')
+            ->where('exam_record.student_id', $mem_id['user_id'])
+            ->where('exam_record.is_finish', '1')
+            ->where('unit_list.subject',$subject_id)
+            ->select('unit_list.id', 'exam_record.updated_at', 'unit_list.vol', 'unit_list.unit')
+            ->get();
+       if(count($temp_obj) > 0){
+           $return_data = $temp_obj->toArray();
+       }
 
         return $return_data;
     }
