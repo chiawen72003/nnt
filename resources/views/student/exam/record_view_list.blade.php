@@ -36,21 +36,27 @@
 
 <div id="page-container">
 	<div id="page-body">
-		<h1 class="section-title title-structure">單元結構編制</h1>
-		<div class="section-content">
-			<div class="links-wrap">
-				<a class="top-link" href="[! route('mem.exam.viewrecord',[$unit_id]) !]">觀看紀錄</a>
+		<h1 class="section-title title-result">成果查詢</h1>
+		<div class="result-detail-wrap">
+			<div class="result-button-wrap">
+				<a class="button-download" href="#">下載</a>
 			</div>
-			<table>
+			<table class="table-detail2">
 				<tr>
-					<th>試卷id</th>
-					<th>學生答案</th>
+					<th>對話順序</th>
+					<th>作答題號</th>
+					<th>學生回答內容</th>
+					<th>電腦回應內容</th>
+					<th>答對/答錯</th>
 					<th>回饋類型</th>
 				</tr>
 				@foreach($exam_record['use_item'] as $key => $v)
 					<tr>
+						<td>[! $key !]</td>
 						<td>[! $v['item_id'] !]</td>
 						<td>[! $v['student_ans'] !]</td>
+						<td></td>
+						<td></td>
 						<td>[! $v['feedback_dsc'] !]</td>
 					</tr>
 				@endforeach
