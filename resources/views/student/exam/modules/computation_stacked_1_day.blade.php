@@ -137,7 +137,6 @@
     function resetAll(){
         operating_record({'fun':'resetAll','value':''});
         for(var x=0;x<38;x++){
-            set_record(x,'');
             $('#input_'+ x).val('');
 		}
         now_index = 0;
