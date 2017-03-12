@@ -37,11 +37,11 @@
 	<div id="page-body">
 		<h1 class="section-title title-result">成果查詢</h1>
 		<div class="result-wrap">
-			@if(isset($subject_list) and count($subject_list) > 0)
-				@foreach($subject_list as $key => $value)
+			@if(isset($list_data) and count($list_data) > 0)
+				@foreach($list_data as $v)
 					<div class="result-box">
-						<a href="[! route('mem.achievement.list',array($key)) !]"><img src="[!  url('/images/img_select01.png') !]" width="140"></a>
-						<p><a href="[! route('mem.achievement.list',array($key)) !]">[! $value !]</a></p>
+						<a href="[! route('mem.achievement.list',array($v['subject'])) !]"><img src="[!  url('/images/img_select01.png') !]" width="140"></a>
+						<p><a href="[! route('mem.achievement.list',array($v['subject'])) !]">[! isset($subject_list[$v['subject']])?$subject_list[$v['subject']]:'' !]</a></p>
 					</div>
 				@endforeach
 			@endif
