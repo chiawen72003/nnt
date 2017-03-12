@@ -478,6 +478,25 @@ class ExamClass
         return $return_data;
     }
 
+    /**
+     *  取出已經學習過的科目
+     */
+    public static function get_record_list_all_subject($mem_id)
+    {
+        $return_data = array();
+        $temp_obj = ExamRecord::
+        leftJoin('unit_list', 'exam_record.unit_id', '=', 'unit_list.id')
+            ->where('exam_record.student_id', $mem_id['user_id'])
+            ->where('exam_record.is_finish', '1')
+            ->select('unit_list.subject')
+            ->groupBy('unit_list.subject')
+            ->get();
+        if(count($temp_obj) > 0){
+            $return_data = $temp_obj->toArray();
+        }
+
+        return $return_data;
+    }
 
     /**
      *  取出指定科目內，已經學習過得單元資料
