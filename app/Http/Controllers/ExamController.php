@@ -79,6 +79,9 @@ class ExamController extends Controller
             'unit_id'=>$unit_id,
             ));
         $last_exam_record = $examrecord->get_one_record();
+        $data['begin_paper_index'] = 0;//起始試卷的index位置
+        $data['begin_item_index'] = 0;//起始試題的index位置
+
         if(!is_null($last_exam_record)){
             //如果已經操作完畢，就必須把紀錄重新清除在操作
             if($last_exam_record['is_finish'] == 1){
@@ -94,9 +97,6 @@ class ExamController extends Controller
                     }
                 }
             }
-        }else{
-            $data['begin_paper_index'] = 0;//起始試卷的index位置
-            $data['begin_item_index'] = 0;//起始試題的index位置
         }
 
         return view('student.exam.test_page', $data);
