@@ -256,12 +256,16 @@ class ExamController extends Controller
 
     /**
      * 學生端 成果查詢 第一層 科目列表
+     *
+     * 備註：只顯示學生有操作紀錄的科目
      */
     public function Achievement()
     {
         $data = array();
         $data['subject_list'] = ExamClass::subject_list();
         $data['user_data'] = app('request')->session()->get('user_data');
+        $mem_id = app('request')->session()->get('user_data');
+        $data['list_data'] = ExamClass::get_record_list_all_subject($mem_id);
 
         return view('student.exam.achievement_level_one', $data);
     }
