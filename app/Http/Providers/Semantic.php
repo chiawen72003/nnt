@@ -5,6 +5,7 @@ namespace App\Http\Providers;
 use App\Http\Models\QuestionsItem;
 use App\Http\Models\Lsa_Term;
 use App\Http\Models\Lsa_U;
+use Illuminate\Support\Facades\DB;
 
 class Semantic
 {
@@ -72,6 +73,7 @@ class Semantic
                 $stu_ans_new = $this->words_segmentation($stu_ans_new);//BayesianTest/segmentation.php
                 $stu_ans_term = explode(",", $stu_ans_new);
                 $Answer_vector = $this->document_vector($stu_ans_term);     //---學生答案向量 BayesianTest/lsa_compute.php
+
                 //-----中文句子剖析處理-----//
                 $parser_text_stu = $this->sentence_parser_stu($this->input_data['student_ans'], $this->user_id);   //學生答案 BayesianTest/segmentation.php
                 $parser_text_stu = $this->parser_process($parser_text_stu);//BayesianTest/segmentation.php
@@ -144,7 +146,7 @@ class Semantic
                     if ($getValue > $threshold) {
                         return array(
                             'type' => 'right',
-                            'index' => $right_ans[1]['jump'][$x],
+                            'jump' => $right_ans[1]['jump'][$x],
                         );
                     }
 
@@ -164,7 +166,7 @@ class Semantic
                 if ($stu_ans == null) {
                     return array(
                         'type' => 'no_match',
-                        'index' => $error_ans[1]['jump'][$x],
+                        'jump' => $error_ans[1]['jump'][$x],
                     );
                 } else {
                     $t_num = count($error_ans[0]['answer']);
@@ -198,7 +200,7 @@ class Semantic
                         if ($getValue > $max_value and $getValue > 0.5) {
                             return array(
                                 'type' => 'error',
-                                'index' => $error_ans[1]['jump'][$x],
+                                'jump' => $error_ans[1]['jump'][$x],
                             );
                         }
                     }
@@ -211,6 +213,7 @@ class Semantic
                 );
             }
         }catch (\Exception $e){
+            dd($e->getMessage());
             return array(
                 'type' => 'no_match',
                 'jump' => '',
@@ -222,174 +225,235 @@ class Semantic
     private function parts_of_speech_change($word)
     {
         for ($i = 0; $i < count($word); $i++) {
-            if ($word[$i] == '(ADV)' and $word[$i + 2] == '(Vi)' and $word[$i + 4] == '(M)' and $word[$i + 6] == '(N)') {
-                $word[$i + 2] = '(ADJ)';
+            if (isset($word[$i]) and isset($word[$i + 2]) and isset($word[$i + 4]) and isset($word[$i + 6])) {
+                if ($word[$i] == '(ADV)' and $word[$i + 2] == '(Vi)' and $word[$i + 4] == '(M)' and $word[$i + 6] == '(N)') {
+                    $word[$i + 2] = '(ADJ)';
+                }
             }
         }
         for ($i = 0; $i < count($word); $i++) {
-            if ($word[$i] == '(DET)' and $word[$i + 2] == '(Vi)' and $word[$i + 4] == '(M)' and $word[$i + 6] == '(N)') {
-                $word[$i + 2] = '(ADJ)';
+            if (isset($word[$i]) and isset($word[$i + 2]) and isset($word[$i + 4]) and isset($word[$i + 6])) {
+                if ($word[$i] == '(DET)' and $word[$i + 2] == '(Vi)' and $word[$i + 4] == '(M)' and $word[$i + 6] == '(N)') {
+                    $word[$i + 2] = '(ADJ)';
+                }
             }
         }
         for ($i = 0; $i < count($word); $i++) {
-            if ($word[$i] == '(ADV)' and $word[$i + 2] == '(Vi)' and $word[$i + 4] == '(Vt)' and $word[$i + 6] == '(Vi)') {
-                $word[$i + 2] = '(ADJ)';
-                $word[$i + 6] = '(N)';
+            if (isset($word[$i]) and isset($word[$i + 2]) and isset($word[$i + 4]) and isset($word[$i + 6])) {
+                if ($word[$i] == '(ADV)' and $word[$i + 2] == '(Vi)' and $word[$i + 4] == '(Vt)' and $word[$i + 6] == '(Vi)') {
+                    $word[$i + 2] = '(ADJ)';
+                    $word[$i + 6] = '(N)';
+                }
+            }
+        }
+
+        for ($i = 0; $i < count($word); $i++) {
+            if (isset($word[$i]) and isset($word[$i + 2]) and isset($word[$i + 4]) and isset($word[$i + 6])) {
+                if ($word[$i] == '(Vi)' and $word[$i + 2] == '(Vt)' and $word[$i + 4] == '(T)' and $word[$i + 6] == '(N)') {
+                    $word[$i] = '(ADJ)';
+                    $word[$i + 2] = '(ADJ)';
+                }
             }
         }
         for ($i = 0; $i < count($word); $i++) {
-            if ($word[$i] == '(Vi)' and $word[$i + 2] == '(Vt)' and $word[$i + 4] == '(T)' and $word[$i + 6] == '(N)') {
-                $word[$i] = '(ADJ)';
-                $word[$i + 2] = '(ADJ)';
+            if (isset($word[$i]) and isset($word[$i + 2]) and isset($word[$i + 4]) and isset($word[$i + 6])) {
+                if ($word[$i] == '(Vi)' and $word[$i + 2] == '(N)' and $word[$i + 4] == '(T)' and $word[$i + 6] == '(N)') {
+                    $word[$i] = '(ADJ)';
+                }
             }
         }
         for ($i = 0; $i < count($word); $i++) {
-            if ($word[$i] == '(Vi)' and $word[$i + 2] == '(N)' and $word[$i + 4] == '(T)' and $word[$i + 6] == '(N)') {
-                $word[$i] = '(ADJ)';
+            if (isset($word[$i]) and isset($word[$i + 2]) and isset($word[$i + 4]) and isset($word[$i + 6])) {
+                if ($word[$i] == '(ADV)' and $word[$i + 2] == '(Vi)' and $word[$i + 4] == '(T)' and $word[$i + 6] == '(Vi)') {
+                    $word[$i + 1] = $word[$i + 1] . $word[$i + 3];
+                    $word[$i + 2] = '(ADJ)';
+                    unset($word[$i + 3]);
+                    unset($word[$i + 4]);
+                }
             }
         }
         for ($i = 0; $i < count($word); $i++) {
-            if ($word[$i] == '(ADV)' and $word[$i + 2] == '(Vi)' and $word[$i + 4] == '(T)' and $word[$i + 6] == '(Vi)') {
-                $word[$i + 1] = $word[$i + 1] . $word[$i + 3];
-                $word[$i + 2] = '(ADJ)';
-                unset($word[$i + 3]);
-                unset($word[$i + 4]);
+            if (isset($word[$i]) and isset($word[$i + 2]) and isset($word[$i + 4]) and isset($word[$i + 6])) {
+                if ($word[$i] == '(Vi)' and $word[$i + 2] == '(T)' and $word[$i + 4] == '(N)' and $word[$i + 6] == '(Vi)') {
+                    $word[$i - 1] = $word[$i - 1] . $word[$i + 1];
+                    $word[$i] = '(ADJ)';
+                    $word[$i + 6] = '(ADJ)';
+                    unset($word[$i + 1]);
+                    unset($word[$i + 2]);
+                }
             }
         }
         for ($i = 0; $i < count($word); $i++) {
-            if ($word[$i] == '(Vi)' and $word[$i + 2] == '(T)' and $word[$i + 4] == '(N)' and $word[$i + 6] == '(Vi)') {
-                $word[$i - 1] = $word[$i - 1] . $word[$i + 1];
-                $word[$i] = '(ADJ)';
-                $word[$i + 6] = '(ADJ)';
-                unset($word[$i + 1]);
-                unset($word[$i + 2]);
+            if (isset($word[$i]) and isset($word[$i + 2]) and isset($word[$i + 4]) and isset($word[$i + 6])) {
+                if ($word[$i] == '(ADV)' and $word[$i + 2] == '(Vi)' and $word[$i + 4] == '(T)' and $word[$i + 6] == '(N)') {
+                    $word[$i + 1] = $word[$i + 1] . $word[$i + 3];
+                    $word[$i + 2] = '(ADJ)';
+                    unset($word[$i + 3]);
+                    unset($word[$i + 4]);
+                }
             }
         }
         for ($i = 0; $i < count($word); $i++) {
-            if ($word[$i] == '(ADV)' and $word[$i + 2] == '(Vi)' and $word[$i + 4] == '(T)' and $word[$i + 6] == '(N)') {
-                $word[$i + 1] = $word[$i + 1] . $word[$i + 3];
-                $word[$i + 2] = '(ADJ)';
-                unset($word[$i + 3]);
-                unset($word[$i + 4]);
+            if (isset($word[$i]) and isset($word[$i + 2]) and isset($word[$i + 4]) ) {
+                if ($word[$i] == '(Vi)' and $word[$i + 2] == '(T)' and $word[$i + 4] == '(N)') {
+                    $word[$i - 1] = $word[$i - 1] . $word[$i + 1];
+                    $word[$i] = '(ADJ)';
+                    unset($word[$i + 2]);
+                    unset($word[$i + 1]);
+                }
+            }
+        }
+
+        for ($i = 0; $i < count($word); $i++) {
+            if (isset($word[$i]) and isset($word[$i + 2]) and isset($word[$i + 4]) ) {
+                if ($word[$i] == '(Vt)' and $word[$i + 2] == '(T)' and $word[$i + 4] == '(N)') {
+                    $word[$i - 1] = $word[$i - 1] . $word[$i + 1];
+                    $word[$i] = '(ADJ)';
+                    unset($word[$i + 2]);
+                    unset($word[$i + 1]);
+                }
             }
         }
         for ($i = 0; $i < count($word); $i++) {
-            if ($word[$i] == '(Vi)' and $word[$i + 2] == '(T)' and $word[$i + 4] == '(N)') {
-                $word[$i - 1] = $word[$i - 1] . $word[$i + 1];
-                $word[$i] = '(ADJ)';
-                unset($word[$i + 2]);
-                unset($word[$i + 1]);
+            if (isset($word[$i]) and isset($word[$i + 2]) and isset($word[$i + 4])) {
+                if ($word[$i] == '(N)' and $word[$i + 2] == '(T)' and $word[$i + 4] == '(N)') {
+                    $word[$i - 1] = $word[$i - 1] . $word[$i + 1];
+                    $word[$i] = '(ADJ)';
+                    unset($word[$i + 2]);
+                    unset($word[$i + 1]);
+                }
+            }
+
+        }
+
+        for ($i = 0; $i < count($word); $i++) {
+            if (isset($word[$i]) and isset($word[$i + 2]) and isset($word[$i + 4])) {
+                if ($word[$i] == '(M)' and $word[$i + 2] == '(Vi)' and $word[$i + 4] == '(N)') {
+                    $word[$i + 2] = '(ADJ)';
+                }
             }
         }
         for ($i = 0; $i < count($word); $i++) {
-            if ($word[$i] == '(Vt)' and $word[$i + 2] == '(T)' and $word[$i + 4] == '(N)') {
-                $word[$i - 1] = $word[$i - 1] . $word[$i + 1];
-                $word[$i] = '(ADJ)';
-                unset($word[$i + 2]);
-                unset($word[$i + 1]);
+            if (isset($word[$i]) and isset($word[$i + 2]) and isset($word[$i + 4])) {
+                if ($word[$i] == '(Vt)' and $word[$i + 2] == '(Vi)' and $word[$i + 4] == '(N)') {
+                    $word[$i + 2] = '(ADJ)';
+                }
+            }
+        }
+
+        for ($i = 0; $i < count($word); $i++) {
+            if (isset($word[$i]) and isset($word[$i + 2]) and isset($word[$i + 4])) {
+                if ($word[$i] == '(Vt)' and $word[$i + 2] == '(T)' and $word[$i + 4] == '(Vt)') {
+                    $word[$i - 1] = $word[$i - 1] . $word[$i + 1];
+                    $word[$i] = '(ADV)';
+                    unset($word[$i + 2]);
+                    unset($word[$i + 1]);
+                }
             }
         }
         for ($i = 0; $i < count($word); $i++) {
-            if ($word[$i] == '(N)' and $word[$i + 2] == '(T)' and $word[$i + 4] == '(N)') {
-                $word[$i - 1] = $word[$i - 1] . $word[$i + 1];
-                $word[$i] = '(ADJ)';
-                unset($word[$i + 2]);
-                unset($word[$i + 1]);
+            if (isset($word[$i]) and isset($word[$i + 2]) and isset($word[$i + 4])) {
+                if ($word[$i] == '(Vi)' and $word[$i + 2] == '(T)' and $word[$i + 4] == '(Vt)') {
+                    $word[$i - 1] = $word[$i - 1] . $word[$i + 1];
+                    $word[$i] = '(ADV)';
+                    unset($word[$i + 2]);
+                    unset($word[$i + 1]);
+                }
+            }
+        }
+
+        for ($i = 0; $i < count($word); $i++) {
+            if (isset($word[$i]) and isset($word[$i + 2]) and isset($word[$i + 4]) and isset($word[$i + 6])) {
+                if ($word[$i] == '(N)' and $word[$i + 2] == '(Vi)' and $word[$i + 4] == '(T)' and $word[$i + 6] == '(Vt)') {
+                    $word[$i + 1] = $word[$i + 1] . $word[$i + 3];
+                    $word[$i + 2] = '(ADV)';
+                    unset($word[$i + 4]);
+                    unset($word[$i + 3]);
+                }
+            }
+        }
+
+        for ($i = 0; $i < count($word); $i++) {
+            if (isset($word[$i]) and isset($word[$i + 2]) and isset($word[$i + 4]) and isset($word[$i + 6])) {
+                if ($word[$i] == '(N)' and $word[$i + 2] == '(Vi)' and $word[$i + 4] == '(T)' and $word[$i + 6] == '(Vi)') {
+                    $word[$i + 1] = $word[$i + 1] . $word[$i + 3];
+                    $word[$i + 2] = '(ADV)';
+                    unset($word[$i + 4]);
+                    unset($word[$i + 3]);
+                }
             }
         }
         for ($i = 0; $i < count($word); $i++) {
-            if ($word[$i] == '(M)' and $word[$i + 2] == '(Vi)' and $word[$i + 4] == '(N)') {
-                $word[$i + 2] = '(ADJ)';
+            if (isset($word[$i]) and isset($word[$i + 2]) and isset($word[$i + 4])) {
+                if ($word[$i] == '(Vt)' and $word[$i + 2] == '(T)' and $word[$i + 4] == '(Vi)') {
+                    $word[$i - 1] = $word[$i - 1] . $word[$i + 1];
+                    $word[$i] = '(ADV)';
+                    unset($word[$i + 2]);
+                    unset($word[$i + 1]);
+                }
             }
         }
         for ($i = 0; $i < count($word); $i++) {
-            if ($word[$i] == '(Vt)' and $word[$i + 2] == '(Vi)' and $word[$i + 4] == '(N)') {
-                $word[$i + 2] = '(ADJ)';
+            if (isset($word[$i]) and isset($word[$i + 2]) and isset($word[$i + 4])) {
+                if ($word[$i] == '(ADV)' and $word[$i + 2] == '(Vi)' and $word[$i + 4] == '(T)') {
+                    $word[$i + 2] = '(ADJ)';
+                }
             }
         }
         for ($i = 0; $i < count($word); $i++) {
-            if ($word[$i] == '(Vt)' and $word[$i + 2] == '(T)' and $word[$i + 4] == '(Vt)') {
-                $word[$i - 1] = $word[$i - 1] . $word[$i + 1];
-                $word[$i] = '(ADV)';
-                unset($word[$i + 2]);
-                unset($word[$i + 1]);
+            if (isset($word[$i]) and isset($word[$i + 2]) and isset($word[$i + 4])) {
+                if ($word[$i] == '(Vi)' and $word[$i + 2] == '(Vi)' and $word[$i + 4] == '(Vt)') {
+                    $word[$i + 2] = '(ADV)';
+                }
             }
         }
         for ($i = 0; $i < count($word); $i++) {
-            if ($word[$i] == '(Vi)' and $word[$i + 2] == '(T)' and $word[$i + 4] == '(Vt)') {
-                $word[$i - 1] = $word[$i - 1] . $word[$i + 1];
-                $word[$i] = '(ADV)';
-                unset($word[$i + 2]);
-                unset($word[$i + 1]);
+            if (isset($word[$i]) and isset($word[$i + 2]) ) {
+                if ($word[$i] == '(Vi)' and $word[$i + 2] == '(N)') {
+                    $word[$i] = '(ADJ)';
+                }
             }
         }
         for ($i = 0; $i < count($word); $i++) {
-            if ($word[$i] == '(N)' and $word[$i + 2] == '(Vi)' and $word[$i + 4] == '(T)' and $word[$i + 6] == '(Vt)') {
-                $word[$i + 1] = $word[$i + 1] . $word[$i + 3];
-                $word[$i + 2] = '(ADV)';
-                unset($word[$i + 4]);
-                unset($word[$i + 3]);
+            if (isset($word[$i]) and isset($word[$i + 2]) ) {
+                if ($word[$i] == '(N)' and $word[$i + 2] == '(Vi)') {
+                    $word[$i + 2] = '(ADJ)';
+                }
             }
         }
         for ($i = 0; $i < count($word); $i++) {
-            if ($word[$i] == '(N)' and $word[$i + 2] == '(Vi)' and $word[$i + 4] == '(T)' and $word[$i + 6] == '(Vi)') {
-                $word[$i + 1] = $word[$i + 1] . $word[$i + 3];
-                $word[$i + 2] = '(ADV)';
-                unset($word[$i + 4]);
-                unset($word[$i + 3]);
+            if (isset($word[$i]) and isset($word[$i + 2]) and isset($word[$i + 4]) and isset($word[$i + 6])) {
+                if ($word[$i] == '(N)' and $word[$i + 2] == '(ADJ)' and $word[$i + 4] == '(T)' and $word[$i + 6] == '(N)') {
+                    $word[$i + 2] = '(Vt)';
+                }
             }
         }
         for ($i = 0; $i < count($word); $i++) {
-            if ($word[$i] == '(Vt)' and $word[$i + 2] == '(T)' and $word[$i + 4] == '(Vi)') {
-                $word[$i - 1] = $word[$i - 1] . $word[$i + 1];
-                $word[$i] = '(ADV)';
-                unset($word[$i + 2]);
-                unset($word[$i + 1]);
+            if (isset($word[$i]) and isset($word[$i + 2]) and isset($word[$i + 4]) and isset($word[$i + 6])) {
+                if ($word[$i] == '(P)' and $word[$i + 2] == '(N)' and $word[$i + 4] == '(N)' and $word[$i + 6] == '(ADJ)') {
+                    $word[$i + 6] = '(Vi)';
+                }
             }
         }
         for ($i = 0; $i < count($word); $i++) {
-            if ($word[$i] == '(ADV)' and $word[$i + 2] == '(Vi)' and $word[$i + 4] == '(T)') {
-                $word[$i + 2] = '(ADJ)';
+            if (isset($word[$i]) and isset($word[$i + 2]) and isset($word[$i + 4]) ) {
+                if ($word[$i] == '(P)' and $word[$i + 2] == '(N)' and $word[$i + 4] == '(ADJ)') {
+                    $word[$i + 4] = '(Vi)';
+                }
             }
         }
         for ($i = 0; $i < count($word); $i++) {
-            if ($word[$i] == '(Vi)' and $word[$i + 2] == '(Vi)' and $word[$i + 4] == '(Vt)') {
-                $word[$i + 2] = '(ADV)';
+            if (isset($word[$i]) and isset($word[$i + 2]) and isset($word[$i + 4]) ) {
+                if ($word[$i] == '(N)' and $word[$i + 2] == '(ADJ)' and $word[$i + 4] == '(P)') {
+                    $word[$i + 2] = '(Vi)';
+                }
             }
         }
         for ($i = 0; $i < count($word); $i++) {
-            if ($word[$i] == '(Vi)' and $word[$i + 2] == '(N)') {
-                $word[$i] = '(ADJ)';
-            }
-        }
-        for ($i = 0; $i < count($word); $i++) {
-            if ($word[$i] == '(N)' and $word[$i + 2] == '(Vi)') {
-                $word[$i + 2] = '(ADJ)';
-            }
-        }
-        for ($i = 0; $i < count($word); $i++) {
-            if ($word[$i] == '(N)' and $word[$i + 2] == '(ADJ)' and $word[$i + 4] == '(T)' and $word[$i + 6] == '(N)') {
-                $word[$i + 2] = '(Vt)';
-            }
-        }
-        for ($i = 0; $i < count($word); $i++) {
-            if ($word[$i] == '(P)' and $word[$i + 2] == '(N)' and $word[$i + 4] == '(N)' and $word[$i + 6] == '(ADJ)') {
-                $word[$i + 6] = '(Vi)';
-            }
-        }
-        for ($i = 0; $i < count($word); $i++) {
-            if ($word[$i] == '(P)' and $word[$i + 2] == '(N)' and $word[$i + 4] == '(ADJ)') {
-                $word[$i + 4] = '(Vi)';
-            }
-        }
-        for ($i = 0; $i < count($word); $i++) {
-            if ($word[$i] == '(N)' and $word[$i + 2] == '(ADJ)' and $word[$i + 4] == '(P)') {
-                $word[$i + 2] = '(Vi)';
-            }
-        }
-        for ($i = 0; $i < count($word); $i++) {
-            if ($word[$i] == '(N)' and $word[$i + 2] == '(ADJ)' and $word[$i + 4] == '(ASP)') {
-                $word[$i + 2] = '(Vi)';
+            if (isset($word[$i]) and isset($word[$i + 2]) and isset($word[$i + 4]) ) {
+                if ($word[$i] == '(N)' and $word[$i + 2] == '(ADJ)' and $word[$i + 4] == '(ASP)') {
+                    $word[$i + 2] = '(Vi)';
+                }
             }
         }
         $new_word = array_values($word);
@@ -446,11 +510,13 @@ class Semantic
         for ($i = 0; $i < count($word); $i++) {
             $t = Lsa_Term::where('word', DB::raw("binary '$word[$i]'"))
                 ->get();
+
             foreach($t as $v){
                 $t2 = Lsa_U::where('id',$v['id'])->get();
                 foreach($t2 as $v2){
                     for ($k = 1; $k <= $dimension; $k++) {
-                        $vector[$k][$i] = log($a[$word[$i]] + 1) * $v['global_weight'] * $v2[$k];
+                        $d='d'.$k; 
+                        $vector[$k][$i] = log($a[$word[$i]] + 1) * $v['global_weight'] * $v2[$d];
                     }
                 }
             }
@@ -605,6 +671,7 @@ class Semantic
 
     private function contentword_overlap($stuans_return_terms, $expect_return_terms)
     {
+        $common_words_tag = array();
         //---local---//
         for ($i = 0; $i < count($stuans_return_terms); $i++) {
             $stu_ans_terms[$i] = $stuans_return_terms[$i]['term'];
@@ -615,14 +682,10 @@ class Semantic
             $expect_ans_tag[$i] = $expect_return_terms[$i]['tag'];
         }
         $common_words = array_unique(array_intersect($stu_ans_terms, $expect_ans));
-        //print_r($common_words)."<br>";
-
-        //echo array_search('一方面',$expect_ans)."<br>";
         for ($i = 0; $i < count($common_words); $i++) {
             $a = array_search($common_words[$i], $expect_ans);
             $common_words_tag[$i] = $expect_ans_tag[$a];
         }
-        //print_r($common_words_tag)."<br>";
         $common_N = array_keys($common_words_tag, 'N');
         $common_Vi = array_keys($common_words_tag, 'Vi');
         $common_Vt = array_keys($common_words_tag, 'Vt');
@@ -658,7 +721,6 @@ class Semantic
         $DET_num = count($DET_a) + count($DET_b);
         $M_num = count($M_a) + count($M_b);
         $contentwords_num = $N_num + $Vi_num + $Vt_num + $ADV_num + $ADJ_num + $ASP_num + $DET_num + $M_num;
-        //echo $contentwords_num."<br>";
         $contentword_overlap = (2 * $common_words_num) / $contentwords_num;
 
         return $contentword_overlap;
