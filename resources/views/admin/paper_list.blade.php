@@ -55,7 +55,7 @@
                         <td>[! isset($questions_item_nums[$v['id']])?$questions_item_nums[$v['id']]:'0' !]</td>
                         <td>
                             <a class="icon-action icon-edit" href="[! route('ad.questions.edit',$v['id']) !]"></a>
-                            <a class="icon-action icon-delete" onclick='del_exampaper("[! $v['id'] !]","[! $v['title'] !]")'></a>
+                            <a class="icon-action icon-delete" onclick='del_exampaper("[! $v['id'] !]","[! $v['title'] !]")' href="#"></a>
                         </td>
                     </tr>
                 @endforeach
