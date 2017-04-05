@@ -48,26 +48,18 @@
                             <th class="th-file">附件檔</th>
                             <th class="th-button">功能</th>
                         </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>2017/02/22</td>
-                            <td>系統操作說明</td>
-                            <td>系統操作說明書.pdf</td>
-                            <td>
-                                <a class="icon-action icon-edit" href="admin_conceptStructure_edit.html"></a>
-                                <a class="icon-action icon-delete" href="#"></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>2017/02/22</td>
-                            <td>系統更新完畢，開放登入</td>
-                            <td></td>
-                            <td>
-                                <a class="icon-action icon-edit" href="admin_conceptStructure_edit.html"></a>
-                                <a class="icon-action icon-delete" href="#"></a>
-                            </td>
-                        </tr>
+                        @foreach($list_data as $key => $news)
+                            <tr>
+                                <td>[! $key+1 !]</td>
+                                <td>[! substr($news['updated_at'],0,10) !]</td>
+                                <td>[! $news['title'] !]</td>
+                                <td>[! $news['file_name'] !]</td>
+                                <td>
+                                    <a class="icon-action icon-edit" href="admin_conceptStructure_edit.html"></a>
+                                    <a class="icon-action icon-delete" href="" onclick="del_unit('[! $news["id"] !]','[! $news["title"] !]')"></a>
+                                </td>
+                            </tr>
+                        @endforeach
                     </table>
                 </form>
             </div>
@@ -77,10 +69,10 @@
 <script>
     //確認是否刪除單元
     function del_unit(get_id,unit_dsc){
-        if(confirm("確定是否刪除下列單元的資料內容嗎?\r\n"+unit_dsc)){
+        if(confirm("確定是否刪除下列標題的資料嗎?\r\n"+unit_dsc)){
             $.ajax({
-                url: "[! route('ad.unit.delete') !]",
-                type:'POST',
+                url: "[! route('ad.news.delete') !]",
+                type:'DELETE',
                 data: {
                     _token: '[! csrf_token() !]',
                     getID:get_id,
