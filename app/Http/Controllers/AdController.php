@@ -197,7 +197,7 @@ class AdController extends Controller
         $t = new FeedbackList();
         $data['feedback_list'] = $t->get_list_data();
 
-        return view('admin.edititem', $data);
+        return view('admin.questions_item_edit', $data);
     }
 
     /**
@@ -409,6 +409,67 @@ class AdController extends Controller
      *
      */
     public function schoolDelete()
+    {
+        $fp = Input::all();
+        $organization = new Organization();
+        $organization->_init($fp);
+        $organization->delete_data();
+
+        return ;
+    }
+
+    /**
+     * 系統公告列表
+     *
+     */
+    public function newsList()
+    {
+        $data = array();
+        $data['user_data'] = app('request')->session()->get('user_data');
+        $organization = new Organization();
+        $data['list_data'] = $organization->get_list();
+
+        return view('admin.school_list', $data);
+    }
+
+    /**
+     * 新增一筆系統公告的資料
+     *
+     * 備註：先檢查id是否重複，沒有重複在新增
+     */
+    public function newsAdd()
+    {
+        $fp = Input::all();
+        $organization = new Organization();
+        $organization->_init($fp);
+        $isAdd = $organization->add();
+        if($isAdd){
+
+            return 'success';
+        }
+
+        return 'error';
+    }
+
+    /**
+     * 更新一筆系統公告的資料
+     *
+     */
+    public function newsUpdate()
+    {
+        $fp = Input::all();
+        $organization = new Organization();
+        $organization->_init($fp);
+        $organization->update_data();
+
+        return ;
+    }
+
+    /**
+     * 移除一個系統公告
+     *
+     */
+    public function newsDelete()
     {
         $fp = Input::all();
         $organization = new Organization();
