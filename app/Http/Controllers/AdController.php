@@ -12,6 +12,7 @@ use \Response;
 use App\Http\Providers\ExamClass;
 use App\Http\Models\QuestionsItem;
 use App\Http\Models\Organization;
+use App\Http\Providers\NewsClass;
 
 class AdController extends Controller
 {
@@ -426,10 +427,10 @@ class AdController extends Controller
     {
         $data = array();
         $data['user_data'] = app('request')->session()->get('user_data');
-        $organization = new Organization();
-        $data['list_data'] = $organization->get_list();
+        $organization = new NewsClass();
+        $data['list_data'] = $organization->get_news_list();
 
-        return view('admin.school_list', $data);
+        return view('admin.news_list', $data);
     }
 
     /**
@@ -472,8 +473,7 @@ class AdController extends Controller
     public function newsDelete()
     {
         $fp = Input::all();
-        $organization = new Organization();
-        $organization->_init($fp);
+        $organization = new NewsClass($fp);
         $organization->delete_data();
 
         return ;
