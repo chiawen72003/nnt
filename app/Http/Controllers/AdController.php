@@ -434,22 +434,27 @@ class AdController extends Controller
     }
 
     /**
-     * 新增一筆系統公告的資料
+     * 系統公告 新增頁面
      *
-     * 備註：先檢查id是否重複，沒有重複在新增
+     */
+    public function newsAddPage()
+    {
+        $data = array();
+        $data['user_data'] = app('request')->session()->get('user_data');
+
+        return view('admin.news_add_page', $data);
+    }
+
+    /**
+     * 新增一筆系統公告的資料
      */
     public function newsAdd()
     {
         $fp = Input::all();
-        $organization = new Organization();
-        $organization->_init($fp);
-        $isAdd = $organization->add();
-        if($isAdd){
+        $organization = new NewsClass($fp);
+        $isAdd = $organization->add_data();
 
-            return 'success';
-        }
-
-        return 'error';
+        return redirect()->route('ad.news.list')->with('message', '系統公告新增完畢!');
     }
 
     /**
