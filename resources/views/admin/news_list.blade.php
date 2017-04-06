@@ -72,10 +72,10 @@
         if(confirm("確定是否刪除下列標題的資料嗎?\r\n"+unit_dsc)){
             $.ajax({
                 url: "[! route('ad.news.delete') !]",
-                type:'DELETE',
+                type:'POST',
                 data: {
                     _token: '[! csrf_token() !]',
-                    getID:get_id,
+                    id:get_id,
                 },
                 error: function(xhr) {
                     //alert('Ajax request 發生錯誤');
