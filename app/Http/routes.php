@@ -51,9 +51,11 @@ Route::delete('/Mem/Admin/Delete', ['as' => 'mem.admin.delete', 'uses' => 'Membe
 
 //管理員端 系統公告列表
 Route::get('/Ad/News/List', ['as' => 'ad.news.list', 'uses' => 'AdController@newsList']);
+Route::get('/Ad/News/Add/Page', ['as' => 'ad.news.add.page', 'uses' => 'AdController@newsAddPage']);
+Route::get('/Ad/News/Edit/Page/{id}', ['as' => 'ad.news.edit.page', 'uses' => 'AdController@newsEditPage']);
 Route::post('/Ad/News/Add', ['as' => 'ad.news.add', 'uses' => 'AdController@newsAdd']);
 Route::post('/Ad/News/Update', ['as' => 'ad.news.update', 'uses' => 'AdController@newsUpdate']);
-Route::delete('/Ad/News/Delete', ['as' => 'ad.news.delete', 'uses' => 'AdController@newsDelete']);
+Route::post('/Ad/News/Delete', ['as' => 'ad.news.delete', 'uses' => 'AdController@newsDelete']);
 
 //管理員端 學校列表
 Route::get('/Ad/School/List', ['as' => 'ad.school.list', 'uses' => 'AdController@schoolList']);
