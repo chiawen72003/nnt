@@ -3,12 +3,17 @@
 namespace App\Http\Providers;
 
 use App\Http\Models\NewsList;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use \Input;
+
 
 class NewsClass
 {
     private $input_array = array(
-        'id' => null
+        'id' => null,
+        'title' => null,
+        'dsc' => null,
+        'updateFile' => null,
     );
 
     public function __construct($input_data = array())
@@ -35,7 +40,29 @@ class NewsClass
         return $list_data;
     }
 
+    /**
+     * 新增 系統資料
+     *
+     */
+    public function add_data()
+    {
+        if($this->input_array['title'])
+        {
+            $update = new NewsList();
+            $update->title = $this->input_array['title'];
+            $update->dsc = $this->input_array['dsc'];
+            $update->save();
+            $getID  = $update->id;
 
+            //處理上傳圖片檔案
+            $files = Input::file('updateFile');
+            if(count($files) > 0 and $files != null){
+                $lists = $this -> uploadFile($files,$getID);
+            }
+        }
+
+        return ;
+    }
     /**
      * 移除一筆系統資料
      *
@@ -55,5 +82,75 @@ class NewsClass
         }
 
         return ;
+    }
+
+
+    //上傳圖片檔
+    protected static function uploadFile($file,$id) {
+        $upload_path = env('NEWS_FILE_BATH');
+        $file_name = Str::random(32);
+        $org_name = $file->getClientOriginalName();
+
+        $mime = $file->getMimeType();
+        $ext = '';
+        switch ($mime) {
+            case 'image/png':
+                $ext = 'png';
+                break;
+            case 'image/pjpeg':
+            case 'image/jpg':
+            case 'image/jpeg':
+                $ext = 'jpg';
+                break;
+            case 'image/gif':
+                $ext = 'gif';
+                break;
+            case 'image/x-ms-bmp':
+                $ext = 'bmp';
+                break;
+            default:
+                $_t = explode('.', $org_name);
+                if (count($_t) > 0) {
+                    $ext = $_t[count($_t) - 1];
+                }
+                break;
+        }
+        if (!empty($ext)) {
+            $file_name = "{$file_name}.{$ext}";
+        }
+
+
+        $real_path = public_path() . DIRECTORY_SEPARATOR . $upload_path;
+
+        $year = date('Y');
+        $month = date('m');
+        $day = date('d');
+        if (!file_exists($real_path)) {
+            mkdir($real_path);
+        }
+        $real_path = $real_path . DIRECTORY_SEPARATOR . $year;
+        if (!file_exists($real_path)) {
+            mkdir($real_path);
+        }
+        $real_path = $real_path . DIRECTORY_SEPARATOR . $month;
+        if (!file_exists($real_path)) {
+            mkdir($real_path);
+        }
+        $real_path = $real_path . DIRECTORY_SEPARATOR . $day;
+        if (!file_exists($real_path)) {
+            mkdir($real_path);
+        }
+
+        $destinationPath = $real_path;
+        $file->move($destinationPath, $file_name);
+
+        $file_path = $upload_path.'/'.$year.'/'.$month.'/'.$day.'/'.$file_name;
+
+        $update = NewsList::find($id);
+        $update->file_path = $file_path;
+        $update->file_name = $org_name;
+        $update->save();
+
+        return $update;
     }
 }
