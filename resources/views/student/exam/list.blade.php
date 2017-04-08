@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 @extends('student.layout.layout')
 @section('content')
 <div id="page-container">
