@@ -35,6 +35,10 @@ Route::post('/Mem/Exam/semantic/analysis', ['middleware' => 'MemSessionCheck','a
 Route::get('/Mem/Achievement', ['middleware' => 'MemSessionCheck','as' => 'mem.achievement', 'uses' => 'ExamController@Achievement']);
 Route::get('/Mem/Achievement/List/{id}', ['middleware' => 'MemSessionCheck','as' => 'mem.achievement.list', 'uses' => 'ExamController@AchievementList']);
 
+//學生端 系統公告
+Route::get('/Mem/News', ['middleware' => 'MemSessionCheck','as' => 'mem.news', 'uses' => 'MemController@News']);
+Route::get('/Mem/News/{id}', ['middleware' => 'MemSessionCheck','as' => 'mem.news.detail', 'uses' => 'MemController@NewsDetail']);
+Route::get('/Mem/News/download/{id}', ['middleware' => 'MemSessionCheck','as' => 'mem.news.file', 'uses' => 'MemController@NewsFileDownload']);
 
 //給前端直接呼叫模組修改用
 Route::get('/Mem/Exam/modelPage/{modelName}', ['as' => 'mem.exam.modelpage', 'uses' => 'ExamController@modelPage']);
