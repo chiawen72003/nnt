@@ -41,6 +41,23 @@ class NewsClass
     }
 
     /**
+     * 取得 一筆系統公告資料
+     *
+     * @return Array $news_data 系統公告資料
+     */
+    public function get_old_data($id)
+    {
+        $news_data = null;
+        $temp_obj = NewsList::where('id',$id)
+            ->get();
+        foreach ($temp_obj as $value) {
+            $news_data = $value;
+        }
+
+        return $news_data;
+    }
+
+    /**
      * 新增 系統資料
      *
      */
@@ -63,6 +80,36 @@ class NewsClass
 
         return ;
     }
+
+
+    /**
+     * 更新 系統資料
+     *
+     */
+    public function update_data()
+    {
+        if($this->input_array['id'] AND $this->input_array['title'])
+        {
+            $update = NewsList::find($this->input_array['id']);
+            $update->title = $this->input_array['title'];
+            $update->dsc = $this->input_array['dsc'];
+            $update->save();
+            $getID  = $this->input_array['id'];
+
+            //處理上傳圖片檔案
+            $files = Input::file('updateFile');
+            if(count($files) > 0 and $files != null){
+                if($update->file_path > '' AND file_exists( $update->file_path ))
+                {
+                    unlink('./'.$update->file_path);
+                }
+                $lists = $this -> uploadFile($files,$getID);
+            }
+        }
+
+        return ;
+    }
+
     /**
      * 移除一筆系統資料
      *
