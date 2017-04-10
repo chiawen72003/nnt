@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Models\FeedbackList;
 use Illuminate\Http\Request;
 use \Input;
 use \Validator;
@@ -11,7 +10,10 @@ use \DB;
 use \Response;
 use App\Http\Providers\ExamClass;
 use App\Http\Providers\Semantic;
-use App\Http\Models\ExamRecord;
+use App\Http\Providers\ExamRecordClass;
+use App\Http\Providers\FeedbackListClass;
+use App\Http\Providers\SubjectClass;
+
 
 class ExamController extends Controller
 {
@@ -27,9 +29,10 @@ class ExamController extends Controller
      */
     public function index()
     {
+        $exam_class_obj = new ExamClass();
         $data = array();
         $data['user_data'] = app('request')->session()->get('user_data');
-        $data['list_data'] = ExamClass::get_exam_list($data['user_data']);
+        $data['list_data'] = $exam_class_obj -> get_exam_list($data['user_data']);
 
         return view('student.exam.index', $data);
     }
@@ -41,11 +44,13 @@ class ExamController extends Controller
      */
     public function examList()
     {
+        $exam_class_obj = new ExamClass();
+        $subject_obj = new SubjectClass();
         $data = array();
         $data['user_data'] = app('request')->session()->get('user_data');
-        $data['list_data'] = ExamClass::get_exam_list($data['user_data']);
-        $data['subject_list'] = ExamClass::subject_list();
-        $data['exam_review_data'] = ExamClass::get_review_data($data['user_data']);
+        $data['list_data'] = $exam_class_obj -> get_exam_list($data['user_data']);
+        $data['subject_list'] = $subject_obj -> subject_list();
+        $data['exam_review_data'] = $exam_class_obj -> get_review_data($data['user_data']);
 
         return view('student.exam.list', $data);
     }
@@ -60,24 +65,21 @@ class ExamController extends Controller
     public function testPage()
     {
         $unit_id = app('request')->get('unit_id');
-        ExamClass::init(
-            array(
-                'unit_id' => $unit_id
-            )
-        );
+        $exam_class_obj = new ExamClass(array(
+            'unit_id' => $unit_id
+        ));
         $data = array();
         $data['is_view_record'] = false;//是否為操作紀錄觀看模式
-        $t = new FeedbackList();
+        $t = new FeedbackListClass();
         $data['feedback_list'] = $t->get_list_data();//回饋類型
         $data['unit_id'] = $unit_id;
         $data['user_data'] = app('request')->session()->get('user_data');
-        $data['paper_data'] = ExamClass::get_paper_by_unit_id($unit_id);
-        $data['questions_item_data'] = ExamClass::get_questions_item_paper_id($data['paper_data']);
-        $examrecord = new ExamRecord();
-        $examrecord->_init(array(
+        $data['paper_data'] = $exam_class_obj -> get_paper_by_unit_id($unit_id);
+        $data['questions_item_data'] = $exam_class_obj -> get_questions_item_paper_id($data['paper_data']);
+        $examrecord = new ExamRecordClass(array(
             'student_id'=>app('request')->session()->get('user_data')['user_id'],
             'unit_id'=>$unit_id,
-            ));
+        ));
         $last_exam_record = $examrecord->get_one_record();
         $data['begin_paper_index'] = 0;//起始試卷的index位置
         $data['begin_item_index'] = 0;//起始試題的index位置
@@ -110,13 +112,11 @@ class ExamController extends Controller
     public function GetModelPage()
     {
         $item_id = app('request')->get('item_id');
-        ExamClass::init(
-            array(
-                'item_id' => $item_id,
-            )
-        );
+        $exam_class_obj = new ExamClass(array(
+            'item_id' => $item_id,
+        ));
         $data['item_num'] = 1;
-        $data['exam_data'] = ExamClass::get_exam_item_data();
+        $data['exam_data'] = $exam_class_obj -> get_exam_item_data();
         $data['exam_item'] = '';
         if ($data['exam_data']['load_module'] != null) {
 
@@ -153,19 +153,16 @@ class ExamController extends Controller
         $cs_id = app('request')->get('csID');
         $item_num = app('request')->get('itemNum');
         $paper_vol = app('request')->get('paperVol');
-        ExamClass::init(
-            array(
-                'cs_id' => $cs_id,
-                'paper_vol' => $paper_vol,
-                'item_num' => $item_num,
-            )
-        );
-
+        $exam_class_obj = new ExamClass(array(
+            'cs_id' => $cs_id,
+            'paper_vol' => $paper_vol,
+            'item_num' => $item_num,
+        ));
         $data = array();
         $data['cs_id'] = $cs_id;
         $data['paper_vol'] = $paper_vol;
         $data['item_num'] = $item_num;
-        $data['exam_data'] = ExamClass::get_exam_item_data();
+        $data['exam_data'] = $exam_class_obj -> get_exam_item_data();
         $data['exam_item'] = '';
         if ($modelName != null) {
             $data['exam_item'] = view('student.exam.modules.' . $modelName,$data);
@@ -181,7 +178,8 @@ class ExamController extends Controller
     {
         $input_data = app('request')->all();
         $mem_id = app('request')->session()->get('user_data')['user_id'];
-        ExamClass::set_exam_record($mem_id,$input_data);
+        $exam_class_obj = new ExamClass();
+        $exam_class_obj -> set_exam_record($mem_id,$input_data);
 
         return ;
     }
@@ -192,25 +190,17 @@ class ExamController extends Controller
      */
     public function viewExamRecordList($id)
     {
+        $exam_class_obj = new ExamClass();
         $data = array();
         $mem_id = app('request')->session()->get('user_data');
-        $data['exam_record'] = ExamClass::get_exam_record($mem_id,$id);
+        $data['exam_record'] = $exam_class_obj -> get_exam_record($mem_id,$id);
         $unit_id = $data['exam_record']['unit_id'];
-        ExamClass::init(
-            array(
-                'unit_id' => $unit_id
-            )
-        );
-
         $data['unit_id'] = $unit_id;
         $data['user_data'] = app('request')->session()->get('user_data');
-        $t = new ExamRecord();
-        $t->_init(
-            array(
-                'student_id' => app('request')->session()->get('user_data')['user_id'],
-                'unit_id' => $unit_id,
-            )
-        );
+        $t = new ExamRecordClass(array(
+            'student_id' => app('request')->session()->get('user_data')['user_id'],
+            'unit_id' => $unit_id,
+        ));
         $t->set_has_view_record();
 
         return view('student.exam.record_view_list', $data);
@@ -221,33 +211,24 @@ class ExamController extends Controller
      */
     public function viewExamRecord($id)
     {
+        $exam_class_obj = new ExamClass();
         $data = array();
-        $t = new FeedbackList();
+        $t = new FeedbackListClass();
         $data['feedback_list'] = $t->get_list_data();//回饋類型
         $mem_id = app('request')->session()->get('user_data');
-        $data['exam_record'] = ExamClass::get_exam_record($mem_id,$id);
+        $data['exam_record'] = $exam_class_obj -> get_exam_record($mem_id,$id);
         $unit_id = $data['exam_record']['unit_id'];
-
-        ExamClass::init(
-            array(
-                'unit_id' => $unit_id
-            )
-        );
-
         $data['is_view_record'] = true;//是否為操作紀錄觀看模式
         $data['unit_id'] = $unit_id;
         $data['user_data'] = app('request')->session()->get('user_data');
-        $data['paper_data'] = ExamClass::get_paper_by_unit_id($unit_id);
-        $data['questions_item_data'] = ExamClass::get_questions_item_paper_id($data['paper_data']);
+        $data['paper_data'] = $exam_class_obj -> get_paper_by_unit_id($unit_id);
+        $data['questions_item_data'] = $exam_class_obj -> get_questions_item_paper_id($data['paper_data']);
         $data['begin_paper_index'] = 0;//起始試卷的index位置
         $data['begin_item_index'] = 0;//起始試題的index位置
-        $t = new ExamRecord();
-        $t->_init(
-            array(
-             'student_id' => app('request')->session()->get('user_data')['user_id'],
-             'unit_id' => $unit_id,
-            )
-        );
+        $t = new ExamRecordClass(array(
+            'student_id' => app('request')->session()->get('user_data')['user_id'],
+            'unit_id' => $unit_id,
+        ));
         $t->set_has_view_record();
 
         return view('student.exam.test_page', $data);
@@ -261,11 +242,13 @@ class ExamController extends Controller
      */
     public function Achievement()
     {
+        $exam_class_obj = new ExamClass();
+        $subject_obj = new SubjectClass();
         $data = array();
-        $data['subject_list'] = ExamClass::subject_list();
+        $data['subject_list'] = $subject_obj -> subject_list();
         $data['user_data'] = app('request')->session()->get('user_data');
         $mem_id = app('request')->session()->get('user_data');
-        $data['list_data'] = ExamClass::get_record_list_all_subject($mem_id);
+        $data['list_data'] = $exam_class_obj -> get_record_list_all_subject($mem_id);
 
         return view('student.exam.achievement_level_one', $data);
     }
@@ -275,11 +258,13 @@ class ExamController extends Controller
      */
     public function AchievementList($unit_id)
     {
+        $exam_class_obj = new ExamClass();
+        $subject_obj = new SubjectClass();
         $data = array();
-        $data['subject_list'] = ExamClass::subject_list();
+        $data['subject_list'] = $subject_obj -> subject_list();
         $data['user_data'] = app('request')->session()->get('user_data');
         $mem_id = app('request')->session()->get('user_data');
-        $data['list_data'] = ExamClass::get_record_list_by_subject($mem_id, $unit_id);
+        $data['list_data'] = $exam_class_obj -> get_record_list_by_subject($mem_id, $unit_id);
         //dd($data['list_data']);
         $data['unit_id'] = $unit_id;
 
