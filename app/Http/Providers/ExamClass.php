@@ -5,29 +5,31 @@ namespace App\Http\Providers;
 use App\Http\Models\ExamPaper;
 use App\Http\Models\ExamRecord;
 use App\Http\Models\QuestionsItem;
+use App\Http\Providers\QuestionsItemClass;
+use App\Http\Providers\ExamRecordClass;
 use App\Http\Models\UnitList;
 use App\Http\Models\Subject;
 
 class ExamClass
 {
     const _SPLIT_SYMBOL = '@XX@';
+    private $use_data = array(
+        'url_path' => 'http://210.240.188.161/chineseautotutor/Multi_Agent_test_show.php?a=b',
+        'paper_id' => null,
+        'cs_id' => null,
+        'paper_vol' => null,
+        'item_num' => null,
+        'InputCode' => null,//學生輸入的答案
+        'at_error' => null,//試題錯誤答案的集合
+        'at_answer' => null,//試題正確答案的集合
+        'unit_id' => null,//單元id
+        'item_id' => null,//試題id
+    );
 
-    public static $url_path = 'http://210.240.188.161/chineseautotutor/Multi_Agent_test_show.php?a=b';
-    public static $paper_id = null;
-    public static $cs_id = null;
-    public static $paper_vol = null;
-    public static $item_num = null;
-    public static $InputCode = null;//學生輸入的答案
-    public static $at_error = null;//試題錯誤答案的集合
-    public static $at_answer = null;//試題正確答案的集合
-    public static $unit_id = null;//單元id
-    public static $item_id = null;//試題id
-
-
-    public static function init($use_data)
+    public function __construct($set_data = array())
     {
-        foreach ($use_data as $key => $value) {
-            self::$$key = $value;
+        foreach ($set_data as $key => $value) {
+            $this -> use_data[$key] = $value;
         }
     }
 
@@ -38,7 +40,7 @@ class ExamClass
      *
      * @return Array $list_data 可測驗的單元資料
      */
-    public static function get_exam_list($mem_data)
+    public  function get_exam_list($mem_data)
     {
         $list_data = array();
         $has_test_data = array();//已經受測過得單元
@@ -65,19 +67,19 @@ class ExamClass
      * 取得試題item的資料
      *
      */
-    public static function get_exam_item_data()
+    public  function get_exam_item_data()
     {
         $item_sn = null;
         $publisher_id = null;
         $return_data = array(
-            'id' => self::$item_id,
+            'id' => $this -> use_data['item_id'],
             'title' => null,
             'correct_answer' => null,
             'error_answer' => null,
             'load_module' => null,
             'iframe_path' => '',
         );
-        $t = QuestionsItem::where('questions_item.id',self::$item_id)
+        $t = QuestionsItem::where('questions_item.id', $this -> use_data['item_id'])
             ->leftJoin('model_item', 'model_item.id', '=', 'questions_item.model_item_id')
             ->select(
                 'questions_item.title',
@@ -110,12 +112,12 @@ class ExamClass
 	* 組合電腦代理人的網址
 	*
 	*/
-    public static function get_iframe_path($publisher_id, $feedback_array, $feedback_order, $computer_agent)
+    public  function get_iframe_path($publisher_id, $feedback_array, $feedback_order, $computer_agent)
     {
         $selected_item = 1;
         $feedback_talk_url = '';
         $feedback_order_url = '';
-        $url_path = ExamClass::$url_path;
+        $url_path = $this -> use_data['url_path'];
         for ($x = 1, $y = 0; $x < 7; $x++, $y++) {
             $feedback_talk_url .= '&text' . $x . '=';
             isset($feedback_array[$y]) ? $feedback_talk_url .= $feedback_array[$y] : '';
@@ -130,43 +132,25 @@ class ExamClass
         //單代理人
         if ($publisher_id == 19) {
             $computer_item = isset($computer_agent[0]) ? $computer_agent[0] : ''; //單代理人頭像選擇
-            $url_path .= '&select=char2&select2=char2&select3=char2' . $feedback_talk_url . '&text7=MAT_' . self::$cs_id . sprintf("%02d", self::$paper_vol) . "_" . $selected_item . '&agent_role=' . $computer_item;
+            $url_path .= '&select=char2&select2=char2&select3=char2' . $feedback_talk_url . '&text7=MAT_' . $this -> use_data['cs_id'] . sprintf("%02d", $this -> use_data['paper_vol']) . "_" . $selected_item . '&agent_role=' . $computer_item;
         }
         //多代理人
         if ($publisher_id == 20) {
-            $url_path .= $feedback_order_url . $feedback_talk_url . '&text7=MAT_' . self::$cs_id . sprintf("%02d", self::$paper_vol) . "_" . $selected_item;
+            $url_path .= $feedback_order_url . $feedback_talk_url . '&text7=MAT_' . $this -> use_data['cs_id'] . sprintf("%02d", $this -> use_data['paper_vol']) . "_" . $selected_item;
         }
         //雙代理人
         if ($publisher_id == 21) {
-            $url_path .= $feedback_order_url . $feedback_talk_url . '&text7=MAT_' . self::$cs_id . sprintf("%02d", self::$paper_vol) . "_" . $selected_item;
+            $url_path .= $feedback_order_url . $feedback_talk_url . '&text7=MAT_' . $this -> use_data['cs_id'] . sprintf("%02d", $this -> use_data['paper_vol']) . "_" . $selected_item;
         }
 
         return $url_path;
     }
 
-    /**
-     * 領域名稱列表
-     *
-     * @return array 領域名稱資料(id=>名稱)
-     */
-    public static function subject_list()
-    {
-        $subject_list = array();
-        $temp_obj = Subject::select('id','name')->get();
-        if($temp_obj)
-        {
-            foreach ($temp_obj as $value){
-                $subject_list[$value['id']] = $value['name'];
-            }
-        }
-
-        return $subject_list;
-    }
 
     /**
      * 取得指定試卷的試題數量
      */
-    public static function get_questions_item_nums($paper_obj)
+    public function get_questions_item_nums($paper_obj)
     {
         $subject_list = array();
         $whereIn = array();
@@ -174,8 +158,7 @@ class ExamClass
             $whereIn[] = $temp_array['id'];
         }
         if(count($whereIn) > 0){
-            $t = new QuestionsItem();
-            $t -> _init(array('exam_paper_id'=>$whereIn));
+            $t = new QuestionsItemClass(array('exam_paper_id'=>$whereIn));
             $subject_list = $t -> get_paper_item_num($whereIn);
         }
 
@@ -188,9 +171,9 @@ class ExamClass
      * 單元列表
      *
      */
-    public static function unit_list()
+    public function unit_list()
     {
-        $subject_list = self::subject_list();
+        $subject_list = $this -> subject_list();
         $unit_list = array();
 
         $temp_obj = UnitList::select(
@@ -220,7 +203,7 @@ class ExamClass
      *
      * @param array $return_data
      */
-    public static function get_unit($id)
+    public function get_unit($id)
     {
         $return_data = array();
         $temp_obj = UnitList::select(
@@ -251,7 +234,7 @@ class ExamClass
      *
      * @param array $insert_data 要新增的資料
      */
-    public static function unit_add($insert_data)
+    public function unit_add($insert_data)
     {
         $temp_obj = new UnitList();
         foreach ($insert_data as $key => $value){
@@ -267,7 +250,7 @@ class ExamClass
      *
      * @param array $insert_data 要新增的資料
      */
-    public static function unit_update($id,$insert_data)
+    public function unit_update($id,$insert_data)
     {
         $temp_obj = UnitList::find($id);
         if($temp_obj){
@@ -285,7 +268,7 @@ class ExamClass
      *
      * @param int/string $getID 要移除單元的id
      */
-    public static function unit_delete($getID)
+    public function unit_delete($getID)
     {
         UnitList::destroy($getID);
 
@@ -297,7 +280,7 @@ class ExamClass
      *
      *
      */
-    public static function get_exam_paper_data($unit_data)
+    public function get_exam_paper_data($unit_data)
     {
         $exam_list = array();
         if(is_array($unit_data)){
@@ -341,7 +324,7 @@ class ExamClass
      *
      * @param array $return_data
      */
-    public static function get_exam_paper($id)
+    public function get_exam_paper($id)
     {
         $return_data = array();
         $temp_obj = ExamPaper::select(
@@ -370,13 +353,12 @@ class ExamClass
     *
     * @param array $insert_data 要新增的資料
     */
-    public static function exampaper_add($insert_data)
+    public function exampaper_add($insert_data)
     {
         $temp_obj = new ExamPaper();
         foreach ($insert_data as $key => $value){
             $temp_obj->$key = $value;
         }
-        //$temp_obj->cs_id =
         $temp_obj->save();
 
         return ;
@@ -387,7 +369,7 @@ class ExamClass
      *
      * @param int/string $getID 要移除單元的id
      */
-    public static function exampaper_delete($getID)
+    public function exampaper_delete($getID)
     {
         ExamPaper::destroy($getID);
 
@@ -402,9 +384,9 @@ class ExamClass
      *
      * @return Array $list_data 可測驗的單元資料
      */
-    public static function get_review_data($mem_data)
+    public function get_review_data($mem_data)
     {
-        $temp_obj = new ExamRecord();
+        $temp_obj = new ExamRecordClass();
 
         return $temp_obj->get_review_data($mem_data['user_id']);
     }
@@ -416,11 +398,10 @@ class ExamClass
      *
      * @return Array $list_data 可測驗的單元資料
      */
-    public static function set_exam_record($mem_id,$inputData)
+    public function set_exam_record($mem_id,$inputData)
     {
         $inputData['student_id'] = $mem_id;
-        $temp_obj = new ExamRecord();
-        $temp_obj->_init($inputData);
+        $temp_obj = new ExamRecordClass($inputData);
         $temp_obj->set_record();
 
         return '';
@@ -429,7 +410,7 @@ class ExamClass
     /**
      * 取得指定單元下的所有試卷資料
      */
-    public static function get_paper_by_unit_id($unit_id){
+    public function get_paper_by_unit_id($unit_id){
         $return_data = array();
         $temp_obj = ExamPaper::where('unit_list_id',$unit_id)
                     ->select('id','title')
@@ -445,7 +426,7 @@ class ExamClass
     /**
      * 取得試卷下的試題資料
      */
-    public static function get_questions_item_paper_id($paper_id_array){
+    public function get_questions_item_paper_id($paper_id_array){
         $return_data = array();
         $temp_obj = QuestionsItem::whereIn('exam_paper_id',$paper_id_array)
             ->orderBy('id')
@@ -460,7 +441,7 @@ class ExamClass
     /**
      *  取出一筆指定的單元操作紀錄
      */
-    public static function get_exam_record($mem_id,$id)
+    public  function get_exam_record($mem_id,$id)
     {
         $return_data = array();
         $temp_obj = ExamRecord::where('student_id', $mem_id['user_id'])
@@ -481,7 +462,7 @@ class ExamClass
     /**
      *  取出已經學習過的科目
      */
-    public static function get_record_list_all_subject($mem_id)
+    public  function get_record_list_all_subject($mem_id)
     {
         $return_data = array();
         $temp_obj = ExamRecord::
@@ -501,7 +482,7 @@ class ExamClass
     /**
      *  取出指定科目內，已經學習過得單元資料
      */
-    public static function get_record_list_by_subject($mem_id,$subject_id)
+    public  function get_record_list_by_subject($mem_id,$subject_id)
     {
         $return_data = array();
         $temp_obj = ExamRecord::
