@@ -173,7 +173,8 @@ class ExamClass
      */
     public function unit_list()
     {
-        $subject_list = $this -> subject_list();
+        $subject_obj = new SubjectClass();
+        $subject_list = $subject_obj -> subject_list();
         $unit_list = array();
 
         $temp_obj = UnitList::select(
