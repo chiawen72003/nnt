@@ -1,43 +1,5 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Document</title>
-    [! Html::style('style/reset.css') !]
-    [! Html::style('style/style.css') !]
-    <script>
-        window.onload = function (){
-            var docHeight = document.body.offsetHeight,
-                wrapHeight = docHeight - document.getElementById("header").offsetHeight;
-
-            // 設定page-body元素高度
-            document.getElementById("page-body").style.minHeight = wrapHeight + "px";
-        }
-    </script>
-</head>
-<body class="is-login">
-    <div id="header">
-        <div class="header-top">
-            <div id="header-logo"></div>
-        </div>
-        <div id="boad-wrap" class="boad-wrap">
-            <div id="boad-nav">
-                <a href="#">建立系統公告</a>
-                <a href="#">建立結構</a>
-                <a href="#">建立試題</a>
-                <a href="#">學習紀錄查詢</a>
-                <a href="#">版本控管</a>
-                <a href="#">單元上鎖</a>
-                <a href="#">管理使用者</a>
-                <a href="#">試卷存取</a>
-                <a href="#">登出</a>
-            </div>
-            <div class="boad-detail-wrap">
-                <p>台中市臺中教育大學十一年十四班<span class="txt-yellow">autotutor</span></p>
-            </div>
-            <div class="img-chalk"></div>
-        </div>
-    </div>
+@extends('admin.layout.layout')
+@section('content')
     <div id="page-container">
         <div id="page-body">
             <h1 class="section-title title-buildnews">建立系統公告</h1>
@@ -85,5 +47,4 @@
         }
     }
 </script>
-</body>
-</html>
+@stop
