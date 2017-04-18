@@ -26,8 +26,7 @@
             <a href="[! route('ad.news.list') !]" title="建立系統公告">建立系統公告</a>
             <a href="[! route('ad.index') !]" title="單元列表">單元列表</a>
             <a href="[! route('ad.subject.list') !]" title="科目列表">科目列表</a>
-            <a href="[! route('mem.admin.list') !]" title="管理員列表">管理員列表</a>
-            <a href="[! route('ad.school.list') !]" title="學校列表">學校列表</a>
+            <a href="[! route('ad.school.list') !]" title="使用者管理">使用者管理</a>
             <a href="[! route('ad.logout') !]" title="登出系統">登出</a>
         </div>
         <div class="boad-detail-wrap">
