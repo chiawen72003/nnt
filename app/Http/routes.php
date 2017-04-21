@@ -70,7 +70,7 @@ Route::post('/Ad/School/Update', ['as' => 'ad.school.update', 'uses' => 'AdContr
 Route::post('/Ad/School/Delete', ['as' => 'ad.school.delete', 'uses' => 'AdController@schoolDelete']);
 
 //管理員端 新增使用者頁面
-Route::get('/Ad/User/Add/Page', ['as' => 'ad.school.list', 'uses' => 'AdController@userAddPage']);
+Route::get('/Ad/User/Add/Page', ['as' => 'ad.user.add.page', 'uses' => 'AdController@userAddPage']);
 
 
 //管理員端 單元列表
