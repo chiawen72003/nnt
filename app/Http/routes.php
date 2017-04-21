@@ -44,8 +44,8 @@ Route::get('/Mem/News/download/{id}', ['middleware' => 'MemSessionCheck','as' =>
 Route::get('/Mem/Exam/modelPage/{modelName}', ['as' => 'mem.exam.modelpage', 'uses' => 'ExamController@modelPage']);
 
 //管理員端 登入、登出
-Route::get('/Ad/LoginPG', ['middleware' => 'IsAdLoginCheck','as' => 'ad.loginpg', 'uses' => 'MemberController@AdLoginPage']);
-Route::get('/Ad/LogOut', ['as' => 'ad.logout', 'uses' => 'MemberController@AdLogOut']);
+Route::get('/Ad/LoginPG', ['middleware' => 'IsAdLoginCheck','as' => 'ad.loginpg', 'uses' => 'MemberController@LoginPage']);
+Route::get('/Ad/LogOut', ['as' => 'ad.logout', 'uses' => 'MemberController@LogOut']);
 
 //管理員端 管理員列表
 Route::get('/Mem/Admin/List', ['as' => 'mem.admin.list', 'uses' => 'MemberController@adminList']);

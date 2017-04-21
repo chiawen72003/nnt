@@ -22,7 +22,7 @@ class MemberController extends Controller
     {
         $data = array();
 
-        return view('student.member.login', $data);
+        return view('login.login', $data);
     }
 
     public function LoginChk()
@@ -32,62 +32,29 @@ class MemberController extends Controller
         if ($check_data['check_result']) {
             $user_data = $check_data['user_data'];
             session(['user_data' => $user_data]);
+            //判斷身份別
+            if(in_array($user_data['access_level'],array(1,2,3,8,9)))
+            {
 
-            return redirect()->route('mem.index');
+                return redirect()->route('mem.index');
+            }
+
+            return redirect()->route('ad.news.list');
         }
 
         return redirect()->back()->with('error', ['your message,here']);
     }
 
+    /**
+     * 使用者登出
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function LogOut()
     {
         app('request')->session()->flush();
 
         return redirect()->route('mem.loginpg');
-    }
-
-    /**
-     * 管理員登入頁面
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function AdLoginPage()
-    {
-
-        $data = array();
-
-        return view('admin.member.login', $data);
-    }
-
-    /**
-     * 管理員登入檢查
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function AdLoginChk()
-    {
-        $member_class_obj = new MemberClass();
-        $check_data = $member_class_obj -> chk_ad_login_data();
-        if ($check_data['check_result']) {
-            $user_data = $check_data['user_data'];
-            session(['admin_data' => $user_data]);
-
-            return redirect()->route('ad.index');
-        }
-
-        return redirect()->back()->with('error', ['your message,here']);
-    }
-
-    /**
-     * 管理員登出
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function AdLogOut()
-    {
-        app('request')->session()->flush();
-
-        return redirect()->route('ad.loginpg');
     }
 
     /**

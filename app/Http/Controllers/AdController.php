@@ -9,7 +9,7 @@ use \DB;
 use \Response;
 use App\Http\Providers\ExamClass;
 use App\Http\Providers\QuestionsItemClass;
-use App\Http\Providers\OrganizationClass;
+use App\Http\Providers\SchoolClass;
 use App\Http\Providers\NewsClass;
 use App\Http\Providers\FeedbackListClass;
 use App\Http\Providers\SubjectClass;
@@ -372,9 +372,9 @@ class AdController extends Controller
     {
         $data = array();
         $data['user_data'] = app('request')->session()->get('user_data');
-        $organization = new OrganizationClass();
-        $data['list_data'] = $organization->get_list();
-
+        $organization = new SchoolClass();
+        $data['list_data'] = $organization->get_school_list();
+        //dd($data['list_data']->links());
         return view('admin.school_list', $data);
     }
 

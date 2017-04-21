@@ -1,85 +1,53 @@
-@extends('admin.layout.list_layout')
+@extends('admin.layout.layout')
 @section('content')
-<div id="wrapper">
-    <!--列表標題-->
-    <ul>
-        <li><a class="button" title="新增單元" onclick="show_add_area()">新增學校</a></li>
-    </ul>
-    <table class="title">
-        <tr>
-            <td width="5%">編號</td>
-            <td width="7%">學校代碼</td>
-            <td width="5%">類型</td>
-            <td width="5%">縣市</td>
-            <td width="10%">學校名稱</td>
-            <td width="10%">地址</td>
-            <td width="10%">電話</td>
-            <td width="7%">是否使用</td>
-            <td width="10%">編輯</td>
-        </tr>
-    </table>
-@foreach($list_data as $key => $v)
-    <!-- 單元 -->
-        <div class="accordionButton">
-            <table class="list_item">
-                <tr>
-                    <td width="5%">[! $key+1 !]</td>
-                    <td width="7%"><p class="name">[! $v['organization_id'] !]</p></td>
-                    <td width="5%"><p class="name">[! $v['type'] !]</p></td>
-                    <td width="5%"><p class="name">[! $v['city_code'] !]</p></td>
-                    <td width="10%"><p class="name">[! $v['name'] !]</p></td>
-                    <td width="10%"><p class="name">[! $v['address'] !]</p></td>
-                    <td width="10%"><p class="name">[! $v['telno'] !]</p></td>
-                    <td width="7%"><p class="name">[! $v['used'] !]</p></td>
-                    <td width="10%">
-                        <a class="button" title="編輯" onclick='show_edit_area("[! $v['organization_id'] !]","[! $v['type'] !]","[! $v['city_code'] !]","[! $v['name'] !]","[! $v['address'] !]","[! $v['telno'] !]","[! $v['used'] !]")'>編輯</a>
-                        <a class="button" title="刪除" onclick='del_unit("[! $v['organization_id'] !]","[! $v['name'] !]")'>刪除</a>
-                    </td>
-                </tr>
-            </table>
+<div id="page-container">
+    <div id="page-body">
+        <h1 class="section-title title-usermange">使用者管理</h1>
+        <div class="record-wrap clearfix">
+            <div class="record-menu">
+                <ul>
+                    <li><a class="active" href="#" tittle="學校管理">學校管理</a></li>
+                    <li><a href="#" title="新增使用者">新增使用者</a></li>
+                    <li><a href="#" tittle="匯入使用者">匯入使用者</a></li>
+                    <li><a href="#" title="查詢使用者資料">查詢使用者資料</a></li>
+                </ul>
+            </div>
+            <div class="record-content">
+                <form id="search-form">
+                    <div class="sarch-bg">
+                        <h3 class="search-title">請選取地區</h3>
+                        <div class="select-group">
+                            <select name="select-area" id="select-area" class="select-s">
+                                <option value="新北市">新北市</option>
+                            </select>
+                            <input id="input-search" class="btn-yellow" type="button" value="送出">
+                        </div>
+                    </div>
+                    <div class="record-inner">
+                        <h3 class="record-title">學校列表<a class="record-add" href="#" onclick="show_add_area()">新增學校</a></h3>
+                        <table class="table-detail2">
+                            <tr>
+                                <th class="td-school">學校名稱</th>
+                                <th>功能</th>
+                            </tr>
+                        @foreach($list_data as $key => $v)
+                                <tr>
+                                    <td>[! $v['name'] !]</td>
+                                    <td>
+                                        <a class="icon-action icon-edit" href="admin_conceptStructure_edit.html"></a>
+                                        <a class="icon-action icon-delete" href="#" onclick='del_unit("[! $v['organization_id'] !]","[! $v['name'] !]")'></a>
+                                    </td>
+                                </tr>
+                        @endforeach
+                        </table>
+                        <div class="page-select-wrap">
+                        [! $list_data->links()  !]
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
-        <!-- 單元 End -->
-    @endforeach
-    [! $list_data->links()  !]
-</div>
-<!--更改標籤排列-->
-<div id="inline" style="display:none;">
-    <ul class="name">
-        <li>
-            <span>學校代碼</span>
-            <input type="text" id="organization_id" value="">
-        </li>
-        <li>
-            <span>類型</span>
-            <input type="text" id="organization_type" value="">
-        </li>
-        <li>
-            <span>縣市</span>
-            <input type="text" id="organization_city_code" value="">
-        </li>
-        <li>
-            <span>學校名稱</span>
-            <input type="text" id="organization_name" value="">
-        </li>
-        <li>
-            <span>地址</span>
-            <input type="text" id="organization_address" value="">
-        </li>
-        <li>
-            <span>電話</span>
-            <input type="text" id="organization_telno" value="">
-        </li>
-        <li>
-            <span>是否使用</span>
-            <select id="organization_used">
-                <option value="1">啟用</option>
-                <option value="0">停用</option>
-            </select>
-            <input type="hidden" id="school_id" value="">
-        </li>
-    </ul>
-    <a class="button" onclick="add_unit()" id="inline_add_btn">新增</a>
-    <a class="button" onclick="edit_unit()" id="inline_edit_btn">更新</a>
+    </div>
 </div>
 <script>
     //顯示編輯區 新增
