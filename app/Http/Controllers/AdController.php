@@ -504,6 +504,22 @@ class AdController extends Controller
         return view('admin.user.user_import_page', $data);
     }
 
+    /**
+     * 查詢使用者資料頁面
+     *
+     */
+    public function userSearchPage()
+    {
+        $data = array();
+        $data['user_data'] = app('request')->session()->get('user_data');
+        $school_tmp = new SchoolClass();
+        $member_tmp = new MemberClass();
+        $data['city_data'] = $school_tmp -> get_all_city_data();
+        $data['all_school'] = $school_tmp -> get_all_school();
+        $data['all_level'] = $member_tmp -> get_all_level();
+
+        return view('admin.user.user_search_page', $data);
+    }
 
     /**
      * 系統公告列表
