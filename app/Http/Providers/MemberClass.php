@@ -118,11 +118,12 @@ class MemberClass
             $t_obj->uname = ($this->input_data['uname']) ? $this->input_data['uname'] : '';
             $t_obj->email = ($this->input_data['email']) ? $this->input_data['email'] : '';
             $t_obj->sex = ($this->input_data['sex']) ? $this->input_data['sex'] : '';
+            $t_obj->user_regdate =  date("Y-m-d");
             $t_obj->user_regdate = ($this->input_data['user_regdate']) ? $this->input_data['user_regdate'] : '';
             $t_obj->birthday = ($this->input_data['birthday']) ? $this->input_data['birthday'] : '';
             $t_obj->organization_id = ($this->input_data['organization_id']) ? $this->input_data['organization_id'] : '';
             $t_obj->pass = ($this->input_data['pass']) ? md5($this->input_data['pass']) : '';
-            $t_obj->viewpass = ($this->input_data['viewpass']) ? $this->input_data['viewpass'] : '';
+            $t_obj->viewpass = ($this->input_data['pass']) ? $this->input_data['pass'] : '';
             $t_obj->city_code = ($this->input_data['city_code']) ? $this->input_data['city_code'] : '0';
             $t_obj->grade = ($this->input_data['grade']) ? $this->input_data['grade'] : '0';
             $t_obj->class = ($this->input_data['class']) ? $this->input_data['class'] : '0';
