@@ -385,6 +385,34 @@ class AdController extends Controller
     }
 
     /**
+     * 學校新增 頁面
+     *
+     */
+    public function schoolAddPage()
+    {
+        $data = array();
+        $data['user_data'] = app('request')->session()->get('user_data');
+        $school_tmp = new SchoolClass();
+        $data['city_data'] = $school_tmp -> get_all_city_data();
+
+        return view('admin.school_add_page', $data);
+    }
+
+    /**
+     * 學校更新 頁面
+     *
+     */
+    public function schoolEditPage($id)
+    {
+        $data = array();
+        $data['user_data'] = app('request')->session()->get('user_data');
+        $school_tmp = new SchoolClass();
+        $data['city_data'] = $school_tmp -> get_all_city_data();
+
+        return view('admin.school_add_page', $data);
+    }
+
+    /**
      * 新增一筆學校的資料
      *
      * 備註：先檢查id是否重複，沒有重複在新增
@@ -394,12 +422,8 @@ class AdController extends Controller
         $fp = Input::all();
         $school_tmp = new SchoolClass($fp);
         $isAdd = $school_tmp -> add();
-        if($isAdd){
 
-            return 'success';
-        }
-
-        return 'error';
+        return redirect()->route('ad.school.list');
     }
 
     /**
