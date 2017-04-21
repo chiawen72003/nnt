@@ -73,6 +73,10 @@ Route::post('/Ad/School/Delete', ['as' => 'ad.school.delete', 'uses' => 'AdContr
 Route::get('/Ad/User/Add/Page', ['as' => 'ad.user.add.page', 'uses' => 'AdController@userAddPage']);
 Route::post('/Ad/User/Add', ['as' => 'ad.user.add', 'uses' => 'AdController@userAdd']);
 
+//管理員端 匯入使用者頁面
+Route::get('/Ad/User/Import/Page', ['as' => 'ad.user.import.page', 'uses' => 'AdController@userImportPage']);
+
+
 //管理員端 單元列表
 Route::get('/Ad', ['middleware' => 'AdSessionCheck','as' => 'ad.index', 'uses' => 'AdController@index']);
 Route::get('/Ad/Subject/List', ['middleware' => 'AdSessionCheck','as' => 'ad.subject.list', 'uses' => 'AdController@subjectList']);
