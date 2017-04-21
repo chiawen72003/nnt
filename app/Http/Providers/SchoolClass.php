@@ -41,6 +41,28 @@ class SchoolClass
     }
 
     /**
+     * 回傳一筆學校資訊
+     *
+     * @return mixed
+     */
+    public function get_school_data()
+    {
+        $return_data = array();
+        if($this -> input_data['id']){
+            $temp_obj = Organization::select('id','school_code', 'city_code', 'name')
+                ->where('id', $this -> input_data['id'])
+                ->get();
+            foreach($temp_obj as $v)
+            {
+                $return_data = $v -> toArray();
+            }
+        }
+
+        return $temp_obj;
+    }
+
+
+    /**
      * 新增 學校
      *
      * @return mixed
@@ -66,21 +88,14 @@ class SchoolClass
      */
     public function update_data()
     {
-        if ($this->input_data['School_id']) {
-            Organization::where('School_id', $this->input_data['School_id'])
+        if ($this->input_data['id']) {
+            Organization::where('id', $this->input_data['id'])
                 ->update([
-                    'type' => $this->input_data['type'] ? $this->input_data['type'] : '',
                     'city_code' => $this->input_data['city_code'] ? $this->input_data['city_code'] : '',
                     'name' => $this->input_data['name'] ? $this->input_data['name'] : '',
-                    'address' => $this->input_data['address'] ? $this->input_data['address'] : '',
-                    'telno' => $this->input_data['telno'] ? $this->input_data['telno'] : '',
-                    'used' => $this->input_data['used'] ? $this->input_data['used'] : ''
+                    'school_code' => $this->input_data['school_code'] ? $this->input_data['school_code'] : '',
                 ]);
-
-            return true;
         }
-
-        return false;
     }
 
     /**
