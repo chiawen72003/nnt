@@ -9,7 +9,27 @@ use \Input;
 
 class MemberClass
 {
-    public $input_data = array();
+    private $input_data = array(
+        'uid' => null,
+        'user_id' => null,
+        'uname' => null,
+        'email' => null,
+        'sex' => null,
+        'user_regdate' => null,
+        'birthday' => null,
+        'organization_id' => null,
+        'pass' => null,
+        'viewpass' => null,
+        'city_code' => null,
+        'grade' => null,
+        'class' => null,
+        'identity' => null,
+        'tel' => null,
+        'mobil' => null,
+        'address' => null,
+        'class_group' => null,
+        'seme' => null,
+    );
 
     public function __construct()
     {
@@ -85,5 +105,34 @@ class MemberClass
         }
 
         return $access_level;
+    }
+
+    /**
+     * 新增使用者資料
+     */
+    public function set_add_user()
+    {
+        if($this->input_data['user_id'] AND $this->input_data['pass'] ) {
+            $t_obj = new UserInfo();
+            $t_obj->user_id = ($this->input_data['user_id']) ? $this->input_data['user_id'] : '';
+            $t_obj->uname = ($this->input_data['uname']) ? $this->input_data['uname'] : '';
+            $t_obj->email = ($this->input_data['email']) ? $this->input_data['email'] : '';
+            $t_obj->sex = ($this->input_data['sex']) ? $this->input_data['sex'] : '';
+            $t_obj->user_regdate = ($this->input_data['user_regdate']) ? $this->input_data['user_regdate'] : '';
+            $t_obj->birthday = ($this->input_data['birthday']) ? $this->input_data['birthday'] : '';
+            $t_obj->organization_id = ($this->input_data['organization_id']) ? $this->input_data['organization_id'] : '';
+            $t_obj->pass = ($this->input_data['pass']) ? md5($this->input_data['pass']) : '';
+            $t_obj->viewpass = ($this->input_data['viewpass']) ? $this->input_data['viewpass'] : '';
+            $t_obj->city_code = ($this->input_data['city_code']) ? $this->input_data['city_code'] : '0';
+            $t_obj->grade = ($this->input_data['grade']) ? $this->input_data['grade'] : '0';
+            $t_obj->class = ($this->input_data['class']) ? $this->input_data['class'] : '0';
+            $t_obj->identity = ($this->input_data['identity']) ? $this->input_data['identity'] : '';
+            $t_obj->tel = ($this->input_data['tel']) ? $this->input_data['tel'] : '';
+            $t_obj->mobil = ($this->input_data['mobil']) ? $this->input_data['mobil'] : '';
+            $t_obj->address = ($this->input_data['address']) ? $this->input_data['address'] : '';
+            $t_obj->class_group = ($this->input_data['class_group']) ? $this->input_data['class_group'] : '';
+            $t_obj->seme = ($this->input_data['seme']) ? $this->input_data['seme'] : '';
+            $t_obj->save();
+        }
     }
 }
