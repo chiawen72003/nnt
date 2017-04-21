@@ -77,7 +77,7 @@ class SchoolClass
             }
         }
 
-        return $temp_obj;
+        return $return_data;
     }
 
 
