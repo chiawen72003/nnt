@@ -41,6 +41,25 @@ class SchoolClass
     }
 
     /**
+     * 回傳所有學校資料
+     *
+     * @return mixed
+     */
+    public function get_all_school()
+    {
+        $return_data = array();
+        $temp_obj = Organization::select('id','school_code', 'type', 'city_code', 'name', 'address', 'telno', 'used')
+            ->orderby('city_code', 'ASC')
+            ->orderby('id', 'ASC')
+            ->get();
+        foreach($temp_obj as $v ){
+            $return_data[] = $v;
+        }
+
+        return $return_data;
+    }
+
+    /**
      * 回傳一筆學校資訊
      *
      * @return mixed
