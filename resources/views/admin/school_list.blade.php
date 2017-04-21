@@ -35,7 +35,7 @@
                                     <td>[! $v['name'] !]</td>
                                     <td>
                                         <a class="icon-action icon-edit" href="admin_conceptStructure_edit.html"></a>
-                                        <a class="icon-action icon-delete" href="#" onclick='del_unit("[! $v['organization_id'] !]","[! $v['name'] !]")'></a>
+                                        <a class="icon-action icon-delete" href="#" onclick='del_unit("[! $v['id'] !]","[! $v['name'] !]")'></a>
                                     </td>
                                 </tr>
                         @endforeach
@@ -50,107 +50,15 @@
     </div>
 </div>
 <script>
-    //顯示編輯區 新增
-    function show_add_area() {
-        $('#inline_add_btn').show();
-        $('#inline_edit_btn').hide();
-        $('#organization_id').val('');
-        $('#organization_type').val('');
-        $('#organization_city_code').val('');
-        $('#organization_name').val('');
-        $('#organization_address').val('');
-        $('#organization_telno').val('');
-        $('#organization_used').val('1');
-        $('#school_id').val('');
-        $('#organization_id').removeAttr('disabled');
-        $('#inline').show();
-        $.colorbox({
-            inline: true, href: "#inline", width: "30%", open: true, onClosed: function () {
-                $('#inline').hide();
-            }
-        });
-    }
-
-    //顯示編輯區 編輯
-    function show_edit_area(getOrganizationId,getType,getCityCode,getName,getAddress,getTelno,getUsed) {
-        $('#inline_add_btn').hide();
-        $('#inline_edit_btn').show();
-        $('#organization_id').val(getOrganizationId);
-        $('#organization_type').val(getType);
-        $('#organization_city_code').val(getCityCode);
-        $('#organization_name').val(getName);
-        $('#organization_address').val(getAddress);
-        $('#organization_telno').val(getTelno);
-        $('#organization_used').val(getUsed);
-        $('#school_id').val(getOrganizationId);
-        $('#organization_id').attr('disabled', true);
-        $('#inline').show();
-        $.colorbox({
-            inline: true, href: "#inline", width: "30%", open: true, onClosed: function () {
-                $('#inline').hide();
-            }
-        });
-    }
-
-    //新增一個學校
-    function add_unit() {
-        $.ajax({
-            url: "[! route('ad.school.add') !]",
-            type: 'POST',
-            data: {
-                _token: '[! csrf_token() !]',
-                organization_id: $('#organization_id').val(),
-                type: $('#organization_type').val(),
-                city_code: $('#organization_city_code').val(),
-                name: $('#organization_name').val(),
-                address: $('#organization_address').val(),
-                telno: $('#organization_telno').val(),
-                used: $('#organization_used').val()
-            },
-            success: function (data) {
-                if(data == 'success'){
-                    alert('新增學校成功!!');
-                    location.reload();
-                }else{
-                    alert('學校代碼重複!!');
-                }
-
-            }
-        });
-    }
-
-    //修改一個學校
-    function edit_unit() {
-        $.ajax({
-            url: "[! route('ad.school.update') !]",
-            type: 'POST',
-            data: {
-                _token: '[! csrf_token() !]',
-                organization_id: $('#school_id').val(),
-                type: $('#organization_type').val(),
-                city_code: $('#organization_city_code').val(),
-                name: $('#organization_name').val(),
-                address: $('#organization_address').val(),
-                telno: $('#organization_telno').val(),
-                used: $('#organization_used').val()
-            },
-            success: function (data) {
-                alert('更新學校成功!!');
-                location.reload();
-            }
-        });
-    }
-
-
     //確認是否刪除學校
     function del_unit(get_id,unit_dsc){
         if(confirm("確定是否刪除下列學校嗎?\r\n"+unit_dsc)){
             $.ajax({
                 url: "[! route('ad.school.delete') !]",
-                type:'DELETE',
+                type:'POST',
                 data: {
                     _token: '[! csrf_token() !]',
-                    organization_id: get_id
+                    id: get_id
                 },
                 error: function(xhr) {
                     //alert('Ajax request 發生錯誤');
