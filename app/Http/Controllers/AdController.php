@@ -411,6 +411,7 @@ class AdController extends Controller
             array('id' => $id)
         );
         $data['school_data'] = $school_tmp -> get_school_data();
+        $data['city_data'] = $school_tmp -> get_all_city_data();
 
         return view('admin.school_edit_page', $data);
     }
