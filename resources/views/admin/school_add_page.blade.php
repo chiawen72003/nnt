@@ -6,7 +6,7 @@
         <div class="record-wrap clearfix">
             <div class="record-menu">
                 <ul>
-                    <li><a class="active" href="#" tittle="學校管理">學校管理</a></li>
+                    <li><a class="active" href="[! route('ad.school.list') !]" tittle="學校管理">學校管理</a></li>
                     <li><a href="#" title="新增使用者">新增使用者</a></li>
                     <li><a href="#" tittle="匯入使用者">匯入使用者</a></li>
                     <li><a href="#" title="查詢使用者資料">查詢使用者資料</a></li>
