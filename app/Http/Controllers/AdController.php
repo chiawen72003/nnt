@@ -406,10 +406,12 @@ class AdController extends Controller
     {
         $data = array();
         $data['user_data'] = app('request')->session()->get('user_data');
-        $school_tmp = new SchoolClass();
-        $data['city_data'] = $school_tmp -> get_all_city_data();
+        $school_tmp = new SchoolClass(
+            array('id' => $id)
+        );
+        $data['school_data'] = $school_tmp -> get_school_data();
 
-        return view('admin.school_add_page', $data);
+        return view('admin.school_edit_page', $data);
     }
 
     /**
