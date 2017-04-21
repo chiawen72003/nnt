@@ -63,6 +63,8 @@ Route::post('/Ad/News/Delete', ['as' => 'ad.news.delete', 'uses' => 'AdControlle
 
 //管理員端 學校列表
 Route::get('/Ad/School/List', ['as' => 'ad.school.list', 'uses' => 'AdController@schoolList']);
+Route::get('/Ad/School/AddPage', ['as' => 'ad.school.addpage', 'uses' => 'AdController@schoolAddPage']);
+Route::get('/Ad/School/EditPage/{id}', ['as' => 'ad.school.editpage', 'uses' => 'AdController@schoolEditPage']);
 Route::post('/Ad/School/Add', ['as' => 'ad.school.add', 'uses' => 'AdController@schoolAdd']);
 Route::post('/Ad/School/Update', ['as' => 'ad.school.update', 'uses' => 'AdController@schoolUpdate']);
 Route::post('/Ad/School/Delete', ['as' => 'ad.school.delete', 'uses' => 'AdController@schoolDelete']);
