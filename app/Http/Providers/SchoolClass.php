@@ -47,24 +47,16 @@ class SchoolClass
      */
     public function add()
     {
-        if ($this->input_data['School_id']) {
-            $temp_obj = Organization::where('School_id', $this->input_data['School_id'])->get();
+        if ($this->input_data['school_code']) {
+            $temp_obj = Organization::where('school_code', $this->input_data['school_code'])->get();
             if (count($temp_obj) == 0) {
                 $temp_obj = new Organization();
-                $temp_obj->School_id = $this->input_data['School_id'] ? $this->input_data['School_id'] : '';
-                $temp_obj->type = $this->input_data['type'] ? $this->input_data['type'] : '';
+                $temp_obj->School_id = $this->input_data['school_code'] ? $this->input_data['school_code'] : '';
                 $temp_obj->city_code = $this->input_data['city_code'] ? $this->input_data['city_code'] : '';
                 $temp_obj->name = $this->input_data['name'] ? $this->input_data['name'] : '';
-                $temp_obj->address = $this->input_data['address'] ? $this->input_data['address'] : '';
-                $temp_obj->telno = $this->input_data['telno'] ? $this->input_data['telno'] : '';
-                $temp_obj->used = $this->input_data['used'] ? $this->input_data['used'] : '';
                 $temp_obj->save();
-
-                return true;
             }
         }
-
-        return false;
     }
 
     /**
