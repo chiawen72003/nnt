@@ -4,6 +4,7 @@ namespace App\Http\Providers;
 
 use App\Http\Models\UserInfo;
 use App\Http\Models\UserStatus;
+use App\Http\Models\UserAccess;
 use \Input;
 
 class MemberClass
@@ -44,6 +45,24 @@ class MemberClass
                 $return_data['check_result'] = true;
                 $return_data['user_data'] = $user_data;
             }
+        }
+
+        return $return_data;
+    }
+
+
+    /**
+     * 取得使用者等級的設定資料
+     *
+     * @return int
+     */
+    public function get_all_level()
+    {
+        $return_data = array();
+        $tempObj = UserAccess::get();
+        foreach ($tempObj as $v)
+        {
+            $return_data[] = $v;
         }
 
         return $return_data;
