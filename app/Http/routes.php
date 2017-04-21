@@ -69,6 +69,10 @@ Route::post('/Ad/School/Add', ['as' => 'ad.school.add', 'uses' => 'AdController@
 Route::post('/Ad/School/Update', ['as' => 'ad.school.update', 'uses' => 'AdController@schoolUpdate']);
 Route::post('/Ad/School/Delete', ['as' => 'ad.school.delete', 'uses' => 'AdController@schoolDelete']);
 
+//管理員端 新增使用者頁面
+Route::get('/Ad/User/Add/Page', ['as' => 'ad.school.list', 'uses' => 'AdController@userAddPage']);
+
+
 //管理員端 單元列表
 Route::get('/Ad', ['middleware' => 'AdSessionCheck','as' => 'ad.index', 'uses' => 'AdController@index']);
 Route::get('/Ad/Subject/List', ['middleware' => 'AdSessionCheck','as' => 'ad.subject.list', 'uses' => 'AdController@subjectList']);
