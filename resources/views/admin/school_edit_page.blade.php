@@ -39,6 +39,7 @@
         </div>
     </div>
 </div>
+[! Html::script('js/jquery-1.11.3.js') !]
 <script>
     //修改一個學校
     function edit_unit() {

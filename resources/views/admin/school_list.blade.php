@@ -51,6 +51,7 @@
         </div>
     </div>
 </div>
+[! Html::script('js/jquery-1.11.3.js') !]
 <script>
     //確認是否刪除學校
     function del_unit(get_id,unit_dsc){

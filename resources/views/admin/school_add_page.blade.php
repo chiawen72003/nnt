@@ -41,4 +41,5 @@
         </div>
     </div>
 </div>
+[! Html::script('js/jquery-1.11.3.js') !]
 @stop
