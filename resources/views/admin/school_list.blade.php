@@ -18,13 +18,15 @@
                         <h3 class="search-title">請選取地區</h3>
                         <div class="select-group">
                             <select name="select-area" id="select-area" class="select-s">
-                                <option value="新北市">新北市</option>
+                                @foreach($city_data as $k => $v)
+                                    <option value="[! $k !]" [! ($city_code == $k)?'selected':''  !]>[! $v !]</option>
+                                @endforeach
                             </select>
-                            <input id="input-search" class="btn-yellow" type="button" value="送出">
+                            <input id="input-search" class="btn-yellow" type="button" value="送出" onclick="change_city()">
                         </div>
                     </div>
                     <div class="record-inner">
-                        <h3 class="record-title">學校列表<a class="record-add" href="#" onclick="show_add_area()">新增學校</a></h3>
+                        <h3 class="record-title">學校列表<a class="record-add" href="[! route('ad.school.addpage') !]">新增學校</a></h3>
                         <table class="table-detail2">
                             <tr>
                                 <th class="td-school">學校名稱</th>
@@ -41,7 +43,7 @@
                         @endforeach
                         </table>
                         <div class="page-select-wrap">
-                        [! $list_data->links()  !]
+                        [! $list_data->appends(['city' => $city_code])->links()  !]
                         </div>
                     </div>
                 </form>
@@ -69,6 +71,12 @@
                 }
             });
         }
+    }
+
+    //變更縣市
+    function change_city()
+    {
+        location.href = "[! route('ad.school.list') !]?city=" + $('#select-area').val();
     }
 </script>
 @stop
