@@ -76,6 +76,9 @@ Route::post('/Ad/User/Add', ['as' => 'ad.user.add', 'uses' => 'AdController@user
 //管理員端 匯入使用者頁面
 Route::get('/Ad/User/Import/Page', ['as' => 'ad.user.import.page', 'uses' => 'AdController@userImportPage']);
 
+//管理員端 查詢使用者資料頁面
+Route::get('/Ad/User/Search/Page', ['as' => 'ad.user.search.page', 'uses' => 'AdController@userSearchPage']);
+
 
 //管理員端 單元列表
 Route::get('/Ad', ['middleware' => 'AdSessionCheck','as' => 'ad.index', 'uses' => 'AdController@index']);
