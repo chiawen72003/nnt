@@ -40,7 +40,7 @@ class MemberClass
     }
 
     /**
-     *  檢查登入的資料
+     * 登入檢查
      *
      * @return array
      */
@@ -72,7 +72,7 @@ class MemberClass
 
 
     /**
-     * 取得使用者等級的設定資料
+     * 使用者等級的設定資料
      *
      * @return int
      */
@@ -89,7 +89,7 @@ class MemberClass
     }
 
     /**
-     * 取得指定使用者的等級資料
+     * 指定使用者的等級
      *
      * @param $user_id
      * @return int
@@ -108,7 +108,7 @@ class MemberClass
     }
 
     /**
-     * 新增使用者資料
+     * 新增使用者
      */
     public function set_add_user()
     {
@@ -134,5 +134,23 @@ class MemberClass
             $t_obj->seme = ($this->input_data['seme']) ? $this->input_data['seme'] : '';
             $t_obj->save();
         }
+    }
+
+    /**
+     * 單一使用者的資料
+     */
+    public function get_user_data()
+    {
+        $return_data = array();
+        if($this->input_data['uid']) {
+            $t_obj = UserInfo::where('uid', $this->input_data['uid'])
+                ->get();
+            foreach($t_obj as $v)
+            {
+                $return_data = $v->toArray();
+            }
+        }
+
+        return $return_data;
     }
 }
