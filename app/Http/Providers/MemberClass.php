@@ -29,6 +29,7 @@ class MemberClass
         'address' => null,
         'class_group' => null,
         'seme' => null,
+        'access_level'=>null,
     );
 
     public function __construct()
@@ -138,6 +139,11 @@ class MemberClass
                 $t_obj->address = ($this->input_data['address']) ? $this->input_data['address'] : '';
                 $t_obj->class_group = ($this->input_data['class_group']) ? $this->input_data['class_group'] : '';
                 $t_obj->seme = ($this->input_data['seme']) ? $this->input_data['seme'] : '';
+                $t_obj->save();
+
+                $t_obj = new UserStatus();
+                $t_obj->user_id = ($this->input_data['user_id']) ? $this->input_data['user_id'] : '';
+                $t_obj->access_level = ($this->input_data['access_level']) ? $this->input_data['access_level'] : '';
                 $t_obj->save();
             }
         }
