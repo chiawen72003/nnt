@@ -36,7 +36,7 @@
                                 <tr>
                                     <td>[! $v['name'] !]</td>
                                     <td>
-                                        <a class="icon-action icon-edit" href="admin_conceptStructure_edit.html"></a>
+                                        <a class="icon-action icon-edit" href="[! route('ad.school.editpage',array($v['id'])) !]"></a>
                                         <a class="icon-action icon-delete" href="#" onclick='del_unit("[! $v['id'] !]","[! $v['name'] !]")'></a>
                                     </td>
                                 </tr>
