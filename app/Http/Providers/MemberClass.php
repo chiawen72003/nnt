@@ -112,28 +112,34 @@ class MemberClass
      */
     public function set_add_user()
     {
-        if($this->input_data['user_id'] AND $this->input_data['pass'] ) {
-            $t_obj = new UserInfo();
-            $t_obj->user_id = ($this->input_data['user_id']) ? $this->input_data['user_id'] : '';
-            $t_obj->uname = ($this->input_data['uname']) ? $this->input_data['uname'] : '';
-            $t_obj->email = ($this->input_data['email']) ? $this->input_data['email'] : '';
-            $t_obj->sex = ($this->input_data['sex']) ? $this->input_data['sex'] : '';
-            $t_obj->user_regdate =  date("Y-m-d");
-            $t_obj->user_regdate = ($this->input_data['user_regdate']) ? $this->input_data['user_regdate'] : '';
-            $t_obj->birthday = ($this->input_data['birthday']) ? $this->input_data['birthday'] : '';
-            $t_obj->organization_id = ($this->input_data['organization_id']) ? $this->input_data['organization_id'] : '';
-            $t_obj->pass = ($this->input_data['pass']) ? md5($this->input_data['pass']) : '';
-            $t_obj->viewpass = ($this->input_data['pass']) ? $this->input_data['pass'] : '';
-            $t_obj->city_code = ($this->input_data['city_code']) ? $this->input_data['city_code'] : '0';
-            $t_obj->grade = ($this->input_data['grade']) ? $this->input_data['grade'] : '0';
-            $t_obj->class = ($this->input_data['class']) ? $this->input_data['class'] : '0';
-            $t_obj->identity = ($this->input_data['identity']) ? $this->input_data['identity'] : '';
-            $t_obj->tel = ($this->input_data['tel']) ? $this->input_data['tel'] : '';
-            $t_obj->mobil = ($this->input_data['mobil']) ? $this->input_data['mobil'] : '';
-            $t_obj->address = ($this->input_data['address']) ? $this->input_data['address'] : '';
-            $t_obj->class_group = ($this->input_data['class_group']) ? $this->input_data['class_group'] : '';
-            $t_obj->seme = ($this->input_data['seme']) ? $this->input_data['seme'] : '';
-            $t_obj->save();
+        if($this->input_data['user_id'] AND $this->input_data['pass'] )
+        {
+            $temp_obj = UserInfo::where('user_id',$this->input_data['user_id'])
+                ->get();
+            if(count($temp_obj) == 0)
+            {
+                $t_obj = new UserInfo();
+                $t_obj->user_id = ($this->input_data['user_id']) ? $this->input_data['user_id'] : '';
+                $t_obj->uname = ($this->input_data['uname']) ? $this->input_data['uname'] : '';
+                $t_obj->email = ($this->input_data['email']) ? $this->input_data['email'] : '';
+                $t_obj->sex = ($this->input_data['sex']) ? $this->input_data['sex'] : '';
+                $t_obj->user_regdate =  date("Y-m-d");
+                $t_obj->user_regdate = ($this->input_data['user_regdate']) ? $this->input_data['user_regdate'] : '';
+                $t_obj->birthday = ($this->input_data['birthday']) ? $this->input_data['birthday'] : '';
+                $t_obj->organization_id = ($this->input_data['organization_id']) ? $this->input_data['organization_id'] : '';
+                $t_obj->pass = ($this->input_data['pass']) ? md5($this->input_data['pass']) : '';
+                $t_obj->viewpass = ($this->input_data['pass']) ? $this->input_data['pass'] : '';
+                $t_obj->city_code = ($this->input_data['city_code']) ? $this->input_data['city_code'] : '0';
+                $t_obj->grade = ($this->input_data['grade']) ? $this->input_data['grade'] : '0';
+                $t_obj->class = ($this->input_data['class']) ? $this->input_data['class'] : '0';
+                $t_obj->identity = ($this->input_data['identity']) ? $this->input_data['identity'] : '';
+                $t_obj->tel = ($this->input_data['tel']) ? $this->input_data['tel'] : '';
+                $t_obj->mobil = ($this->input_data['mobil']) ? $this->input_data['mobil'] : '';
+                $t_obj->address = ($this->input_data['address']) ? $this->input_data['address'] : '';
+                $t_obj->class_group = ($this->input_data['class_group']) ? $this->input_data['class_group'] : '';
+                $t_obj->seme = ($this->input_data['seme']) ? $this->input_data['seme'] : '';
+                $t_obj->save();
+            }
         }
     }
 
