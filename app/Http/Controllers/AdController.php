@@ -474,6 +474,19 @@ class AdController extends Controller
     }
 
     /**
+     * 使用者新增
+     *
+     */
+    public function userAdd()
+    {
+        $fp = Input::all();
+        $school_tmp = new MemberClass($fp);
+        $school_tmp -> set_add_user();
+
+        return ;
+    }
+
+    /**
      * 系統公告列表
      *
      */
