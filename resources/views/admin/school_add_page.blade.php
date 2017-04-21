@@ -13,24 +13,30 @@
                 </ul>
             </div>
             <div class="record-content">
-                <form id="addschool-form">
+                [! Form::open(array('url'=>route('ad.school.add'),'id'=>'addForm', 'name'=>'addForm', 'files' => true)) !]
                     <div class="title-feature">新增學校</div>
                     <div class="record-inner">
                         <div class="select-group">
                             <div class="label-title label-title-s">縣市</div>
-                            <select name="select-area" id="select-area">
-                                <option value="新北市">新北市</option>
+                            <select name="city_code" id="city_code">
+                                @foreach($city_data as $k => $v)
+                                    <option value="[! $k !]" >[! $v !]</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="select-group">
                             <div class="label-title label-title-s">學校名稱</div>
-                            <input class="select-input" name="input-school" type="text" value="縣立新莊國中">
+                            <input class="select-input" name="name" id="name" type="text" value="">
+                        </div>
+                        <div class="select-group">
+                            <div class="label-title label-title-s">學校代碼</div>
+                            <input class="select-input" name="school_code" id="school_code" type="text" value="">
                         </div>
                         <div class="form-button-wrap">
-                            <input class="btn-yellow" type="submit" value="送出" />
+                            <input class="btn-yellow" type="submit" value="送出"  />
                         </div>
                     </div>
-                </form>
+                [! Form::close() !]
             </div>
         </div>
     </div>
