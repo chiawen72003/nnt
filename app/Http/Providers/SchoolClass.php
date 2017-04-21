@@ -100,11 +100,7 @@ class SchoolClass
     {
         if ($this->input_data['id']) {
             Organization::where('id', $this->input_data['id'])->delete();
-
-            return true;
         }
-
-        return false;
     }
 
     /**
