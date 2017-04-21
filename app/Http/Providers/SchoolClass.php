@@ -92,7 +92,7 @@ class SchoolClass
             $temp_obj = Organization::where('school_code', $this->input_data['school_code'])->get();
             if (count($temp_obj) == 0) {
                 $temp_obj = new Organization();
-                $temp_obj->School_id = $this->input_data['school_code'] ? $this->input_data['school_code'] : '';
+                $temp_obj->school_code = $this->input_data['school_code'] ? $this->input_data['school_code'] : '';
                 $temp_obj->city_code = $this->input_data['city_code'] ? $this->input_data['city_code'] : '';
                 $temp_obj->name = $this->input_data['name'] ? $this->input_data['name'] : '';
                 $temp_obj->save();
