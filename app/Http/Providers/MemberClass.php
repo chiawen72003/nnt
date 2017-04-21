@@ -49,6 +49,12 @@ class MemberClass
         return $return_data;
     }
 
+    /**
+     * 取得指定使用者的等級資料
+     *
+     * @param $user_id
+     * @return int
+     */
     public function get_access_level($user_id)
     {
         $access_level = 0;
