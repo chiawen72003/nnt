@@ -370,10 +370,16 @@ class AdController extends Controller
      */
     public function schoolList()
     {
+        $fp = Input::all();
+        $city_code = isset($fp['city'])?$fp['city']:'1';
         $data = array();
         $data['user_data'] = app('request')->session()->get('user_data');
-        $organization = new SchoolClass();
-        $data['list_data'] = $organization->get_school_list();
+        $school_tmp = new SchoolClass(
+            array('city_code' => $city_code)
+        );
+        $data['list_data'] = $school_tmp -> get_school_list();
+        $data['city_data'] = $school_tmp -> get_all_city_data();
+        $data['city_code'] = $city_code;
 
         return view('admin.school_list', $data);
     }
@@ -386,8 +392,8 @@ class AdController extends Controller
     public function schoolAdd()
     {
         $fp = Input::all();
-        $organization = new SchoolClass($fp);
-        $isAdd = $organization->add();
+        $school_tmp = new SchoolClass($fp);
+        $isAdd = $school_tmp -> add();
         if($isAdd){
 
             return 'success';
@@ -397,27 +403,27 @@ class AdController extends Controller
     }
 
     /**
-     * 更新一筆單元的資料
+     * 更新一筆學校的資料
      *
      */
     public function schoolUpdate()
     {
         $fp = Input::all();
-        $organization = new SchoolClass($fp);
-        $organization->update_data();
+        $school_tmp = new SchoolClass($fp);
+        $school_tmp -> update_data();
 
         return ;
     }
 
     /**
-     * 移除一個單元
+     * 移除一個學校
      *
      */
     public function schoolDelete()
     {
         $fp = Input::all();
-        $organization = new SchoolClass($fp);
-        $organization->delete_data();
+        $school_tmp = new SchoolClass($fp);
+        $school_tmp -> delete_data();
 
         return ;
     }
