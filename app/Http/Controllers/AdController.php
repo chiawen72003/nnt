@@ -374,7 +374,7 @@ class AdController extends Controller
         $data['user_data'] = app('request')->session()->get('user_data');
         $organization = new SchoolClass();
         $data['list_data'] = $organization->get_school_list();
-        //dd($data['list_data']->links());
+
         return view('admin.school_list', $data);
     }
 
@@ -386,7 +386,7 @@ class AdController extends Controller
     public function schoolAdd()
     {
         $fp = Input::all();
-        $organization = new OrganizationClass($fp);
+        $organization = new SchoolClass($fp);
         $isAdd = $organization->add();
         if($isAdd){
 
@@ -403,7 +403,7 @@ class AdController extends Controller
     public function schoolUpdate()
     {
         $fp = Input::all();
-        $organization = new OrganizationClass($fp);
+        $organization = new SchoolClass($fp);
         $organization->update_data();
 
         return ;
@@ -416,7 +416,7 @@ class AdController extends Controller
     public function schoolDelete()
     {
         $fp = Input::all();
-        $organization = new OrganizationClass($fp);
+        $organization = new SchoolClass($fp);
         $organization->delete_data();
 
         return ;
