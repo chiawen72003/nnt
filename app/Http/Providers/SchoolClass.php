@@ -33,7 +33,7 @@ class SchoolClass
     public function get_school_list()
     {
         $temp_obj = Organization::select('id','school_code', 'type', 'city_code', 'name', 'address', 'telno', 'used')
-            ->orderby('city_code', 'ASC')
+            ->where('city_code', $this->input_data['city_code'])
             ->orderby('id', 'ASC')
             ->paginate(20);
 
