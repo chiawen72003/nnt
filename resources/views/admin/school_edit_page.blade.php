@@ -14,11 +14,10 @@
             </div>
             <div class="record-content">
                 <div class="title-feature">編輯學校</div>
-                [! Form::open(array('url'=>route('ad.school.update'),'id'=>'addForm', 'name'=>'addForm', 'files' => true)) !]
                     <div class="record-inner">
                         <div class="select-group">
                             <div class="label-title label-title-s">縣市</div>
-                            <select name="select-area" id="select-area">
+                            <select id="select-area">
                                 @foreach($city_data as $k => $v)
                                     <option value="[! $k !]" [! ($school_data['city_code'] == $k)?'selected':''  !]>[! $v !]</option>
                                 @endforeach
@@ -26,19 +25,38 @@
                         </div>
                         <div class="select-group">
                             <div class="label-title label-title-s">學校名稱</div>
-                            <input class="select-input" name="input-school" type="text" value="[! $school_data['name'] !]">
+                            <input class="select-input" id="input-school" type="text" value="[! $school_data['name'] !]">
                         </div>
                         <div class="select-group">
                             <div class="label-title label-title-s">學校代碼</div>
-                            <input class="select-input" name="school_code" id="school_code" type="text" value="[! $school_data['school_code'] !]">
+                            <input class="select-input" id="school_code" type="text" value="[! $school_data['school_code'] !]">
                         </div>
                         <div class="form-button-wrap">
-                            <input class="btn-yellow" type="submit" value="送出" />
+                            <input class="btn-yellow" type="button" value="送出" onclick="edit_unit()" />
                         </div>
                     </div>
-                [! Form::close() !]
             </div>
         </div>
     </div>
 </div>
+<script>
+    //修改一個學校
+    function edit_unit() {
+        $.ajax({
+            url: "[! route('ad.school.update') !]",
+            type: 'POST',
+            data: {
+                _token: '[! csrf_token() !]',
+                id: '[! $school_data["id"] !]',
+                city_code: $('#select-area').val(),
+                name: $('#input-school').val(),
+                school_code: $('#school_code').val(),
+            },
+            success: function (data) {
+                alert('更新學校成功!!');
+                history.back();
+            }
+        });
+    }
+</script>
 @stop
