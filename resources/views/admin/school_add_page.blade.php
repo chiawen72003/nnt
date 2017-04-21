@@ -13,8 +13,8 @@
                 </ul>
             </div>
             <div class="record-content">
+                <div class="title-feature">新增學校</div>
                 [! Form::open(array('url'=>route('ad.school.add'),'id'=>'addForm', 'name'=>'addForm', 'files' => true)) !]
-                    <div class="title-feature">新增學校</div>
                     <div class="record-inner">
                         <div class="select-group">
                             <div class="label-title label-title-s">縣市</div>
