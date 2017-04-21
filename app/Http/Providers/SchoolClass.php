@@ -7,8 +7,9 @@ use App\Http\Models\Organization;
 
 class SchoolClass
 {
-    private $use_data = array(
-        'School_id' => null,
+    private $input_data = array(
+        'id' => null,
+        'school_code' => null,
         'type' => null,
         'city_code' => null,
         'name' => null,
@@ -25,7 +26,7 @@ class SchoolClass
     }
 
     /**
-     * 回傳科目列表
+     * 回傳學校列表
      *
      * @return mixed
      */
@@ -97,8 +98,8 @@ class SchoolClass
      */
     public function delete_data()
     {
-        if ($this->input_data['School_id']) {
-            Organization::where('School_id', $this->input_data['School_id'])->delete();
+        if ($this->input_data['id']) {
+            Organization::where('id', $this->input_data['id'])->delete();
 
             return true;
         }
