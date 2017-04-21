@@ -2,9 +2,9 @@
 
 namespace App\Http\Models;
 
-class School extends BaseModel
+class Organization extends BaseModel
 {
-    protected $table = 'school';
+    protected $table = 'organization';
     protected $primaryKey = 'id';
     public $timestamps = false;
 }
