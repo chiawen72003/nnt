@@ -29,7 +29,7 @@
                         </div>
                         <div class="select-group">
                             <div class="label-title label-title-s">學校代碼</div>
-                            <input class="select-input" id="school_code" type="text" value="[! $school_data['school_code'] !]">
+                            <input class="select-input" id="organization_id" type="text" value="[! $school_data['organization_id'] !]">
                         </div>
                         <div class="form-button-wrap">
                             <input class="btn-yellow" type="button" value="送出" onclick="edit_unit()" />
@@ -51,7 +51,7 @@
                 id: '[! $school_data["id"] !]',
                 city_code: $('#select-area').val(),
                 name: $('#input-school').val(),
-                school_code: $('#school_code').val(),
+                organization_id: $('#organization_id').val(),
             },
             success: function (data) {
                 alert('更新學校成功!!');

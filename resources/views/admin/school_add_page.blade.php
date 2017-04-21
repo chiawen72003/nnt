@@ -30,7 +30,7 @@
                         </div>
                         <div class="select-group">
                             <div class="label-title label-title-s">學校代碼</div>
-                            <input class="select-input" name="school_code" id="school_code" type="text" value="">
+                            <input class="select-input" name="organization_id" id="organization_id" type="text" value="">
                         </div>
                         <div class="form-button-wrap">
                             <input class="btn-yellow" type="submit" value="送出"  />
