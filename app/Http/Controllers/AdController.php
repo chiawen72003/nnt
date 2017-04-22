@@ -554,6 +554,20 @@ class AdController extends Controller
     }
 
     /**
+     * 科目控管
+     */
+    public function userSubjectLimitPage()
+    {
+        $data = array();
+        $data['user_data'] = app('request')->session()->get('user_data');
+        $member_tmp = new MemberClass();
+        $data['all_teacher'] = $member_tmp -> get_teacher_data();
+        $data['all_level'] = $member_tmp -> get_all_level();
+
+        return view('admin.subject.subject_limit', $data);
+    }
+
+    /**
      * 系統公告列表
      *
      */
