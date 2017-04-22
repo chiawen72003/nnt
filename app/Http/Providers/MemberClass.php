@@ -83,7 +83,7 @@ class MemberClass
         $tempObj = UserAccess::get();
         foreach ($tempObj as $v)
         {
-            $return_data[] = $v;
+            $return_data[$v['access_level']] = $v['access_title'];
         }
 
         return $return_data;
@@ -227,5 +227,24 @@ class MemberClass
                     'user_status.access_level' => '-1',
                 ]);
         }
+    }
+
+    /**
+     * 所有教師的資料
+     */
+    function get_teacher_data()
+    {
+        $teacher_data = array();
+        $t_obj = UserInfo::select('user_info.user_id', 'user_info.uid', 'user_status.access_level')
+            ->leftJoin('user_status', 'user_status.user_id', '=', 'user_info.user_id')
+            ->whereIn('user_status.access_level', array('21','22','23'))
+            ->orderBy('user_info.user_id')
+            ->get();
+        foreach ($t_obj as $v)
+        {
+            $teacher_data[] = $v->toArray();
+        }
+
+        return $teacher_data;
     }
 }
