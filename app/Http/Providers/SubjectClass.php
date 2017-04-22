@@ -3,12 +3,15 @@
 namespace App\Http\Providers;
 
 use App\Http\Models\Subject;
+use App\Http\Models\SubjectLimit;
 use \Input;
 
 
 class SubjectClass
 {
-    public $input_data = array();
+    public $input_data = array(
+        'user_id' => null
+    );
 
     public function __construct($data = array())
     {
@@ -18,7 +21,7 @@ class SubjectClass
     }
 
     /**
-     * 領域名稱列表
+     * 科目名稱列表
      *
      * @return array 領域名稱資料(id=>名稱)
      */
@@ -101,5 +104,25 @@ class SubjectClass
         }
 
         return false;
+    }
+
+    /**
+     * 取得現有已經上鎖的科目資料
+     *
+     */
+    public function get_limit_subject()
+    {
+        $data = array();
+        if($this->input_data['user_id'])
+        {
+            $t_obj = SubjectLimit::where('user_id', $this->input_data['user_id'])
+                ->get();
+            foreach ($t_obj as $v)
+            {
+                $data[] = $v -> subject_id;
+            }
+        }
+
+        return $data;
     }
 }
