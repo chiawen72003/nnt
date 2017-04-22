@@ -568,6 +568,47 @@ class AdController extends Controller
     }
 
     /**
+     * 取得教師開放跟未開放的科目資料
+     */
+    public function userSubjectLockUnLock()
+    {
+        $fp = Input::all();
+        $subject_obj = new SubjectClass($fp);
+        $access_data = $subject_obj -> get_access_subject();
+        $subject_data = $subject_obj -> subject_list();
+        $return_data = array(
+            'subject_data' => $subject_data,
+            'access_data' => $access_data
+        );
+
+        return json_encode($return_data);
+    }
+
+    /**
+     * 增加教師開放的科目資料
+     */
+    public function userSubjectSetUnLock()
+    {
+        $fp = Input::all();
+        $subject_obj = new SubjectClass($fp);
+        $subject_obj -> set_access_subject();
+
+        return ;
+    }
+
+    /**
+     * 移除教師開放的科目資料
+     */
+    public function userSubjectSetLock()
+    {
+        $fp = Input::all();
+        $subject_obj = new SubjectClass($fp);
+        $subject_obj -> unset_access_subject();
+
+        return ;
+    }
+
+    /**
      * 系統公告列表
      *
      */
