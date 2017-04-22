@@ -166,4 +166,66 @@ class MemberClass
 
         return $return_data;
     }
+
+    /**
+     * 指定學校、班級的學生資料
+     */
+    public function get_class_student_data()
+    {
+        $t_obj = null;
+        if($this->input_data['organization_id']  AND $this->input_data['grade'] AND $this->input_data['class'])
+        {
+            $temp_obj = UserInfo::leftJoin('user_status', 'user_status.user_id', '=', 'user_info.user_id')
+                ->where('user_status.access_level', '1')
+                ->where('user_info.organization_id', $this->input_data['organization_id'])
+                ->where('user_info.grade', $this->input_data['grade'])
+                ->where('user_info.class', $this->input_data['class'])
+                ->orderby('user_info.uid', 'ASC')
+                ->paginate(20);
+            foreach ($temp_obj as $v)
+            {
+                $t_obj['student_data'][] = $v;
+            }
+            if(count($temp_obj) > 0)
+            {
+                $t_obj['page_data'] = $temp_obj -> appends([
+                    'city_code' => $this->input_data['city_code'],
+                    'organization_id' => $this->input_data['organization_id'],
+                    'grade' => $this->input_data['grade'],
+                    'class' => $this->input_data['class']
+                ])->links();
+            }
+        }
+
+        return $t_obj;
+    }
+
+    /**
+     * 移除一個學生
+     */
+    function set_remove_student()
+    {
+        $t_obj = UserStatus::where('user_id', $this->input_data['user_id'])
+            ->update([
+                'access_level' => '-1',
+            ]);
+    }
+
+    /**
+     * 移除一個班級的學生
+     */
+    function set_remove_all_student()
+    {
+        if($this->input_data['organization_id']  AND $this->input_data['grade'] AND $this->input_data['class'])
+        {
+            UserInfo::leftJoin('user_status', 'user_status.user_id', '=', 'user_info.user_id')
+                ->where('user_status.access_level', '1')
+                ->where('user_info.organization_id', $this->input_data['organization_id'])
+                ->where('user_info.grade', $this->input_data['grade'])
+                ->where('user_info.class', $this->input_data['class'])
+                ->update([
+                    'user_status.access_level' => '-1',
+                ]);
+        }
+    }
 }
