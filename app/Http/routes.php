@@ -81,6 +81,9 @@ Route::get('/Ad/User/Search/Page', ['as' => 'ad.user.search.page', 'uses' => 'Ad
 Route::post('/Ad/User/Search/Delete', ['as' => 'ad.user.search.delete', 'uses' => 'AdController@userSearchDelete']);
 Route::post('/Ad/User/Search/AllDelete', ['as' => 'ad.user.search.alldelete', 'uses' => 'AdController@userSearchAllDelete']);
 
+//管理員端 科目控管
+Route::get('/Ad/Subject/Limit/Page', ['as' => 'ad.subject.limit.page', 'uses' => 'AdController@userSubjectLimitPage']);
+
 //管理員端 單元列表
 Route::get('/Ad', ['middleware' => 'AdSessionCheck','as' => 'ad.index', 'uses' => 'AdController@index']);
 Route::get('/Ad/Subject/List', ['middleware' => 'AdSessionCheck','as' => 'ad.subject.list', 'uses' => 'AdController@subjectList']);
