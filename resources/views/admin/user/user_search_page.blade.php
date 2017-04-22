@@ -163,7 +163,7 @@
         @if( $organization_id AND $grade AND $class)
             if(confirm("確定是否刪除全部的學生嗎?")){
                 $.ajax({
-                    url: "[! route('ad.user.search.delete') !]",
+                    url: "[! route('ad.user.search.alldelete') !]",
                     type:'POST',
                     data: {
                         _token: '[! csrf_token() !]',
