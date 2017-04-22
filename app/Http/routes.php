@@ -83,6 +83,9 @@ Route::post('/Ad/User/Search/AllDelete', ['as' => 'ad.user.search.alldelete', 'u
 
 //管理員端 科目控管
 Route::get('/Ad/Subject/Limit/Page', ['as' => 'ad.subject.limit.page', 'uses' => 'AdController@userSubjectLimitPage']);
+Route::post('/Ad/Subject/Lock/UnLock', ['as' => 'ad.subject.lock.unlock', 'uses' => 'AdController@userSubjectLockUnLock']);
+Route::post('/Ad/Subject/Set/UnLock', ['as' => 'ad.subject.set.unlock', 'uses' => 'AdController@userSubjectSetUnLock']);
+Route::post('/Ad/Subject/Set/Lock', ['as' => 'ad.subject.set.lock', 'uses' => 'AdController@userSubjectSetLock']);
 
 //管理員端 單元列表
 Route::get('/Ad', ['middleware' => 'AdSessionCheck','as' => 'ad.index', 'uses' => 'AdController@index']);
