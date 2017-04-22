@@ -510,6 +510,7 @@ class AdController extends Controller
      */
     public function userSearchPage()
     {
+        $fp = Input::all();
         $data = array();
         $data['user_data'] = app('request')->session()->get('user_data');
         $school_tmp = new SchoolClass();
@@ -517,8 +518,39 @@ class AdController extends Controller
         $data['city_data'] = $school_tmp -> get_all_city_data();
         $data['all_school'] = $school_tmp -> get_all_school();
         $data['all_level'] = $member_tmp -> get_all_level();
+        $data['class_student'] = $member_tmp -> get_class_student_data();
+        $data['city_code'] = isset($fp['city_code'])?$fp['city_code']:null;
+        $data['organization_id'] = isset($fp['organization_id'])?$fp['organization_id']:null;
+        $data['grade'] = isset($fp['grade'])?$fp['grade']:null;
+        $data['class'] = isset($fp['class'])?$fp['class']:null;
 
         return view('admin.user.user_search_page', $data);
+    }
+
+    /**
+     * 移除一個學生
+     *
+     */
+    public function userSearchDelete()
+    {
+        $fp = Input::all();
+        $school_tmp = new MemberClass();
+        $school_tmp -> set_remove_student();
+
+        return ;
+    }
+
+    /**
+     * 移除一個班級的學生
+     *
+     */
+    public function userSearchAllDelete()
+    {
+        $fp = Input::all();
+        $school_tmp = new MemberClass();
+        $school_tmp -> set_remove_all_student();
+
+        return ;
     }
 
     /**
