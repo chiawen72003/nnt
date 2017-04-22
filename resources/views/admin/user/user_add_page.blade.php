@@ -60,7 +60,7 @@
                             <div class="label-title label-title-s">身份</div>
                             <select id="access_level">
                                 @foreach($all_level as $k => $v)
-                                    <option value="[! $v['access_level'] !]">[! $v['access_title'] !]</option>
+                                    <option value="[! $k !]">[! $v !]</option>
                                 @endforeach
                             </select>
                         </div>
