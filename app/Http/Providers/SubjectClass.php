@@ -3,14 +3,16 @@
 namespace App\Http\Providers;
 
 use App\Http\Models\Subject;
-use App\Http\Models\SubjectLimit;
+use App\Http\Models\SubjectAccess;
 use \Input;
 
 
 class SubjectClass
 {
     public $input_data = array(
-        'user_id' => null
+        'user_id' => null,
+        'unlock' => null,
+        'lock' => null,
     );
 
     public function __construct($data = array())
@@ -107,15 +109,15 @@ class SubjectClass
     }
 
     /**
-     * 取得現有已經上鎖的科目資料
+     * 取得開放的科目資料
      *
      */
-    public function get_limit_subject()
+    public function get_access_subject()
     {
         $data = array();
         if($this->input_data['user_id'])
         {
-            $t_obj = SubjectLimit::where('user_id', $this->input_data['user_id'])
+            $t_obj = SubjectAccess::where('user_id', $this->input_data['user_id'])
                 ->get();
             foreach ($t_obj as $v)
             {
@@ -124,5 +126,35 @@ class SubjectClass
         }
 
         return $data;
+    }
+
+    /**
+     *  新增 開放的科目資料
+     */
+    public function set_access_subject()
+    {
+        if($this->input_data['user_id'] AND $this->input_data['unlock'] AND is_array($this->input_data['unlock']))
+        {
+            $data = array();
+            foreach($this->input_data['unlock'] as $v)
+            {
+                $data[] = array('user_id'=> $this->input_data['user_id'], 'subject_id'=> $v);
+            }
+            //以批次新增的方式處理
+            SubjectAccess::insert($data);
+        }
+    }
+
+    /**
+     *  移除 開放的科目資料
+     */
+    public function unset_access_subject()
+    {
+        if($this->input_data['user_id'] AND $this->input_data['lock'] AND is_array($this->input_data['lock']))
+        {
+            SubjectAccess::where('user_id', $this->input_data['user_id'])
+                ->whereIn('subject_id', $this->input_data['lock'])
+                ->delete();
+        }
     }
 }
