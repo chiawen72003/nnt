@@ -78,7 +78,8 @@ Route::get('/Ad/User/Import/Page', ['as' => 'ad.user.import.page', 'uses' => 'Ad
 
 //管理員端 查詢使用者資料頁面
 Route::get('/Ad/User/Search/Page', ['as' => 'ad.user.search.page', 'uses' => 'AdController@userSearchPage']);
-
+Route::post('/Ad/User/Search/Delete', ['as' => 'ad.user.search.delete', 'uses' => 'AdController@userSearchDelete']);
+Route::post('/Ad/User/Search/AllDelete', ['as' => 'ad.user.search.alldelete', 'uses' => 'AdController@userSearchAllDelete']);
 
 //管理員端 單元列表
 Route::get('/Ad', ['middleware' => 'AdSessionCheck','as' => 'ad.index', 'uses' => 'AdController@index']);
