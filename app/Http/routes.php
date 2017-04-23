@@ -87,6 +87,12 @@ Route::post('/Ad/Subject/Lock/UnLock', ['as' => 'ad.subject.lock.unlock', 'uses'
 Route::post('/Ad/Subject/Set/UnLock', ['as' => 'ad.subject.set.unlock', 'uses' => 'AdController@userSubjectSetUnLock']);
 Route::post('/Ad/Subject/Set/Lock', ['as' => 'ad.subject.set.lock', 'uses' => 'AdController@userSubjectSetLock']);
 
+//管理員端 單元上鎖
+Route::get('/Ad/Unit/Lock/Page', ['as' => 'ad.unit.lock.page', 'uses' => 'AdController@unitLockPage']);
+Route::post('/Ad/Unit/Lock/Data', ['as' => 'ad.unit.lock.data', 'uses' => 'AdController@unitLockData']);
+Route::post('/Ad/Unit/Set/Lock', ['as' => 'ad.unit.set.lock', 'uses' => 'AdController@unitSetLock']);
+Route::post('/Ad/Unit/Set/UnLock', ['as' => 'ad.unit.set.unlock', 'uses' => 'AdController@unitSetUnLock']);
+
 //管理員端 單元列表
 Route::get('/Ad', ['middleware' => 'AdSessionCheck','as' => 'ad.index', 'uses' => 'AdController@index']);
 Route::get('/Ad/Subject/List', ['middleware' => 'AdSessionCheck','as' => 'ad.subject.list', 'uses' => 'AdController@subjectList']);
