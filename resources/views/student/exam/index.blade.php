@@ -20,8 +20,8 @@
 			</div>
 			<div class="boad-welcome-wrap">
 				<p>歡迎光臨！</p>
-				<p>您是<span class="txt-yellow">[! $user_data['user_name'] !] </span>，身份：學生</p>
-				<p>台中市臺中教育大學[! $user_data['school_grade'] !]年[! $user_data['school_class'] !]班</p>
+				<p>您是<span class="txt-yellow">[! $user_data['uname'] !] </span>，身份：學生</p>
+				<p>台中市臺中教育大學[! $user_data['grade'] !]年[! $user_data['class'] !]班</p>
 			</div>
 			<div class="img-chalk"></div>
 		</div>
