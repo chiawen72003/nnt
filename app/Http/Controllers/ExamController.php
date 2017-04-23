@@ -13,7 +13,7 @@ use App\Http\Providers\Semantic;
 use App\Http\Providers\ExamRecordClass;
 use App\Http\Providers\FeedbackListClass;
 use App\Http\Providers\SubjectClass;
-
+use App\Http\Providers\MemberClass;
 
 class ExamController extends Controller
 {
@@ -33,6 +33,8 @@ class ExamController extends Controller
         $data = array();
         $data['user_data'] = app('request')->session()->get('user_data');
         $data['list_data'] = $exam_class_obj -> get_exam_list($data['user_data']);
+        $member_obj = new MemberClass();
+        $data['user_access_data'] = $member_obj -> get_all_level();
 
         return view('student.exam.index', $data);
     }
