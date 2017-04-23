@@ -14,6 +14,7 @@ use App\Http\Providers\SchoolClass;
 use App\Http\Providers\NewsClass;
 use App\Http\Providers\FeedbackListClass;
 use App\Http\Providers\SubjectClass;
+use App\Http\Providers\UnitClass;
 
 class AdController extends Controller
 {
@@ -606,6 +607,56 @@ class AdController extends Controller
         $subject_obj -> unset_access_subject();
 
         return ;
+    }
+
+    /**
+     * 單元上鎖頁面
+     */
+    public  function unitLockPage()
+    {
+        $data = array();
+        $data['user_data'] = app('request')->session()->get('user_data');
+        $subject_obj = new SubjectClass();
+        $data['subject_data'] = $subject_obj ->subject_list();
+
+        return view('admin.unit.unit_lock', $data);
+    }
+
+
+    /**
+     * 增加 單元上鎖的資料
+     */
+    public function unitSetLock()
+    {
+        $fp = Input::all();
+        $unit_obj = new UnitClass($fp);
+        $unit_obj -> set_unit_lock();
+
+        return ;
+    }
+
+    /**
+     * 解除 單元上鎖的資料
+     */
+    public function unitSetUnLock()
+    {
+        $fp = Input::all();
+        $unit_obj = new UnitClass($fp);
+        $unit_obj -> unit_set_Lock();
+
+        return ;
+    }
+
+
+    /**
+     * 所有單元的資料
+     */
+    public function unitLockData()
+    {
+        $unit_obj = new UnitClass();
+        $unit_data = $unit_obj->get_all_unit();
+
+        return json_encode($unit_data);
     }
 
     /**
