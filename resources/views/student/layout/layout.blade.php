@@ -28,7 +28,7 @@
             <a href="[! route('mem.logout') !]">登出</a>
         </div>
         <div class="boad-detail-wrap">
-            <p>台中市臺中教育大學[! $user_data['school_grade'] !]年[! $user_data['school_class'] !]班<span class="txt-yellow">[! $user_data['user_name'] !]</span></p>
+            <p>台中市臺中教育大學[! $user_data['grade'] !]年[! $user_data['class'] !]班<span class="txt-yellow">[! $user_data['uname'] !]</span></p>
         </div>
         <div class="img-chalk"></div>
     </div>
