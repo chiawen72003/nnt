@@ -15,6 +15,7 @@ use App\Http\Providers\NewsClass;
 use App\Http\Providers\FeedbackListClass;
 use App\Http\Providers\SubjectClass;
 use App\Http\Providers\UnitClass;
+use App\Http\Providers\ExamPaperClass;
 
 class AdController extends Controller
 {
@@ -201,6 +202,29 @@ class AdController extends Controller
 
         return ;
     }
+
+    /**
+     * 新增試題資料頁面
+     *
+     *
+     */
+    public function questionsAddPage()
+    {
+        $uid = app('request')->session()->get('user_data')['uid'];
+        $data = array();
+        $unit_obj = new UnitClass();
+        $subject_obj = new SubjectClass();
+        $exampaper_obj = new ExamPaperClass();
+        $exampaper_obj ->init(array('uid'=>$uid));
+        $t = new FeedbackListClass();
+        $data['unit_data'] = $unit_obj -> get_all_unit();
+        $data['subject_data'] = $subject_obj -> subject_list();
+        $data['feedback_list'] = $t->get_list_data();
+        $data['exampaper_data'] = $exampaper_obj->get_all_exampaper();
+
+        return view('admin.exampaper.questions_item_add', $data);
+    }
+
 
     /**
      * 編輯試題資料頁面
