@@ -26,7 +26,12 @@ class UnitClass
     function get_all_unit()
     {
         $data = array();
-        $t_obj = UnitList::get();
+        $t_obj = UnitList::orderBy('module_type')
+            ->orderBy('subject')
+            ->orderBy('vol')
+            ->orderBy('unit')
+            ->orderBy('grade')
+            ->get();
         foreach ($t_obj as $v)
         {
             $data[] = $v->toArray();
