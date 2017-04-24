@@ -41,7 +41,7 @@
                 </div>
                 <div class="select-group">
                     <div class="label-title">卷別</div>
-                    <select id="vol">
+                    <select name="paper_vol" id="paper_vol">
                         <option value="">請選擇</option>
                         @for($x=1;$x<51;$x++)
                             <option value="[! $x !]">[! $x !]</option>
