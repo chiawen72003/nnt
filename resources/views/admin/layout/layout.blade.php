@@ -24,7 +24,8 @@
     <div id="boad-wrap" class="boad-wrap">
         <div id="boad-nav">
             <a href="[! route('ad.news.list') !]" title="建立系統公告">建立系統公告</a>
-            <a href="[! route('ad.index') !]" title="單元列表">單元列表</a>
+            <a href="[! route('ad.unit.add.page') !]" title="單元結構編制">單元結構編制</a>
+            <a href="[! route('ad.exampaper.add.page') !]" title="建立試題">建立試題</a>
             <a href="[! route('ad.subject.list') !]" title="科目列表">科目列表</a>
             <a href="[! route('ad.unit.lock.page') !]" title="版本控管">單元上鎖</a>
             <a href="[! route('ad.subject.limit.page') !]" title="版本控管">版本控管</a>
