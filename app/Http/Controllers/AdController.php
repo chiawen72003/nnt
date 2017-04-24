@@ -59,7 +59,7 @@ class AdController extends Controller
         $data['subject_list'] = $subject_obj -> subject_list();
         $data['form_path'] = 'ad.unit.add.data';
 
-        return view('admin.unitedit', $data);
+        return view('admin.unit.unit_add_page', $data);
     }
 
     /**
@@ -103,7 +103,7 @@ class AdController extends Controller
         }
         $exam_class_obj -> unit_add($data);
 
-        return redirect()->route('ad.index')->with('message', '單元結構新增完畢!');
+        return redirect()->route('ad.unit.add.page')->with('message', '單元結構新增完畢!');
     }
 
     /**
@@ -161,12 +161,16 @@ class AdController extends Controller
      * 新增一個試卷的頁面
      *
      */
-    public function examPaperAddPage($unit_id)
+    public function examPaperAddPage()
     {
         $data = array();
-        $data['unit_id'] = $unit_id;
+        $data['unit_id'] = '';
+        $unit_obj = new UnitClass();
+        $subject_obj = new SubjectClass();
+        $data['unit_data'] = $unit_obj -> get_all_unit();
+        $data['subject_data'] = $subject_obj -> subject_list();
 
-        return view('admin.paper_edit', $data);
+        return view('admin.exampaper.paper_add', $data);
     }
 
     /**
