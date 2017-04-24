@@ -93,17 +93,20 @@ Route::post('/Ad/Unit/Lock/Data', ['as' => 'ad.unit.lock.data', 'uses' => 'AdCon
 Route::post('/Ad/Unit/Set/Lock', ['as' => 'ad.unit.set.lock', 'uses' => 'AdController@unitSetLock']);
 Route::post('/Ad/Unit/Set/UnLock', ['as' => 'ad.unit.set.unlock', 'uses' => 'AdController@unitSetUnLock']);
 
+//管理員端 建立(單元)結構
+Route::get('/Ad/Unit/Add/Page', ['middleware' => 'AdSessionCheck','as' => 'ad.unit.add.page', 'uses' => 'AdController@unitAddPage']);
+
+
 //管理員端 單元列表
 Route::get('/Ad', ['middleware' => 'AdSessionCheck','as' => 'ad.index', 'uses' => 'AdController@index']);
 Route::get('/Ad/Subject/List', ['middleware' => 'AdSessionCheck','as' => 'ad.subject.list', 'uses' => 'AdController@subjectList']);
-Route::get('/Ad/Unit/Add/Page', ['middleware' => 'AdSessionCheck','as' => 'ad.unit.add.page', 'uses' => 'AdController@unitAddPage']);
 Route::get('/Ad/Unit/Edit/Page/{id}', ['middleware' => 'AdSessionCheck','as' => 'ad.unit.edit.page', 'uses' => 'AdController@unitEditPage']);
 Route::get('/Ad/Questions/Edit/{id}', ['middleware' => 'AdSessionCheck','as' => 'ad.questions.edit', 'uses' => 'AdController@questionsEdit']);
 Route::get('/Ad/Questions/Next/{paper_id}/', ['middleware' => 'AdSessionCheck','as' => 'ad.questions.next', 'uses' => 'AdController@questionsNext']);
 Route::get('/Ad/Questions/Back/{paper_id}/', ['middleware' => 'AdSessionCheck','as' => 'ad.questions.back', 'uses' => 'AdController@questionsBack']);
 Route::put('/Ad/Questions/Update/', ['middleware' => 'AdSessionCheck','as' => 'ad.questions.update', 'uses' => 'AdController@questionsUpdate']);
 Route::get('/Ad/ExamPaper/List/{id}', ['middleware' => 'AdSessionCheck','as' => 'ad.exampaper.list', 'uses' => 'AdController@examPaperList']);
-Route::get('/Ad/ExamPaper/Add/Page/{id}', ['middleware' => 'AdSessionCheck','as' => 'ad.exampaper.add.page', 'uses' => 'AdController@examPaperAddPage']);
+Route::get('/Ad/ExamPaper/Add/Page', ['middleware' => 'AdSessionCheck','as' => 'ad.exampaper.add.page', 'uses' => 'AdController@examPaperAddPage']);
 Route::post('/Ad/LoginChk', ['middleware' => 'LoginDataCheck','as' => 'ad.loginchk', 'uses' => 'MemberController@AdLoginChk']);
 Route::post('/Ad/Unit/Delete', ['middleware' => 'AdSessionCheck','as' => 'ad.unit.delete', 'uses' => 'AdController@unitDelete']);
 Route::post('/Ad/Unit/Add/Data', ['middleware' => 'AdSessionCheck','as' => 'ad.unit.add.data', 'uses' => 'AdController@unitAddData']);
