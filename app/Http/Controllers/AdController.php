@@ -88,6 +88,7 @@ class AdController extends Controller
     {
         $exam_class_obj = new ExamClass();
         $data = array();
+        $data['uid'] = app('request')->session()->get('user_data')['uid'];
         $data['module_type'] = app('request')->get('module_type');
         $data['subject'] = app('request')->get('subject');
         $data['vol'] = app('request')->get('vol');
@@ -95,12 +96,6 @@ class AdController extends Controller
         $data['unit'] = app('request')->get('unit');
         $data['title'] = app('request')->get('title');
         $data['indicator_nums'] = app('request')->get('indicator_nums');
-        if (Input::file('img') != null AND Input::file('img')->isValid()) {
-            $extension = Input::file('img')->getClientOriginalExtension(); // getting image extension
-            $fileName = time().'.'.$extension; // renameing image
-            Input::file('img')->move('upfire/image', $fileName); // uploading file to given path
-            $data['img'] = $fileName;
-        }
         $exam_class_obj -> unit_add($data);
 
         return redirect()->route('ad.unit.add.page')->with('message', '單元結構新增完畢!');
@@ -181,11 +176,18 @@ class AdController extends Controller
     {
         $exam_class_obj = new ExamClass();
         $data = array();
-        $data['unit_list_id'] = app('request')->get('getID');
-        $data['title'] = app('request')->get('title');
+        $data['uid'] = app('request')->session()->get('user_data')['uid'];
+        $data['unit_list_id'] = app('request')->get('unit_list_id');
+        $data['paper_vol'] = app('request')->get('paper_vol');
+        if (Input::file('img') != null AND Input::file('img')->isValid()) {
+            $extension = Input::file('img')->getClientOriginalExtension(); // getting image extension
+            $fileName = time().'.'.$extension; // renameing image
+            Input::file('img')->move('upfire/image', $fileName); // uploading file to given path
+            $data['img'] = $fileName;
+        }
         $exam_class_obj -> exampaper_add($data);
 
-        return '';
+        return redirect()->route('ad.exampaper.add.page')->with('message', '試卷新增完畢!');
     }
 
     /**
