@@ -7,7 +7,7 @@
             <ul id="exam-unit-wrap" class="clearfix">
                 <li><a href="[! route('ad.exampaper.add.page') !]">新增試卷</a></li>
                 <li><a class="current-page"  href="[! route('ad.questions.add.page') !]">新增試題</a></li>
-                <li><a href="admin_BuildExam_03.html">編修試卷</a></li>
+                <li><a href="[! route('ad.exampaper.vol.list.page') !]">編修試卷</a></li>
             </ul>
             <form id="addschool-form">
                 <div class="select-group">
