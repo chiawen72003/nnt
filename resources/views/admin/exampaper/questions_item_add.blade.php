@@ -9,7 +9,7 @@
                 <li><a class="current-page"  href="[! route('ad.questions.add.page') !]">新增試題</a></li>
                 <li><a href="admin_BuildExam_03.html">編修試卷</a></li>
             </ul>
-            <form id="form-addexam-question">
+            <form id="addschool-form">
                 <div class="select-group">
                     <div class="label-title">請選擇試卷</div>
                     <select id="module_type" class="select-s" onchange="get_subject_option()">
@@ -111,7 +111,7 @@
                     </div>
                 </div>
                 <div class="form-button-wrap">
-                    <input class="btn-yellow" type="submit" value="選擇完畢，送出" />
+                    <input class="btn-yellow" type="button" value="選擇完畢，送出" onclick="add_item()"/>
                 </div>
             </form>
         </div>
@@ -517,6 +517,112 @@
         $('#multiple_choice_questions_area').append(temp_obj);
         option_item_num++;
 
+    }
+
+    //新增試題資料
+    function add_item() {
+        var up_obj = get_item_objs();
+        $.ajax({
+            url: '[! route("ad.questions.add") !]',
+            type:'POST',
+            data: {
+                _token: '[! csrf_token() !]',
+                add_data:up_obj
+            },
+            error: function(xhr) {
+                //alert('Ajax request 發生錯誤');
+            },
+            success: function(response) {
+                item_id = response;
+                alert('新增試題成功!!');
+                location.reload();
+            }
+        });
+    }
+
+    //取得上傳物件
+    function get_item_objs() {
+        var temp_obj = [];
+        temp_obj.push({'exam_paper_id':'[! $exampaper_data["id"] !]'});
+        temp_obj.push({'title':CKEDITOR.instances.c_ckedit1.getData()});
+        temp_obj.push({'score':$('#score').val()});
+        temp_obj.push({'model_item_id':$('#model_item_id').val()});
+        temp_obj.push({'feedback_type':$('#feedback_type').val()});
+        temp_obj.push({'power_dsc':$('#power_dsc').val()});
+        temp_obj.push({'id':item_id});
+        //正確答案區
+        var correct_obj = [];
+        var temp_array = [];
+        $('#tab_2 input[name="correct_answer[]"]').each(function(){
+            temp_array.push($(this).val());
+        });
+        correct_obj.push({'answer':temp_array});
+        temp_array = [];
+        $('#tab_2 input[name="correct_jump_num[]"]').each(function(){
+            temp_array.push($(this).val());
+        });
+        correct_obj.push({'jump':temp_array});
+        temp_array = [];
+        $('#tab_2 input[name="correct_keyword[]"]').each(function(){
+            temp_array.push($(this).val());
+        });
+        correct_obj.push({'keyword':temp_array});
+        temp_obj.push({'correct_answer':correct_obj});
+        //錯度答案區
+        var error_obj = [];
+        temp_array = [];
+        $('#tab_3 input[name="error_answer[]"]').each(function(){
+            temp_array.push($(this).val());
+        });
+        error_obj.push({'answer':temp_array});
+        temp_array = [];
+        $('#tab_3 input[name="error_jump_num[]"]').each(function(){
+            temp_array.push($(this).val());
+        });
+        error_obj.push({'jump':temp_array});
+        temp_array = [];
+        $('#tab_3 input[name="error_number[]"]').each(function(){
+            temp_array.push($(this).val());
+        });
+        error_obj.push({'number':temp_array});
+        temp_array = [];
+        $('#tab_3 input[name="error_keyword[]"]').each(function(){
+            temp_array.push($(this).val());
+        });
+        error_obj.push({'keyword':temp_array});
+        temp_obj.push({'error_answer':error_obj});
+
+        //代理人頭像設定
+        temp_array = [];
+        $('#tab_1 select[name="avatar_type[]"]').each(function(){
+            temp_array.push($(this).val());
+        });
+        temp_obj.push({'avatar_type':temp_array});
+
+        //代理人對話
+        var avatar_dsc_obj = [];
+        temp_array = [];
+        $('#tab_1 select[name="avatar_dsc_type[]"]').each(function(){
+            temp_array.push($(this).val());
+        });
+        avatar_dsc_obj.push({'dsc_type':temp_array});
+        temp_array = [];
+        $('#tab_1 input[name="avatar_dsc[]"]').each(function(){
+            temp_array.push($(this).val());
+        });
+        avatar_dsc_obj.push({'dsc':temp_array});
+        temp_obj.push({'avatar_dsc':avatar_dsc_obj});
+
+        //選擇題的選項
+        temp_array = [];
+        $('#tab_1 input[name="multiple_choice_questions[]"]').each(function(){
+            if($(this).val() != ''){
+                temp_array.push($(this).val());
+            }
+        });
+        temp_obj.push({'model_item_options':temp_array});
+
+        return temp_obj;
     }
 </script>
 @stop
