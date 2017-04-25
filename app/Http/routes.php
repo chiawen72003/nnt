@@ -99,6 +99,13 @@ Route::get('/Ad/Unit/Add/Page', ['middleware' => 'AdSessionCheck','as' => 'ad.un
 //管理員端 新增試題頁面
 Route::get('/Ad/Questions/Add/Page', ['middleware' => 'AdSessionCheck','as' => 'ad.questions.add.page', 'uses' => 'AdController@questionsAddPage']);
 
+//管理員端 編輯試題-選擇試卷頁面
+Route::get('/Ad/ExamPaper/Vol/List/Page', ['middleware' => 'AdSessionCheck','as' => 'ad.exampaper.vol.list.page', 'uses' => 'AdController@exampaperVolListPage']);
+
+//管理員端 編輯試題-選擇試卷頁面
+Route::get('/Ad/ExamPaper/List/Page/{id}', ['middleware' => 'AdSessionCheck','as' => 'ad.exampaper.list.page', 'uses' => 'AdController@exampaperListPage']);
+
+
 //管理員端 單元列表
 Route::get('/Ad', ['middleware' => 'AdSessionCheck','as' => 'ad.index', 'uses' => 'AdController@index']);
 Route::get('/Ad/Subject/List', ['middleware' => 'AdSessionCheck','as' => 'ad.subject.list', 'uses' => 'AdController@subjectList']);
