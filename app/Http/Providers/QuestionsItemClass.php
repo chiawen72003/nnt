@@ -30,6 +30,22 @@ class QuestionsItemClass
     }
 
     /**
+     * 取出指定試卷下的所有試題資料
+     */
+    public function get_questions_data()
+    {
+        $retunrn_array = array();
+        $t_obj = QuestionsItem::where('exam_paper_id' ,$this->item_data['exam_paper_id'])
+            ->get();
+        foreach($t_obj as $v)
+        {
+            $retunrn_array[] = $v->toArray();
+        }
+
+        return $retunrn_array;
+    }
+
+    /**
      * 新增一個試題資料
      *
      */
