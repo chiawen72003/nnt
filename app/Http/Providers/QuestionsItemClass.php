@@ -50,17 +50,21 @@ class QuestionsItemClass
 
         //增加電腦代理人資訊
         //單代理人
+        // todo 代理人資訊後續要再打開
         if (count($this->item_data['avatar_type']) == 1) {
+            /*
             $url_path = "http://210.240.188.161/chineseautotutor/Single_Agent_test_show_1115.php?agent_role=Char".$_REQUEST['Head_portrait_teacher'].$feedback_talk_url.feedback_order_url."&text7=MAT_".$item->exam_paper_id."_".$item->item_num;
             echo $url_path."<br>";
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url_path);
             curl_exec($ch);
             curl_close($ch);
+            */
         }
 
         //多、雙代理人
         if (count($this->item_data['avatar_type']) == 2) {
+            /*
             //http://210.240.188.161/chineseautotutor/Multi_Agent_test_show.php?select=Char3&text7=TEST&text1=RERE&text2=TETE&select2=Char1&text3=&select3=Char2&text4=&select4=Char2&text5=&select5=Char2
             $url_path = "http://210.240.188.161/chineseautotutor/Multi_Agent_test_show.php.php?agent_role=Char".$feedback_talk_url.$feedback_order_url."&text7=MAT_".$item->exam_paper_id."_".$item->item_num;
             echo $url_path."<br>";
@@ -68,6 +72,7 @@ class QuestionsItemClass
             curl_setopt($ch, CURLOPT_URL, $url_path);
             curl_exec($ch);
             curl_close($ch);
+            */
         }
 
         return $add_obj->id;
