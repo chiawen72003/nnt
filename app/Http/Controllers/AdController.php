@@ -781,7 +781,7 @@ class AdController extends Controller
         $data['subject_data'] = $subject_obj -> subject_list();
         $data['exampaper_data'] = $exampaper_obj->get_all_exampaper();
 
-        return view('admin.exampaper.paper_add', $data);
+        return view('admin.exampaper.vol_select_page', $data);
     }
 
 
