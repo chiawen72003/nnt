@@ -32,106 +32,59 @@
                         <option value="卷6">卷6</option>
                     </select>
                 </div>
-                <div class="question-unit">
-                    <div class="question-number">【1】</div>
-                    <div class="question-content">
-                        <div class="question-img">
-                            <img src="images/img_question.png">
-                        </div>
-                        <div class="question-text-wrap clearfix">
-                            <div class="question-left-wrap">
-                                <div class="question-item">
-                                    <span>(1)</span>
-                                    <div class="question-item-img">
-                                        <img src="images/question-item1.png">
-                                    </div>
-                                </div>
-                                <div class="question-item">
-                                    <span>(2)</span>
-                                    <div class="question-item-img">
-                                        <img src="images/question-item2.png">
-                                    </div>
-                                </div>
-                                <div class="question-item">
-                                    <span>(3)</span>
-                                    <div class="question-item-img">
-                                        <img src="images/question-item3.png">
-                                    </div>
-                                </div>
-                                <div class="question-item">
-                                    <span>(4)</span>
-                                    <div class="question-item-img">
-                                        <img src="images/question-item4.png">
-                                    </div>
-                                </div>
+                @foreach($questions as $k => $v)
+                    <div class="question-unit">
+                        <div class="question-number">【[! $k+1 !]】</div>
+                        <div class="question-content">
+                            <div class="question-img">
+                                [! $v["title"] !]
                             </div>
-                            <div class="question-right-wrap">
-                                <div class="question-button clearfix">
-                                    <a href="#" class="button-edit">修改</a>
-                                    <a href="#" class="button-delete">刪除</a>
-                                </div>
-                                <table id="table-data">
-                                    <tr>
-                                        <th>試題SN</th><td>26452</td>
-                                    </tr>
-                                    <tr>
-                                        <th>建構題</th><td>類型86</td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="question-unit">
-                    <div class="question-number">【1】</div>
-                    <div class="question-content">
-                        <div class="question-img">
-                            <img src="images/img_question.png">
-                        </div>
-                        <div class="question-text-wrap clearfix">
-                            <div class="question-left-wrap">
-                                <div class="question-item">
-                                    <span>(1)</span>
-                                    <div class="question-item-img">
-                                        <img src="images/question-item1.png">
+                            <div class="question-text-wrap clearfix">
+                                <div class="question-left-wrap">
+                                    <div class="question-item">
+                                        <span>(1)</span>
+                                        <div class="question-item-img">
+                                            <img src="images/question-item1.png">
+                                        </div>
+                                    </div>
+                                    <div class="question-item">
+                                        <span>(2)</span>
+                                        <div class="question-item-img">
+                                            <img src="images/question-item2.png">
+                                        </div>
+                                    </div>
+                                    <div class="question-item">
+                                        <span>(3)</span>
+                                        <div class="question-item-img">
+                                            <img src="images/question-item3.png">
+                                        </div>
+                                    </div>
+                                    <div class="question-item">
+                                        <span>(4)</span>
+                                        <div class="question-item-img">
+                                            <img src="images/question-item4.png">
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="question-item">
-                                    <span>(2)</span>
-                                    <div class="question-item-img">
-                                        <img src="images/question-item2.png">
+                                <div class="question-right-wrap">
+                                    <div class="question-button clearfix">
+                                        <a href="#" class="button-edit">修改</a>
+                                        <a href="#" class="button-delete" onclick="del_questions('[! $v["id"] !]')">刪除</a>
                                     </div>
+                                    <table id="table-data">
+                                        <tr>
+                                            <th>試題SN</th><td>26452</td>
+                                        </tr>
+                                        <tr>
+                                            <th>建構題</th><td>類型86</td>
+                                        </tr>
+                                    </table>
                                 </div>
-                                <div class="question-item">
-                                    <span>(3)</span>
-                                    <div class="question-item-img">
-                                        <img src="images/question-item3.png">
-                                    </div>
-                                </div>
-                                <div class="question-item">
-                                    <span>(4)</span>
-                                    <div class="question-item-img">
-                                        <img src="images/question-item4.png">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="question-right-wrap">
-                                <div class="question-button clearfix">
-                                    <a href="#" class="button-edit">修改</a>
-                                    <a href="#" class="button-delete">刪除</a>
-                                </div>
-                                <table id="table-data">
-                                    <tr>
-                                        <th>試題SN</th><td>26452</td>
-                                    </tr>
-                                    <tr>
-                                        <th>建構題</th><td>類型86</td>
-                                    </tr>
-                                </table>
                             </div>
                         </div>
                     </div>
-                </div>
+                @endforeach
+
                 <div class="form-button-wrap">
                     <input class="btn-yellow" type="submit" value="選擇完畢，送出" />
                 </div>
@@ -156,8 +109,8 @@
                     //alert('Ajax request 發生錯誤');
                 },
                 success: function(response) {
-                    alert('試卷成功!!');
-                    location.reload();
+                    alert('試卷刪除成功!!');
+                    location.href = "[! route('ad.exampaper.vol.list.page') !]";
                 }
             });
         }
