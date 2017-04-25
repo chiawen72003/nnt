@@ -72,7 +72,6 @@
 
     function get_subject_option()
     {
-        get_people_pic();
         var t_array = [];
         var module_type_value = $("#module_type").val();
         if(module_type_value != '')
@@ -220,7 +219,7 @@
     {
         if($('#vol').val() > '')
         {
-            location.href="[! route('ad.questions.list.page',array('')) !]"+$('#vol').val();
+            location.href="[! route('ad.questions.list.page',array('')) !]"+'/' +$('#vol').val();
         }
     }
 </script>
