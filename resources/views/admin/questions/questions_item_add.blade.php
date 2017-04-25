@@ -48,7 +48,7 @@
                     </select>
                 </div>
                 <!-- 選擇題選項區塊 開始 -->
-                <div id="multiple_choice_questions_area" style="display: none;">
+                <div id="multiple_choice_questions_area" style="display:none;">
                     <div class="select-group" id="add_option_area">
                         <div class="label-title">選擇題選項</div>
                         <input class="select-input" type="text" value="" name="multiple_choice_questions[]">
@@ -255,7 +255,7 @@
 </div>
 <!-- 雙代理人對話區  結束-->
 <!-- 選擇題選項區塊  開始-->
-<div class="select-group" id="module_option_item">
+<div class="select-group" id="module_option_item" style="display: none">
     <div class="label-title">選擇題選項</div>
     <input class="select-input" type="text" value="" name="multiple_choice_questions[]">
     <input class="btn btn-option" type="button" value="移除選項" id="del_btn">
