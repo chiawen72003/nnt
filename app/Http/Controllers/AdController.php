@@ -196,9 +196,11 @@ class AdController extends Controller
      */
     public function exampaperDelete()
     {
-        $exam_class_obj = new ExamClass();
         $get_id = app('request')->get('getID');
+        $exam_class_obj = new ExamClass();
+        $questions_obj = new QuestionsItemClass(array('exam_paper_id' => $get_id));
         $exam_class_obj -> exampaper_delete($get_id);
+        $questions_obj ->delete_by_exam_paper_id();
 
         return ;
     }
@@ -322,25 +324,7 @@ class AdController extends Controller
         return json_encode($return_data);
     }
 
-    /**
-     * 刪除一個試題資料
-     */
-    public static function questionsDelete($paper_id)
-    {
-        $return_data = array(
-            'type' => 'error',
-            'has_next' => false,
-            'has_back' => false,
-        );
 
-        $fp = Input::all();
-        if(isset($fp['question_id'])){
-            $t = new QuestionsItemClass(array('id'=>$fp['question_id'],'exam_paper_id'=>$paper_id));
-            $return_data = $t -> delete_data($return_data);
-        }
-
-        return json_encode($return_data);
-    }
 
     /**
      * 科目列表
@@ -799,7 +783,22 @@ class AdController extends Controller
         $data['unit_data'] = $unit_obj -> get_all_unit();
         $data['subject_data'] = $subject_obj -> subject_list();
         $data['exampaper_data'] = $exampaper_obj->get_all_exampaper();
+        $data['exampaper_id'] = $id;
 
         return view('admin.questions.questions_list', $data);
+    }
+
+    /**
+     * 刪除一個試題資料
+     */
+    public static function questionsDelete()
+    {
+        $fp = Input::all();
+        if(isset($fp['id'])){
+            $t = new QuestionsItemClass(array('id'=>$fp['id'],'exam_paper_id'=>$fp['exam_paper_id']));
+            $t -> delete_data();
+        }
+
+        return ;
     }
 }
