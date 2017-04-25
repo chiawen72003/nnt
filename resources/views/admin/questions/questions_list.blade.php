@@ -5,233 +5,184 @@
         <h1 class="section-title title-exam">建立試題</h1>
         <div class="section-content">
             <ul id="exam-unit-wrap" class="clearfix">
-                <li><a class="current-page" href="[! route('ad.exampaper.add.page') !]">新增試卷</a></li>
+                <li><a href="[! route('ad.exampaper.add.page') !]">新增試卷</a></li>
                 <li><a href="[! route('ad.questions.add.page') !]">新增試題</a></li>
-                <li><a href="[! route('ad.exampaper.vol.list.page') !]">編修試卷</a></li>
+                <li><a class="current-page" href="[! route('ad.exampaper.vol.list.page') !]">編修試卷</a></li>
             </ul>
-            <div class="exam-tip">※若以下選單無法選擇，表示您尚未建立任何單元結構！</div>
-            [! Form::open(array('url'=>route('ad.exampaper.add.data'),'id'=>'addForm', 'name'=>'addForm', 'files' => true)) !]
-            [! Form::hidden('unit_list_id', '' , array('id' => 'unit_list_id')) !]
+            <div class="exam-title">
+                試卷名稱：單代理人 數學(單代理人)第1冊第1單元【b506】－卷02
+                <input class="btn btn-delete" type="button" value="刪除試卷" onclick="del_exampaper()">
+            </div>
+            <form id="form-addexam-question">
                 <div class="select-group">
-                    <div class="label-title">版本</div>
-                    <select id="module_type" onchange="get_subject_option()">
-                        <option value="">請選擇</option>
-                        <option value="1">單代理人</option>
-                        <option value="2">雙代理人</option>
-                        <option value="3">多代理人</option>
+                    <div class="label-title">請選擇試題題號</div>
+                    <select name="select-level" id="select-level" class="select-s">
+                        <option value="二階段">二階段</option>
+                    </select>
+                    <select name="select-subject" id="select-subject" class="select-s">
+                        <option value="數學(單代理人)">數學(單代理人)</option>
+                    </select>
+                    <select name="select-book" id="select-book" class="select-s">
+                        <option value="第5冊">第5冊</option>
+                    </select>
+                    <select name="select-unit" id="select-unit" class="select-s">
+                        <option value="第1單元(時間與月曆)">第1單元(時間與月曆)</option>
+                    </select>
+                    <select name="select-exam" id="select-exam" class="select-s">
+                        <option value="卷6">卷6</option>
                     </select>
                 </div>
-                <div class="select-group" onchange="get_subject_vol_option()">
-                    <div class="label-title">科目</div>
-                    <select id="subject">
-                        <option value="">請選擇</option>
-                    </select>
+                <div class="question-unit">
+                    <div class="question-number">【1】</div>
+                    <div class="question-content">
+                        <div class="question-img">
+                            <img src="images/img_question.png">
+                        </div>
+                        <div class="question-text-wrap clearfix">
+                            <div class="question-left-wrap">
+                                <div class="question-item">
+                                    <span>(1)</span>
+                                    <div class="question-item-img">
+                                        <img src="images/question-item1.png">
+                                    </div>
+                                </div>
+                                <div class="question-item">
+                                    <span>(2)</span>
+                                    <div class="question-item-img">
+                                        <img src="images/question-item2.png">
+                                    </div>
+                                </div>
+                                <div class="question-item">
+                                    <span>(3)</span>
+                                    <div class="question-item-img">
+                                        <img src="images/question-item3.png">
+                                    </div>
+                                </div>
+                                <div class="question-item">
+                                    <span>(4)</span>
+                                    <div class="question-item-img">
+                                        <img src="images/question-item4.png">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="question-right-wrap">
+                                <div class="question-button clearfix">
+                                    <a href="#" class="button-edit">修改</a>
+                                    <a href="#" class="button-delete">刪除</a>
+                                </div>
+                                <table id="table-data">
+                                    <tr>
+                                        <th>試題SN</th><td>26452</td>
+                                    </tr>
+                                    <tr>
+                                        <th>建構題</th><td>類型86</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="select-group">
-                    <div class="label-title">冊別</div>
-                    <select id="subject_vol" onchange="get_subject_unit_option()">
-                        <option value="">請選擇</option>
-                    </select>
-                </div>
-                <div class="select-group">
-                    <div class="label-title">單元</div>
-                    <select id="subject_unit">
-                        <option value="">請選擇</option>
-                    </select>
-                </div>
-                <div class="select-group">
-                    <div class="label-title">卷別</div>
-                    <select name="paper_vol" id="paper_vol">
-                        <option value="">請選擇</option>
-                        @for($x=1;$x<51;$x++)
-                            <option value="[! $x !]">[! $x !]</option>
-                        @endfor
-                    </select>
-                </div>
-                <div class="select-group">
-                    <div class="label-title"><span class="txt-red">*</span>示意圖</div>
-                    <input class="select-input" type="file" name="img" id="img" accept="image/*"><span class="txt-red">(必填)</span>
+                <div class="question-unit">
+                    <div class="question-number">【1】</div>
+                    <div class="question-content">
+                        <div class="question-img">
+                            <img src="images/img_question.png">
+                        </div>
+                        <div class="question-text-wrap clearfix">
+                            <div class="question-left-wrap">
+                                <div class="question-item">
+                                    <span>(1)</span>
+                                    <div class="question-item-img">
+                                        <img src="images/question-item1.png">
+                                    </div>
+                                </div>
+                                <div class="question-item">
+                                    <span>(2)</span>
+                                    <div class="question-item-img">
+                                        <img src="images/question-item2.png">
+                                    </div>
+                                </div>
+                                <div class="question-item">
+                                    <span>(3)</span>
+                                    <div class="question-item-img">
+                                        <img src="images/question-item3.png">
+                                    </div>
+                                </div>
+                                <div class="question-item">
+                                    <span>(4)</span>
+                                    <div class="question-item-img">
+                                        <img src="images/question-item4.png">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="question-right-wrap">
+                                <div class="question-button clearfix">
+                                    <a href="#" class="button-edit">修改</a>
+                                    <a href="#" class="button-delete">刪除</a>
+                                </div>
+                                <table id="table-data">
+                                    <tr>
+                                        <th>試題SN</th><td>26452</td>
+                                    </tr>
+                                    <tr>
+                                        <th>建構題</th><td>類型86</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="form-button-wrap">
-                    <input class="btn-yellow" type="button" value="選擇完畢，送出" onclick="chk()"/>
+                    <input class="btn-yellow" type="submit" value="選擇完畢，送出" />
                 </div>
-            [! Form::close() !]
+            </form>
         </div>
     </div>
 </div>
 [! Html::script('js/jquery-1.11.3.js') !]
-
 <script>
-    var unit_data = [];
-    var subject_data = [];
-@foreach($unit_data as $v)
-unit_data.push({
-    'id':'[! $v["id"] !]',
-    'module_type':'[! $v["module_type"] !]',
-    'subject':'[! $v["subject"] !]',
-    'subject_vol':'[! $v["vol"] !]',
-    'subject_unit':'[! $v["unit"] !]',
-});
-@endforeach
-@foreach($subject_data as $k => $v)
-subject_data.push({
-    'id':'[! $k !]',
-    'name':'[! $v !]',
-});
-@endforeach
-
-    function get_subject_option()
+    //移除 一個試卷資料
+    function del_exampaper()
     {
-        var t_array = [];
-        var module_type_value = $("#module_type").val();
-        if(module_type_value != '')
-        {
-            $("#subject option").remove();
-            $("#subject").append($("<option></option>").attr("value", '').text('請選擇'));
-
-            for(var x=0;x < unit_data.length;x++)
-            {
-                if(unit_data[x]['module_type'] == module_type_value)
-                {
-                    t_array.push(unit_data[x]['subject']);
+        if(confirm("確定是否刪除試卷及所屬的試題嗎?")){
+            $.ajax({
+                url: "[! route('ad.exampaper.delete') !]",
+                type:'POST',
+                data: {
+                    _token: '[! csrf_token() !]',
+                    getID: '[! $exampaper_id !]'
+                },
+                error: function(xhr) {
+                    //alert('Ajax request 發生錯誤');
+                },
+                success: function(response) {
+                    alert('試卷成功!!');
+                    location.reload();
                 }
-            }
-            if(t_array.length > 0)
-            {
-                t_array = unique1(t_array);
-                for(var x=0;x<t_array.length;x++)
-                {
-
-                    $("#subject").append($("<option></option>").attr("value", t_array[x]).text(get_subject_name(t_array[x])));
-                }
-            }
+            });
         }
     }
 
-    function get_subject_vol_option()
+    //移除 一個試題資料
+    function del_questions(id)
     {
-        var t_array = [];
-        var module_type_value = $("#module_type").val();
-        var subject_value = $("#subject").val();
-        if(module_type_value != '' && subject_value != '')
-        {
-            $("#subject_vol option").remove();
-            $("#subject_vol").append($("<option></option>").attr("value", '').text('請選擇'));
-
-            for(var x=0;x < unit_data.length;x++)
-            {
-                if(unit_data[x]['module_type'] == module_type_value && unit_data[x]['subject'] == subject_value)
-                {
-                    t_array.push(unit_data[x]['subject_vol']);
+        if(confirm("確定是否刪除試題嗎?")){
+            $.ajax({
+                url: "[! route('ad.questions.delete') !]",
+                type:'POST',
+                data: {
+                    _token: '[! csrf_token() !]',
+                    exam_paper_id: '[! $exampaper_id !]',
+                    id: id
+                },
+                error: function(xhr) {
+                    //alert('Ajax request 發生錯誤');
+                },
+                success: function(response) {
+                    alert('試題刪除成功!!');
+                    location.reload();
                 }
-            }
-            if(t_array.length > 0)
-            {
-                t_array = unique1(t_array);
-                for(var x=0;x<t_array.length;x++)
-                {
-                    $("#subject_vol").append($("<option></option>").attr("value", t_array[x]).text(t_array[x]));
-                }
-            }
-        }
-    }
-
-    function get_subject_unit_option()
-    {
-        var t_array = [];
-        var module_type_value = $("#module_type").val();
-        var subject_value = $("#subject").val();
-        var subject_vol_value = $("#subject_vol").val();
-        if(module_type_value != '' && subject_value != '' && subject_vol_value !='')
-        {
-            $("#subject_unit option").remove();
-            $("#subject_unit").append($("<option></option>").attr("value", '').text('請選擇'));
-
-            for(var x=0;x < unit_data.length;x++)
-            {
-                if(
-                    unit_data[x]['module_type'] == module_type_value
-                    && unit_data[x]['subject'] == subject_value
-                    && unit_data[x]['subject_vol'] == subject_vol_value
-                )
-                {
-                    t_array.push(unit_data[x]['subject_unit']);
-                }
-            }
-            if(t_array.length > 0)
-            {
-                t_array = unique1(t_array);
-                for(var x=0;x<t_array.length;x++)
-                {
-                    $("#subject_unit").append($("<option></option>").attr("value", t_array[x]).text(t_array[x]));
-                }
-            }
-        }
-    }
-
-    // 取得科目名稱
-    function get_subject_name(id)
-    {
-        var dsc = '';
-        for(var x=0;x<subject_data.length;x++)
-        {
-            if(subject_data[x]['id'] == id)
-            {
-                dsc = subject_data[x]['name'];
-            }
-        }
-
-        return dsc;
-    }
-    // 去掉陣列重複的值
-    function unique1(array){
-        var n = [];
-        for(var i = 0; i < array.length; i++){
-            if (n.indexOf(array[i]) == -1) n.push(array[i]);
-        }
-
-        return n;
-    }
-
-    //資料檢查
-    function chk(){
-        var is_Go = true;
-        var error_dsc ="";
-        var module_type_value = $("#module_type").val();
-        var subject_value = $("#subject").val();
-        var subject_vol_value = $("#subject_vol").val();
-        var subject_unit_value = $("#subject_unit").val();
-        var vol_value = $("#vol").val();
-        var img_value = $("#img").val();
-        if(module_type_value != ''
-            && subject_value != ''
-            && subject_vol_value !=''
-            && subject_unit_value !=''
-            && vol_value !=''
-            && img_value !=''
-        )
-        {
-            if(is_Go){
-                for(var x=0;x < unit_data.length;x++)
-                {
-                    if(unit_data[x]['module_type'] == module_type_value
-                        && unit_data[x]['subject'] == subject_value
-                        && unit_data[x]['subject_vol'] == subject_vol_value
-                        && unit_data[x]['subject_unit'] == subject_unit_value
-                    )
-                    {
-                        $('#unit_list_id').val(unit_data[x]['id']);
-                    }
-                }
-                is_Go = false;
-                $('#addForm').submit();
-            }
-        }else{
-            error_dsc +="請檢查選項或示意圖是否有缺少!!\r\n";
-        }
-
-        if(error_dsc !=''){
-            alert(error_dsc);
+            });
         }
     }
 </script>
