@@ -220,7 +220,7 @@
     {
         if($('#vol').val() > '')
         {
-            location.href="[! route('ad.exampaper.list.page',array('')) !]"+$('#vol').val();
+            location.href="[! route('ad.questions.list.page',array('')) !]"+$('#vol').val();
         }
     }
 </script>
