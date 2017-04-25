@@ -222,7 +222,7 @@ class AdController extends Controller
         $data['feedback_list'] = $t->get_list_data();
         $data['exampaper_data'] = $exampaper_obj->get_all_exampaper();
 
-        return view('admin.exampaper.questions_item_add', $data);
+        return view('admin.questions.questions_item_add', $data);
     }
 
 
