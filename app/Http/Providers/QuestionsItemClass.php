@@ -187,36 +187,24 @@ class QuestionsItemClass
      * 刪除一個試題資料
      *
      */
-    public function delete_data($msg)
+    public function delete_data()
     {
-        $get_data = false;
-        $get_index = 0;
-        $item_obj = QuestionsItem::where('exam_paper_id', $this->item_data['exam_paper_id'])
-            ->orderBy('id', 'DESC');
-        $item_obj = $item_obj->get();
-        if (count($item_obj) > 0) {
-            foreach ($item_obj as $key => $temp_obj) {
-                if ($temp_obj['id'] == $this->item_data['id']) {
-                    $msg['type'] = 'success';
-                    $get_index = $key;
-                }
-            }
-            $temp_index = $get_index + 1;
-            if (isset($item_obj[$temp_index])) {
-                $msg['has_back'] = true;
-            }
-            $temp_index = $get_index - 1;
-            if (isset($item_obj[$temp_index])) {
-                $msg['has_next'] = true;
-            }
-
-            //刪除實際資料
-            $item = QuestionsItem::find($this->item_data['id']);
-            $item->delete();
-        }
-
-        return $msg;
+        $item = QuestionsItem::where('id',$this->item_data['id'])
+            ->where('exam_paper_id',$this->item_data['exam_paper_id'])
+            ->delete();
     }
+
+
+    /**
+     * 刪除指定試卷下的所有試題資料
+     *
+     */
+    public function delete_by_exam_paper_id()
+    {
+        $item = QuestionsItem::where('exam_paper_id',$this->item_data['exam_paper_id'])
+            ->delete();
+    }
+
 
     /**
      * 取得試卷內試題的數量
