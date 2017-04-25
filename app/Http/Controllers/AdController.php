@@ -766,4 +766,21 @@ class AdController extends Controller
         return ;
     }
 
+    /**
+     * 編輯試題-選擇試卷頁面
+     */
+    public function exampaperVolListPage()
+    {
+        $uid = app('request')->session()->get('user_data')['uid'];
+        $data = array();
+        $unit_obj = new UnitClass();
+        $subject_obj = new SubjectClass();
+        $exampaper_obj = new ExamPaperClass();
+        $exampaper_obj ->init(array('uid'=>$uid));
+        $data['unit_data'] = $unit_obj -> get_all_unit();
+        $data['subject_data'] = $subject_obj -> subject_list();
+        $data['exampaper_data'] = $exampaper_obj->get_all_exampaper();
+
+        return view('admin.exampaper.paper_add', $data);
+    }
 }
