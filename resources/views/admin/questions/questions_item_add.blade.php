@@ -409,11 +409,14 @@
             )
             {
                 var unit_list_id = unit_data[x]['id'];
-                for(var x=0;x < exampaper_data.length;x++)
+                if( exampaper_data.length > 0)
                 {
-                    if( exampaper_data[x]['unit_list_id'] == unit_list_id )
+                    for(var x=0;x < exampaper_data.length;x++)
                     {
-                        $("#vol").append($("<option></option>").attr("value", exampaper_data[x]['id']).text('卷'+exampaper_data[x]['paper_vol']));
+                        if( exampaper_data[x]['unit_list_id'] == unit_list_id )
+                        {
+                            $("#vol").append($("<option></option>").attr("value", exampaper_data[x]['id']).text('卷'+exampaper_data[x]['paper_vol']));
+                        }
                     }
                 }
             }
