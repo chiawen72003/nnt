@@ -60,7 +60,7 @@
                                         <td>[! $v['viewpass'] !]</td>
                                         <td>學生</td>
                                         <td>
-                                            <a class="icon-action icon-edit" href="admin_conceptStructure_edit.html"></a>
+                                            <a class="icon-action icon-edit" href="[! route('ad.user.edit.page',array($v['user_id'])) !]"></a>
                                             <a class="icon-action icon-delete" href="#" onclick='del_unit("[! $v['user_id'] !]","[! $v['uname'] !]")'></a>
                                         </td>
                                     </tr>
