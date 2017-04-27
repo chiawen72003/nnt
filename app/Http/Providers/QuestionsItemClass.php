@@ -36,6 +36,7 @@ class QuestionsItemClass
     {
         $retunrn_array = array();
         $t_obj = QuestionsItem::where('exam_paper_id' ,$this->item_data['exam_paper_id'])
+            ->orderBy('id')
             ->get();
         foreach($t_obj as $v)
         {
