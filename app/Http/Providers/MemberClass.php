@@ -40,6 +40,13 @@ class MemberClass
         }
     }
 
+    public function init($data)
+    {
+        foreach ($data as $key => $value) {
+            $this->input_data[$key] = $value;
+        }
+    }
+
     /**
      * 登入檢查
      *
@@ -147,6 +154,19 @@ class MemberClass
                 $t_obj->save();
             }
         }
+    }
+
+    /**
+     * 更新單一使用者資料
+     */
+    public function update_user_data()
+    {
+        $t_obj = UserInfo::where('uid', $this->input_data['uid'])
+            ->update([
+                'uname' => $this->input_data['uname'],
+                'sex' => $this->input_data['sex'],
+                'pass' => md5($this->input_data['pass']),
+            ]);
     }
 
     /**
