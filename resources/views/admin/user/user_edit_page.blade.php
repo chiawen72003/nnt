@@ -26,8 +26,8 @@
                         </div>
                         <div class="select-group">
                             <div class="label-title label-title-s"><span class="txt-red">*</span>性別</div>
-                            <input class="select-radio" name="sex" type="radio" value="男" [! ($edit_data['uname'] == '男')?'checked':'' !]><span class="label-gender">男</span>
-                            <input class="select-radio" name="sex" type="radio" value="女" [! ($edit_data['uname'] == '女')?'checked':'' !]><span class="label-gender">女</span>
+                            <input class="select-radio" name="sex" type="radio" value="男" [! ($edit_data['sex'] == '男')?'checked':'' !]><span class="label-gender">男</span>
+                            <input class="select-radio" name="sex" type="radio" value="女" [! ($edit_data['sex'] == '女')?'checked':'' !]><span class="label-gender">女</span>
                         </div>
                         <div class="select-group">
                             <div class="label-title label-title-s"><span class="txt-red">*</span>密碼(新)</div>
@@ -38,8 +38,8 @@
                             <input class="select-input" type="password" value="" id="re_pass">
                         </div>
                         <div class="form-button-wrap mulitiple-button">
-                            <input class="btn-yellow" type="submit" value="確認修改，送出" onclick="send()"/>
-                            <input class="btn-green" type="submit" value="重新填寫" onclick="location.reload()" />
+                            <input class="btn-yellow" type="button" value="確認修改，送出" onclick="send()"/>
+                            <input class="btn-green" type="button" value="重新填寫" onclick="location.reload()" />
                         </div>
                     </div>
                 </form>
@@ -56,8 +56,8 @@
         var uname = $('#uname').val();
         var pass = $('#pass').val();
         var re_pass = $('#re_pass').val();
+        var sex = $('input[name=sex]:checked').val();
         var error_dsc = '';
-
         if( uname == '' )
         {
             error_dsc = error_dsc + '請輸入姓名\r\n';
@@ -80,7 +80,7 @@
                 type:'POST',
                 data: {
                     _token: '[! csrf_token() !]',
-                    uid: '[! uid !]',
+                    uid: '[! $uid !]',
                     uname: uname,
                     sex: sex,
                     pass: pass,
@@ -89,8 +89,8 @@
                     //alert('Ajax request 發生錯誤');
                 },
                 success: function(response) {
-                    alert('資料更新成功!!');
-                    location.reload();
+                    //lert('資料更新成功!!');
+                    //location.reload();
                 }
             });
         }
