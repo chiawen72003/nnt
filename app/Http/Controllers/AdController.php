@@ -551,7 +551,7 @@ class AdController extends Controller
         $data = array();
         $data['user_data'] = app('request')->session()->get('user_data');
         $member_obj = new MemberClass();
-        $member_obj -> init(array('$uid' => $uid));
+        $member_obj -> init(array('uid' => $uid));
         $data['edit_data'] = $member_obj -> get_user_data();
         $data['uid'] = $uid;
 
@@ -565,7 +565,7 @@ class AdController extends Controller
     public function userDataUpdate()
     {
         $member_obj = new MemberClass();
-        $member_obj -> set_remove_student();
+        $member_obj -> update_user_data();
 
         return ;
     }
