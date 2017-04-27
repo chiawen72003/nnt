@@ -81,6 +81,10 @@ Route::get('/Ad/User/Search/Page', ['as' => 'ad.user.search.page', 'uses' => 'Ad
 Route::post('/Ad/User/Search/Delete', ['as' => 'ad.user.search.delete', 'uses' => 'AdController@userSearchDelete']);
 Route::post('/Ad/User/Search/AllDelete', ['as' => 'ad.user.search.alldelete', 'uses' => 'AdController@userSearchAllDelete']);
 
+//管理員端 編輯使用者資料頁面
+Route::get('/Ad/User/Edit/Page/{id}', ['as' => 'ad.user.edit.page', 'uses' => 'AdController@userEditPage']);
+Route::post('/Ad/User/Data/Update', ['as' => 'ad.user.data.update', 'uses' => 'AdController@userDataUpdate']);
+
 //管理員端 科目控管
 Route::get('/Ad/Subject/Limit/Page', ['as' => 'ad.subject.limit.page', 'uses' => 'AdController@userSubjectLimitPage']);
 Route::post('/Ad/Subject/Lock/UnLock', ['as' => 'ad.subject.lock.unlock', 'uses' => 'AdController@userSubjectLockUnLock']);
