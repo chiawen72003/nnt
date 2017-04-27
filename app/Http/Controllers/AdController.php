@@ -543,6 +543,34 @@ class AdController extends Controller
     }
 
     /**
+     * 編輯使用者資料頁面
+     *
+     */
+    public function userEditPage($uid)
+    {
+        $data = array();
+        $data['user_data'] = app('request')->session()->get('user_data');
+        $member_obj = new MemberClass();
+        $member_obj -> init(array('$uid' => $uid));
+        $data['edit_data'] = $member_obj -> get_user_data();
+        $data['uid'] = $uid;
+
+        return view('admin.user.user_edit_page', $data);
+    }
+
+    /**
+     * 更新使用者資料
+     *
+     */
+    public function userDataUpdate()
+    {
+        $member_obj = new MemberClass();
+        $member_obj -> set_remove_student();
+
+        return ;
+    }
+
+    /**
      * 移除一個學生
      *
      */
