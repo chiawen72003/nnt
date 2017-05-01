@@ -5,7 +5,7 @@
 		<h1 class="section-title title-result">成果查詢</h1>
 		<div class="result-detail-wrap">
 			<div class="result-button-wrap">
-				<a class="button-download" href="#">下載</a>
+				<a class="button-download" href="[! route('mem.exam.download.record',array($exam_record['id'])) !]" target="_blank">下載</a>
 			</div>
 			<table class="table-detail2">
 				<tr>
@@ -18,7 +18,7 @@
 				</tr>
 				@foreach($exam_record['use_item'] as $key => $v)
 					<tr>
-						<td>[! $key !]</td>
+						<td>[! $key+1 !]</td>
 						<td>[! $v['item_id'] !]</td>
 						<td>[! $v['student_ans'] !]</td>
 						<td></td>
