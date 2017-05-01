@@ -14,6 +14,7 @@ use App\Http\Providers\ExamRecordClass;
 use App\Http\Providers\FeedbackListClass;
 use App\Http\Providers\SubjectClass;
 use App\Http\Providers\MemberClass;
+use App\Http\Providers\PhpExcel;
 
 class ExamController extends Controller
 {
@@ -273,4 +274,20 @@ class ExamController extends Controller
         return view('student.exam.achievement_level_two', $data);
     }
 
+    /**
+     * 學生端 成果查詢 下載成果查詢的資料
+     */
+    public function getDownloadRecord($id)
+    {
+        $exam_class_obj = new ExamClass();
+        $mem_id = app('request')->session()->get('user_data');
+        $exam_record = $exam_class_obj -> get_exam_record($mem_id,$id);
+        if(isset($exam_record['use_item']) AND count($exam_record['use_item']) > 0)
+        {
+            $excel_obj = new PhpExcel();
+            $excel_obj ->set_excel_data($exam_record['use_item']);
+            $excel_obj ->get_excel_file();
+        }
+
+    }
 }
