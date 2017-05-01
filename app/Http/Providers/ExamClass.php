@@ -414,7 +414,7 @@ class ExamClass
     public function get_paper_by_unit_id($unit_id){
         $return_data = array();
         $temp_obj = ExamPaper::where('unit_list_id',$unit_id)
-                    ->select('id','title')
+                    ->select('id')
                     ->orderBy('id')
                     ->get();
         foreach ($temp_obj as $t){
