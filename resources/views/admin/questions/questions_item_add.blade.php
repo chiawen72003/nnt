@@ -94,23 +94,23 @@
                 <div id="div_error" >
                     <div class="select-group">
                         <div class="label-title">錯誤bug號碼</div>
-                        <input class="select-input" type="text" value="">
+                        <input class="select-input" type="text" value="" name="error_number[]">
                     </div>
                     <div class="select-group">
                         <div class="label-title">錯誤bug跳題</div>
-                        <input class="select-input" type="text" value="">
+                        <input class="select-input" type="text" value="" name="error_jump_num[]">
                     </div>
                     <div class="select-group">
                         <div class="label-title">錯誤答案</div>
-                        <input class="select-input" type="text" value="">
+                        <input class="select-input" type="text" value="" name="error_answer[]">
                     </div>
                     <div class="select-group">
                         <div class="label-title">錯誤答案(關鍵字)</div>
-                        <input class="select-input" type="text" value="">
+                        <input class="select-input" type="text" value="" name="error_keyword[]">
                         <input class="btn btn-option" type="button" value="新增選項" onclick="add_error_div()">
                     </div>
                 </div>
-                <div class="form-button-wrap">
+                <div class="form-button-wrap" id="sendbutton">
                     <input class="btn-yellow" type="button" value="選擇完畢，送出" onclick="add_item()"/>
                 </div>
             </form>
@@ -478,7 +478,7 @@
     function add_correct_div() {
         var temp_obj = $('#correct_div').clone().attr('id','correct_'+correct_num).show();
         temp_obj.find('input[id="del_btn"]').attr('onclick','$("#correct_'+correct_num+'").remove()');
-        $('#div_right').after(temp_obj);
+        $('#div_error').before(temp_obj);
         correct_num++;
     }
 
@@ -489,7 +489,7 @@
     function add_error_div() {
         var temp_obj = $('#error_div').clone().attr('id','error_'+correct_num).show();
         temp_obj.find('input[id="del_btn"]').attr('onclick','$("#error_'+correct_num+'").remove()');
-        $('#div_error').after(temp_obj);
+        $('#sendbutton').before(temp_obj);
         error_num++;
     }
 
@@ -554,17 +554,17 @@
         //正確答案區
         var correct_obj = [];
         var temp_array = [];
-        $('#div_right input[name="correct_answer[]"]').each(function(){
+        $('#addschool-form input[name="correct_answer[]"]').each(function(){
             temp_array.push($(this).val());
         });
         correct_obj.push({'answer':temp_array});
         temp_array = [];
-        $('#div_right input[name="correct_jump_num[]"]').each(function(){
+        $('#addschool-form input[name="correct_jump_num[]"]').each(function(){
             temp_array.push($(this).val());
         });
         correct_obj.push({'jump':temp_array});
         temp_array = [];
-        $('#div_right input[name="correct_keyword[]"]').each(function(){
+        $('#addschool-form input[name="correct_keyword[]"]').each(function(){
             temp_array.push($(this).val());
         });
         correct_obj.push({'keyword':temp_array});
@@ -572,22 +572,22 @@
         //錯度答案區
         var error_obj = [];
         temp_array = [];
-        $('#div_error input[name="error_answer[]"]').each(function(){
+        $('#addschool-form input[name="error_answer[]"]').each(function(){
             temp_array.push($(this).val());
         });
         error_obj.push({'answer':temp_array});
         temp_array = [];
-        $('#div_error input[name="error_jump_num[]"]').each(function(){
+        $('#addschool-form input[name="error_jump_num[]"]').each(function(){
             temp_array.push($(this).val());
         });
         error_obj.push({'jump':temp_array});
         temp_array = [];
-        $('#div_error input[name="error_number[]"]').each(function(){
+        $('#addschool-form input[name="error_number[]"]').each(function(){
             temp_array.push($(this).val());
         });
         error_obj.push({'number':temp_array});
         temp_array = [];
-        $('#div_error input[name="error_keyword[]"]').each(function(){
+        $('#addschool-form input[name="error_keyword[]"]').each(function(){
             temp_array.push($(this).val());
         });
         error_obj.push({'keyword':temp_array});
