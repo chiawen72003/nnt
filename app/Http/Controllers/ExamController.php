@@ -80,7 +80,7 @@ class ExamController extends Controller
         $data['paper_data'] = $exam_class_obj -> get_paper_by_unit_id($unit_id);
         $data['questions_item_data'] = $exam_class_obj -> get_questions_item_paper_id($data['paper_data']);
         $examrecord = new ExamRecordClass(array(
-            'student_id'=>app('request')->session()->get('user_data')['user_id'],
+            'student_id'=>app('request')->session()->get('user_data')['uid'],
             'unit_id'=>$unit_id,
         ));
         $last_exam_record = $examrecord->get_one_record();
@@ -180,7 +180,7 @@ class ExamController extends Controller
     public function setExamRecord()
     {
         $input_data = app('request')->all();
-        $mem_id = app('request')->session()->get('user_data')['user_id'];
+        $mem_id = app('request')->session()->get('user_data')['uid'];
         $exam_class_obj = new ExamClass();
         $exam_class_obj -> set_exam_record($mem_id,$input_data);
 
@@ -201,7 +201,7 @@ class ExamController extends Controller
         $data['unit_id'] = $unit_id;
         $data['user_data'] = app('request')->session()->get('user_data');
         $t = new ExamRecordClass(array(
-            'student_id' => app('request')->session()->get('user_data')['user_id'],
+            'student_id' => app('request')->session()->get('user_data')['uid'],
             'unit_id' => $unit_id,
         ));
         $t->set_has_view_record();
@@ -229,7 +229,7 @@ class ExamController extends Controller
         $data['begin_paper_index'] = 0;//起始試卷的index位置
         $data['begin_item_index'] = 0;//起始試題的index位置
         $t = new ExamRecordClass(array(
-            'student_id' => app('request')->session()->get('user_data')['user_id'],
+            'student_id' => app('request')->session()->get('user_data')['uid'],
             'unit_id' => $unit_id,
         ));
         $t->set_has_view_record();
