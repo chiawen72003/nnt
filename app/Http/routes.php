@@ -31,6 +31,9 @@ Route::post('/Mem/Exam/UpdateRecord', ['middleware' => 'MemSessionCheck','as' =>
 Route::get('/Mem/Exam/View/Record/{id}', ['middleware' => 'MemSessionCheck','as' => 'mem.exam.viewrecord', 'uses' => 'ExamController@viewExamRecord']);
 Route::post('/Mem/Exam/semantic/analysis', ['middleware' => 'MemSessionCheck','as' => 'mem.exam.semantic.analysis', 'uses' => 'ExamController@getSemanticAnalysis']);
 
+//下載成果查詢的 excel資料
+Route::get('/Mem/Exam/Download/Record/{id}', ['middleware' => 'MemSessionCheck','as' => 'mem.exam.download.record', 'uses' => 'ExamController@getDownloadRecord']);
+
 //學生端 成果查詢
 Route::get('/Mem/Achievement', ['middleware' => 'MemSessionCheck','as' => 'mem.achievement', 'uses' => 'ExamController@Achievement']);
 Route::get('/Mem/Achievement/List/{id}', ['middleware' => 'MemSessionCheck','as' => 'mem.achievement.list', 'uses' => 'ExamController@AchievementList']);
