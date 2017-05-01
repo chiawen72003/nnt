@@ -44,7 +44,7 @@ class ExamClass
     {
         $list_data = array();
         $has_test_data = array();//已經受測過得單元
-        $temp_obj = ExamRecord::where('student_id', $mem_data['user_id'])
+        $temp_obj = ExamRecord::where('student_id', $mem_data['uid'])
             ->where('is_finish','1')
             ->get();
         foreach ($temp_obj as $value) {
@@ -389,7 +389,7 @@ class ExamClass
     {
         $temp_obj = new ExamRecordClass();
 
-        return $temp_obj->get_review_data($mem_data['user_id']);
+        return $temp_obj->get_review_data($mem_data['uid']);
     }
 
     /**
@@ -442,11 +442,12 @@ class ExamClass
     /**
      *  取出一筆指定的單元操作紀錄
      */
-    public  function get_exam_record($mem_id,$id)
+    public  function get_exam_record($mem_id,$unit_id)
     {
+
         $return_data = array();
-        $temp_obj = ExamRecord::where('student_id', $mem_id['user_id'])
-            ->where('unit_id',$id)
+        $temp_obj = ExamRecord::where('student_id', $mem_id['uid'])
+            ->where('unit_id',$unit_id)
             ->select('id', 'unit_id', 'record', 'use_item')
             ->get();
         foreach ($temp_obj as $t){
@@ -468,7 +469,7 @@ class ExamClass
         $return_data = array();
         $temp_obj = ExamRecord::
         leftJoin('unit_list', 'exam_record.unit_id', '=', 'unit_list.id')
-            ->where('exam_record.student_id', $mem_id['user_id'])
+            ->where('exam_record.student_id', $mem_id['uid'])
             ->where('exam_record.is_finish', '1')
             ->select('unit_list.subject')
             ->groupBy('unit_list.subject')
@@ -488,7 +489,7 @@ class ExamClass
         $return_data = array();
         $temp_obj = ExamRecord::
             leftJoin('unit_list', 'exam_record.unit_id', '=', 'unit_list.id')
-            ->where('exam_record.student_id', $mem_id['user_id'])
+            ->where('exam_record.student_id', $mem_id['uid'])
             ->where('exam_record.is_finish', '1')
             ->where('unit_list.subject',$subject_id)
             ->select('unit_list.id', 'exam_record.updated_at', 'unit_list.vol', 'unit_list.unit')
