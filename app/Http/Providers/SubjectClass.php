@@ -22,6 +22,13 @@ class SubjectClass
         }
     }
 
+    public function init($data = array())
+    {
+        foreach ($data as $key => $value) {
+            $this -> input_data[$key] = $value;
+        }
+    }
+
     /**
      * 科目名稱列表
      *
