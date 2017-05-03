@@ -13,10 +13,6 @@ class ExamPaperClass
 
     public function __construct()
     {
-        $fp = Input::all();
-        foreach ($fp as $key => $value) {
-            $this->input_data[$key] = $value;
-        }
     }
 
     public function init($data)
