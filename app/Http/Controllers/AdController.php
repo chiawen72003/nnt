@@ -353,7 +353,8 @@ class AdController extends Controller
     public function  subjectAdd()
     {
         $fp = Input::all();
-        $subject_obj = new SubjectClass($fp);
+        $subject_obj = new SubjectClass();
+        $subject_obj->init($fp);
         $subject_obj -> add();
 
         return '';
@@ -366,7 +367,8 @@ class AdController extends Controller
     public function subjectUpdate()
     {
         $fp = Input::all();
-        $subject_obj = new SubjectClass($fp);
+        $subject_obj = new SubjectClass();
+        $subject_obj -> init($fp);
         $subject_obj -> update_data();
 
         return '';
