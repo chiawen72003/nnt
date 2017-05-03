@@ -27,7 +27,9 @@ class MemberController extends Controller
 
     public function LoginChk()
     {
+        $fp = Input::all();
         $member_class_obj = new MemberClass();
+        $member_class_obj -> init($fp);
         $check_data = $member_class_obj -> chk_login_data();
         if ($check_data['check_result']) {
             $user_data = $check_data['user_data'];
