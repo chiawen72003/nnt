@@ -15,13 +15,6 @@ class SubjectClass
         'lock' => null,
     );
 
-    public function __construct($data = array())
-    {
-        foreach ($data as $key => $value) {
-            $this -> input_data[$key] = $value;
-        }
-    }
-
     public function init($data = array())
     {
         foreach ($data as $key => $value) {
