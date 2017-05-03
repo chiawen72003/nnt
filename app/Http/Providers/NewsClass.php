@@ -13,10 +13,11 @@ class NewsClass
         'id' => null,
         'title' => null,
         'dsc' => null,
+        'file' => null,
         'updateFile' => null,
     );
 
-    public function __construct($input_data = array())
+    public function init($input_data = array())
     {
         foreach($input_data as $k => $v){
             $this->input_array[$k] = $v;
@@ -45,10 +46,10 @@ class NewsClass
      *
      * @return Array $news_data 系統公告資料
      */
-    public function get_old_data($id)
+    public function get_old_data()
     {
         $news_data = null;
-        $temp_obj = NewsList::where('id',$id)
+        $temp_obj = NewsList::where('id',$this->input_array['id'])
             ->get();
         foreach ($temp_obj as $value) {
             $news_data = $value;
