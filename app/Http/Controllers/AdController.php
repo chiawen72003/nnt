@@ -163,8 +163,13 @@ class AdController extends Controller
         $data['unit_id'] = '';
         $unit_obj = new UnitClass();
         $subject_obj = new SubjectClass();
-        $data['unit_data'] = $unit_obj -> get_all_unit();
         $data['subject_data'] = $subject_obj -> subject_list();
+        $data['unit_data'] = $unit_obj -> get_all_unit();
+        if(!in_array(app('request')->session()->get('user_data.access_level'),array('91','92')))
+        {
+            $subject_obj -> init(array('user_id'=>app('request')->session()->get('user_data.id')));
+            $data['subject_access'] = $subject_obj -> get_access_subject();
+        }
 
         return view('admin.exampaper.paper_add', $data);
     }
