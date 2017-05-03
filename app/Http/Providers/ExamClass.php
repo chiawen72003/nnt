@@ -163,7 +163,8 @@ class ExamClass
             $whereIn[] = $temp_array['id'];
         }
         if(count($whereIn) > 0){
-            $t = new QuestionsItemClass(array('exam_paper_id'=>$whereIn));
+            $t = new QuestionsItemClass();
+            $t ->init(array('exam_paper_id'=>$whereIn));
             $subject_list = $t -> get_paper_item_num($whereIn);
         }
 
