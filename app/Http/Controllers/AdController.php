@@ -403,7 +403,8 @@ class AdController extends Controller
         $city_code = isset($fp['city'])?$fp['city']:'1';
         $data = array();
         $data['user_data'] = app('request')->session()->get('user_data');
-        $school_tmp = new SchoolClass(
+        $school_tmp = new SchoolClass();
+        $school_tmp -> init(
             array('city_code' => $city_code)
         );
         $data['list_data'] = $school_tmp -> get_school_list();
@@ -435,7 +436,8 @@ class AdController extends Controller
     {
         $data = array();
         $data['user_data'] = app('request')->session()->get('user_data');
-        $school_tmp = new SchoolClass(
+        $school_tmp = new SchoolClass();
+        $school_tmp -> init(
             array('id' => $id)
         );
         $data['school_data'] = $school_tmp -> get_school_data();
@@ -452,7 +454,8 @@ class AdController extends Controller
     public function schoolAdd()
     {
         $fp = Input::all();
-        $school_tmp = new SchoolClass($fp);
+        $school_tmp = new SchoolClass();
+        $school_tmp -> init($fp);
         $isAdd = $school_tmp -> add();
 
         return redirect()->route('ad.school.list');
@@ -465,7 +468,8 @@ class AdController extends Controller
     public function schoolUpdate()
     {
         $fp = Input::all();
-        $school_tmp = new SchoolClass($fp);
+        $school_tmp = new SchoolClass();
+        $school_tmp -> init($fp);
         $school_tmp -> update_data();
 
         return ;
@@ -478,7 +482,8 @@ class AdController extends Controller
     public function schoolDelete()
     {
         $fp = Input::all();
-        $school_tmp = new SchoolClass($fp);
+        $school_tmp = new SchoolClass();
+        $school_tmp -> init($fp);
         $school_tmp -> delete_data();
 
         return ;
