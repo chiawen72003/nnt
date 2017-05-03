@@ -14,7 +14,7 @@ class ExamRecordClass
         'isFinish' => null,
     );
 
-    public function __construct($input_data = array())
+    public function init($input_data = array())
     {
         foreach ($input_data as $key => $value) {
             $this->item_data[$key] = $value;
