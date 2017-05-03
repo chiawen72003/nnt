@@ -753,7 +753,8 @@ class AdController extends Controller
         $data = array();
         $data['user_data'] = app('request')->session()->get('user_data');
         $newsobj = new NewsClass();
-        $data['news_data'] = $newsobj -> get_old_data($id);
+        $newsobj -> init(array('id'=>$id));
+        $data['news_data'] = $newsobj -> get_old_data();
 
         return view('admin.news_edit_page', $data);
     }
@@ -763,7 +764,8 @@ class AdController extends Controller
     public function newsAdd()
     {
         $fp = Input::all();
-        $newsobj = new NewsClass($fp);
+        $newsobj = new NewsClass();
+        $newsobj -> init($fp);
         $isAdd = $newsobj -> add_data();
 
         return redirect()->route('ad.news.list')->with('message', '系統公告新增完畢!');
@@ -776,7 +778,8 @@ class AdController extends Controller
     public function newsUpdate()
     {
         $fp = Input::all();
-        $newsobj = new NewsClass($fp);
+        $newsobj = new NewsClass();
+        $newsobj -> init($fp);
         $newsobj -> update_data();
 
         return redirect()->route('ad.news.list')->with('message', '系統公告更新完畢!');
@@ -789,7 +792,8 @@ class AdController extends Controller
     public function newsDelete()
     {
         $fp = Input::all();
-        $newsobj = new NewsClass($fp);
+        $newsobj = new NewsClass();
+        $newsobj -> init($fp);
         $newsobj -> delete_data();
 
         return ;
