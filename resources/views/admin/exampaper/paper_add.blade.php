@@ -65,20 +65,33 @@
     var unit_data = [];
     var subject_data = [];
 @foreach($unit_data as $v)
-unit_data.push({
-    'id':'[! $v["id"] !]',
-    'module_type':'[! $v["module_type"] !]',
-    'subject':'[! $v["subject"] !]',
-    'subject_vol':'[! $v["vol"] !]',
-    'subject_unit':'[! $v["unit"] !]',
-});
+    @if($v['is_lock'] == 0)
+        unit_data.push({
+            'id':'[! $v["id"] !]',
+            'module_type':'[! $v["module_type"] !]',
+            'subject':'[! $v["subject"] !]',
+            'subject_vol':'[! $v["vol"] !]',
+            'subject_unit':'[! $v["unit"] !]',
+        });
+    @endif
 @endforeach
-@foreach($subject_data as $k => $v)
-subject_data.push({
-    'id':'[! $k !]',
-    'name':'[! $v !]',
-});
-@endforeach
+@if(isset($subject_access))
+    @foreach($subject_data as $k => $v)
+        @if(in_array($k, $subject_access))
+        subject_data.push({
+        'id':'[! $k !]',
+        'name':'[! $v !]',
+        });
+        @endif
+    @endforeach
+@else
+    @foreach($subject_data as $k => $v)
+    subject_data.push({
+        'id':'[! $k !]',
+        'name':'[! $v !]',
+    });
+    @endforeach
+@endif
 
     function get_subject_option()
     {
