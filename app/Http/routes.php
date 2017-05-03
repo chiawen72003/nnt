@@ -114,6 +114,8 @@ Route::get('/Ad/Questions/List/Page/{id}', ['middleware' => 'AdSessionCheck','as
 Route::post('/Ad/Questions/Delete', ['middleware' => 'AdSessionCheck','as' => 'ad.questions.delete', 'uses' => 'AdController@questionsDelete']);
 Route::post('/Ad/ExamPaper/Delete', ['middleware' => 'AdSessionCheck','as' => 'ad.exampaper.delete', 'uses' => 'AdController@exampaperDelete']);
 
+//管理員端 建立試卷頁面
+Route::get('/Ad/ExamPaper/Add/Page', ['middleware' => 'AdSessionCheck','as' => 'ad.exampaper.add.page', 'uses' => 'AdController@examPaperAddPage']);
 
 
 //管理員端 單元列表
@@ -125,7 +127,6 @@ Route::get('/Ad/Questions/Next/{paper_id}/', ['middleware' => 'AdSessionCheck','
 Route::get('/Ad/Questions/Back/{paper_id}/', ['middleware' => 'AdSessionCheck','as' => 'ad.questions.back', 'uses' => 'AdController@questionsBack']);
 Route::put('/Ad/Questions/Update/', ['middleware' => 'AdSessionCheck','as' => 'ad.questions.update', 'uses' => 'AdController@questionsUpdate']);
 Route::get('/Ad/ExamPaper/List/{id}', ['middleware' => 'AdSessionCheck','as' => 'ad.exampaper.list', 'uses' => 'AdController@examPaperList']);
-Route::get('/Ad/ExamPaper/Add/Page', ['middleware' => 'AdSessionCheck','as' => 'ad.exampaper.add.page', 'uses' => 'AdController@examPaperAddPage']);
 Route::post('/Ad/LoginChk', ['middleware' => 'LoginDataCheck','as' => 'ad.loginchk', 'uses' => 'MemberController@AdLoginChk']);
 Route::post('/Ad/Unit/Delete', ['middleware' => 'AdSessionCheck','as' => 'ad.unit.delete', 'uses' => 'AdController@unitDelete']);
 Route::post('/Ad/Unit/Add/Data', ['middleware' => 'AdSessionCheck','as' => 'ad.unit.add.data', 'uses' => 'AdController@unitAddData']);
