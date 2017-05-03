@@ -698,7 +698,8 @@ class AdController extends Controller
     public function unitSetLock()
     {
         $fp = Input::all();
-        $unit_obj = new UnitClass($fp);
+        $unit_obj = new UnitClass();
+        $unit_obj -> init($fp);
         $unit_obj -> set_unit_lock();
 
         return ;
@@ -710,7 +711,8 @@ class AdController extends Controller
     public function unitSetUnLock()
     {
         $fp = Input::all();
-        $unit_obj = new UnitClass($fp);
+        $unit_obj = new UnitClass();
+        $unit_obj -> init($fp);
         $unit_obj -> unit_set_Lock();
 
         return ;
