@@ -46,9 +46,10 @@ class MemController extends Controller
     public function NewsDetail($id)
     {
         $news_obj = new NewsClass();
+        $news_obj -> init(array('id'=>$id));
         $data = array();
         $data['user_data'] = app('request')->session()->get('user_data');
-        $data['news_data'] = $news_obj ->get_old_data($id);
+        $data['news_data'] = $news_obj ->get_old_data();
 
         return view('student.news.detail', $data);
     }
@@ -61,7 +62,8 @@ class MemController extends Controller
     public function NewsFileDownload($id)
     {
         $news_obj = new NewsClass();
-        $news_data = $news_obj ->get_old_data($id);
+        $news_obj -> init(array('id'=>$id));
+        $news_data = $news_obj ->get_old_data();
         if(isset($news_data['file_path']) and $news_data['file_path'] != ''){
 
             return response()->download($news_data['file_path'],$news_data['file_name']);

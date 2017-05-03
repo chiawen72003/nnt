@@ -68,7 +68,8 @@ class ExamController extends Controller
     public function testPage()
     {
         $unit_id = app('request')->get('unit_id');
-        $exam_class_obj = new ExamClass(array(
+        $exam_class_obj = new ExamClass();
+        $exam_class_obj -> init(array(
             'unit_id' => $unit_id
         ));
         $data = array();
@@ -79,7 +80,8 @@ class ExamController extends Controller
         $data['user_data'] = app('request')->session()->get('user_data');
         $data['paper_data'] = $exam_class_obj -> get_paper_by_unit_id($unit_id);
         $data['questions_item_data'] = $exam_class_obj -> get_questions_item_paper_id($data['paper_data']);
-        $examrecord = new ExamRecordClass(array(
+        $examrecord = new ExamRecordClass();
+        $examrecord -> init(array(
             'student_id'=>app('request')->session()->get('user_data')['uid'],
             'unit_id'=>$unit_id,
         ));
@@ -115,7 +117,8 @@ class ExamController extends Controller
     public function GetModelPage()
     {
         $item_id = app('request')->get('item_id');
-        $exam_class_obj = new ExamClass(array(
+        $exam_class_obj = new ExamClass();
+        $exam_class_obj ->init(array(
             'item_id' => $item_id,
         ));
         $data['item_num'] = 1;
@@ -141,7 +144,8 @@ class ExamController extends Controller
             'item_id' => app('request')->get('item_id'),
             'exam_paper_id' => app('request')->get('exam_paper_id'),
         );
-        $t = new Semantic($t_input);
+        $t = new Semantic();
+        $t -> init($t_input);
         $t->get_item_data();
         $analy_result = $t->analy();
 
@@ -156,7 +160,8 @@ class ExamController extends Controller
         $cs_id = app('request')->get('csID');
         $item_num = app('request')->get('itemNum');
         $paper_vol = app('request')->get('paperVol');
-        $exam_class_obj = new ExamClass(array(
+        $exam_class_obj = new ExamClass();
+        $exam_class_obj ->init(array(
             'cs_id' => $cs_id,
             'paper_vol' => $paper_vol,
             'item_num' => $item_num,
@@ -228,7 +233,8 @@ class ExamController extends Controller
         $data['questions_item_data'] = $exam_class_obj -> get_questions_item_paper_id($data['paper_data']);
         $data['begin_paper_index'] = 0;//起始試卷的index位置
         $data['begin_item_index'] = 0;//起始試題的index位置
-        $t = new ExamRecordClass(array(
+        $t = new ExamRecordClass();
+        $t ->init(array(
             'student_id' => app('request')->session()->get('user_data')['uid'],
             'unit_id' => $unit_id,
         ));

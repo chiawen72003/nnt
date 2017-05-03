@@ -163,8 +163,13 @@ class AdController extends Controller
         $data['unit_id'] = '';
         $unit_obj = new UnitClass();
         $subject_obj = new SubjectClass();
-        $data['unit_data'] = $unit_obj -> get_all_unit();
         $data['subject_data'] = $subject_obj -> subject_list();
+        $data['unit_data'] = $unit_obj -> get_all_unit();
+        if(!in_array(app('request')->session()->get('user_data.access_level'),array('91','92')))
+        {
+            $subject_obj -> init(array('uid'=>app('request')->session()->get('user_data.uid')));
+            $data['subject_access'] = $subject_obj -> get_access_subject();
+        }
 
         return view('admin.exampaper.paper_add', $data);
     }
@@ -198,7 +203,8 @@ class AdController extends Controller
     {
         $get_id = app('request')->get('getID');
         $exam_class_obj = new ExamClass();
-        $questions_obj = new QuestionsItemClass(array('exam_paper_id' => $get_id));
+        $questions_obj = new QuestionsItemClass();
+        $questions_obj -> init(array('exam_paper_id' => $get_id));
         $exam_class_obj -> exampaper_delete($get_id);
         $questions_obj ->delete_by_exam_paper_id();
 
@@ -255,7 +261,8 @@ class AdController extends Controller
             foreach($fp['add_data'] as $v){
                 $get_input = array_merge($get_input,$v);
             }
-            $t = new QuestionsItemClass($get_input);
+            $t = new QuestionsItemClass();
+            $t -> init($get_input);
             $id = $t -> add();
         }
 
@@ -273,7 +280,8 @@ class AdController extends Controller
             foreach($fp['update_data'] as $v){
                 $get_input = array_merge($get_input,$v);
             }
-            $t = new QuestionsItemClass($get_input);
+            $t = new QuestionsItemClass();
+            $t -> init($get_input);
             $id = $t -> update_data();
         }
 
@@ -295,7 +303,8 @@ class AdController extends Controller
 
         $fp = Input::all();
         if(isset($fp['question_id'])){
-            $t = new QuestionsItemClass(array('id'=>$fp['question_id'],'exam_paper_id'=>$paper_id));
+            $t = new QuestionsItemClass();
+            $t -> init(array('id'=>$fp['question_id'],'exam_paper_id'=>$paper_id));
             $return_data = $t -> next_data($return_data);
         }
 
@@ -317,7 +326,8 @@ class AdController extends Controller
 
         $fp = Input::all();
         if(isset($fp['question_id'])){
-            $t = new QuestionsItemClass(array('id'=>$fp['question_id'],'exam_paper_id'=>$paper_id));
+            $t = new QuestionsItemClass();
+            $t -> init(array('id'=>$fp['question_id'],'exam_paper_id'=>$paper_id));
             $return_data = $t -> back_data($return_data);
         }
 
@@ -348,7 +358,8 @@ class AdController extends Controller
     public function  subjectAdd()
     {
         $fp = Input::all();
-        $subject_obj = new SubjectClass($fp);
+        $subject_obj = new SubjectClass();
+        $subject_obj->init($fp);
         $subject_obj -> add();
 
         return '';
@@ -361,7 +372,8 @@ class AdController extends Controller
     public function subjectUpdate()
     {
         $fp = Input::all();
-        $subject_obj = new SubjectClass($fp);
+        $subject_obj = new SubjectClass();
+        $subject_obj -> init($fp);
         $subject_obj -> update_data();
 
         return '';
@@ -374,7 +386,8 @@ class AdController extends Controller
     public function subjectDelete()
     {
         $fp = Input::all();
-        $subject_obj = new SubjectClass($fp);
+        $subject_obj = new SubjectClass();
+        $subject_obj -> init($fp);
         $subject_obj -> delete_data();
 
         return ;
@@ -390,7 +403,8 @@ class AdController extends Controller
         $city_code = isset($fp['city'])?$fp['city']:'1';
         $data = array();
         $data['user_data'] = app('request')->session()->get('user_data');
-        $school_tmp = new SchoolClass(
+        $school_tmp = new SchoolClass();
+        $school_tmp -> init(
             array('city_code' => $city_code)
         );
         $data['list_data'] = $school_tmp -> get_school_list();
@@ -422,7 +436,8 @@ class AdController extends Controller
     {
         $data = array();
         $data['user_data'] = app('request')->session()->get('user_data');
-        $school_tmp = new SchoolClass(
+        $school_tmp = new SchoolClass();
+        $school_tmp -> init(
             array('id' => $id)
         );
         $data['school_data'] = $school_tmp -> get_school_data();
@@ -439,7 +454,8 @@ class AdController extends Controller
     public function schoolAdd()
     {
         $fp = Input::all();
-        $school_tmp = new SchoolClass($fp);
+        $school_tmp = new SchoolClass();
+        $school_tmp -> init($fp);
         $isAdd = $school_tmp -> add();
 
         return redirect()->route('ad.school.list');
@@ -452,7 +468,8 @@ class AdController extends Controller
     public function schoolUpdate()
     {
         $fp = Input::all();
-        $school_tmp = new SchoolClass($fp);
+        $school_tmp = new SchoolClass();
+        $school_tmp -> init($fp);
         $school_tmp -> update_data();
 
         return ;
@@ -465,7 +482,8 @@ class AdController extends Controller
     public function schoolDelete()
     {
         $fp = Input::all();
-        $school_tmp = new SchoolClass($fp);
+        $school_tmp = new SchoolClass();
+        $school_tmp -> init($fp);
         $school_tmp -> delete_data();
 
         return ;
@@ -495,7 +513,8 @@ class AdController extends Controller
     public function userAdd()
     {
         $fp = Input::all();
-        $school_tmp = new MemberClass($fp);
+        $school_tmp = new MemberClass();
+        $school_tmp -> init($fp);
         $school_tmp -> set_add_user();
 
         return ;
@@ -530,6 +549,7 @@ class AdController extends Controller
         $data['user_data'] = app('request')->session()->get('user_data');
         $school_tmp = new SchoolClass();
         $member_tmp = new MemberClass();
+        $member_tmp -> init($fp);
         $data['city_data'] = $school_tmp -> get_all_city_data();
         $data['all_school'] = $school_tmp -> get_all_school();
         $data['all_level'] = $member_tmp -> get_all_level();
@@ -564,7 +584,9 @@ class AdController extends Controller
      */
     public function userDataUpdate()
     {
+        $fp = Input::all();
         $member_obj = new MemberClass();
+        $member_obj -> init($fp);
         $member_obj -> update_user_data();
 
         return ;
@@ -578,6 +600,7 @@ class AdController extends Controller
     {
         $fp = Input::all();
         $school_tmp = new MemberClass();
+        $school_tmp -> init($fp);
         $school_tmp -> set_remove_student();
 
         return ;
@@ -591,6 +614,7 @@ class AdController extends Controller
     {
         $fp = Input::all();
         $school_tmp = new MemberClass();
+        $school_tmp -> init($fp);
         $school_tmp -> set_remove_all_student();
 
         return ;
@@ -616,7 +640,8 @@ class AdController extends Controller
     public function userSubjectLockUnLock()
     {
         $fp = Input::all();
-        $subject_obj = new SubjectClass($fp);
+        $subject_obj = new SubjectClass();
+        $subject_obj -> init($fp);
         $access_data = $subject_obj -> get_access_subject();
         $subject_data = $subject_obj -> subject_list();
         $return_data = array(
@@ -633,7 +658,8 @@ class AdController extends Controller
     public function userSubjectSetUnLock()
     {
         $fp = Input::all();
-        $subject_obj = new SubjectClass($fp);
+        $subject_obj = new SubjectClass();
+        $subject_obj -> init($fp);
         $subject_obj -> set_access_subject();
 
         return ;
@@ -645,7 +671,8 @@ class AdController extends Controller
     public function userSubjectSetLock()
     {
         $fp = Input::all();
-        $subject_obj = new SubjectClass($fp);
+        $subject_obj = new SubjectClass();
+        $subject_obj -> init($fp);
         $subject_obj -> unset_access_subject();
 
         return ;
@@ -671,7 +698,8 @@ class AdController extends Controller
     public function unitSetLock()
     {
         $fp = Input::all();
-        $unit_obj = new UnitClass($fp);
+        $unit_obj = new UnitClass();
+        $unit_obj -> init($fp);
         $unit_obj -> set_unit_lock();
 
         return ;
@@ -683,7 +711,8 @@ class AdController extends Controller
     public function unitSetUnLock()
     {
         $fp = Input::all();
-        $unit_obj = new UnitClass($fp);
+        $unit_obj = new UnitClass();
+        $unit_obj -> init($fp);
         $unit_obj -> unit_set_Lock();
 
         return ;
@@ -736,7 +765,8 @@ class AdController extends Controller
         $data = array();
         $data['user_data'] = app('request')->session()->get('user_data');
         $newsobj = new NewsClass();
-        $data['news_data'] = $newsobj -> get_old_data($id);
+        $newsobj -> init(array('id'=>$id));
+        $data['news_data'] = $newsobj -> get_old_data();
 
         return view('admin.news_edit_page', $data);
     }
@@ -746,7 +776,8 @@ class AdController extends Controller
     public function newsAdd()
     {
         $fp = Input::all();
-        $newsobj = new NewsClass($fp);
+        $newsobj = new NewsClass();
+        $newsobj -> init($fp);
         $isAdd = $newsobj -> add_data();
 
         return redirect()->route('ad.news.list')->with('message', '系統公告新增完畢!');
@@ -759,7 +790,8 @@ class AdController extends Controller
     public function newsUpdate()
     {
         $fp = Input::all();
-        $newsobj = new NewsClass($fp);
+        $newsobj = new NewsClass();
+        $newsobj -> init($fp);
         $newsobj -> update_data();
 
         return redirect()->route('ad.news.list')->with('message', '系統公告更新完畢!');
@@ -772,7 +804,8 @@ class AdController extends Controller
     public function newsDelete()
     {
         $fp = Input::all();
-        $newsobj = new NewsClass($fp);
+        $newsobj = new NewsClass();
+        $newsobj -> init($fp);
         $newsobj -> delete_data();
 
         return ;
@@ -808,7 +841,8 @@ class AdController extends Controller
         $subject_obj = new SubjectClass();
         $exampaper_obj = new ExamPaperClass();
         $exampaper_obj ->init(array('uid'=>$uid));
-        $questions_obj = new QuestionsItemClass(array('exam_paper_id'=>$id));
+        $questions_obj = new QuestionsItemClass();
+        $questions_obj -> init(array('exam_paper_id'=>$id));
         $data['unit_data'] = $unit_obj -> get_all_unit();
         $data['subject_data'] = $subject_obj -> subject_list();
         $data['exampaper_data'] = $exampaper_obj->get_all_exampaper();
@@ -825,7 +859,8 @@ class AdController extends Controller
     {
         $fp = Input::all();
         if(isset($fp['id'])){
-            $t = new QuestionsItemClass(array('id'=>$fp['id'],'exam_paper_id'=>$fp['exam_paper_id']));
+            $t = new QuestionsItemClass();
+            $t -> init(array('id'=>$fp['id'],'exam_paper_id'=>$fp['exam_paper_id']));
             $t -> delete_data();
         }
 

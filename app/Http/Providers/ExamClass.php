@@ -26,7 +26,12 @@ class ExamClass
         'item_id' => null,//試題id
     );
 
-    public function __construct($set_data = array())
+    public function __construct()
+    {
+
+    }
+
+    public function init($set_data = array())
     {
         foreach ($set_data as $key => $value) {
             $this -> use_data[$key] = $value;
@@ -158,7 +163,8 @@ class ExamClass
             $whereIn[] = $temp_array['id'];
         }
         if(count($whereIn) > 0){
-            $t = new QuestionsItemClass(array('exam_paper_id'=>$whereIn));
+            $t = new QuestionsItemClass();
+            $t ->init(array('exam_paper_id'=>$whereIn));
             $subject_list = $t -> get_paper_item_num($whereIn);
         }
 

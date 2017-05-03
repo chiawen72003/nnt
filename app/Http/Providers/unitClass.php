@@ -13,10 +13,9 @@ class UnitClass
         'lock' => null,
     );
 
-    public function __construct()
+    public function init($data = array())
     {
-        $fp = Input::all();
-        foreach ($fp as $key => $value) {
+        foreach ($data as $key => $value) {
             $this->input_data[$key] = $value;
         }
     }

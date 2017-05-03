@@ -27,7 +27,9 @@ class MemberController extends Controller
 
     public function LoginChk()
     {
+        $fp = Input::all();
         $member_class_obj = new MemberClass();
+        $member_class_obj -> init($fp);
         $check_data = $member_class_obj -> chk_login_data();
         if ($check_data['check_result']) {
             $user_data = $check_data['user_data'];
@@ -79,7 +81,8 @@ class MemberController extends Controller
     public function adminAdd()
     {
         $fp = Input::all();
-        $member_admin_obj = new MemberAdminClass($fp);
+        $member_admin_obj = new MemberAdminClass();
+        $member_admin_obj ->init($fp);
         $member_admin_obj -> add();
 
         return '';
@@ -92,7 +95,8 @@ class MemberController extends Controller
     public function adminUpdate()
     {
         $fp = Input::all();
-        $member_admin_obj = new MemberAdminClass($fp);
+        $member_admin_obj = new MemberAdminClass();
+        $member_admin_obj -> init($fp);
         $member_admin_obj -> update_data();
 
         return '';
@@ -105,7 +109,8 @@ class MemberController extends Controller
     public function adminDelete()
     {
         $fp = Input::all();
-        $member_admin_obj = new MemberAdminClass($fp);
+        $member_admin_obj = new MemberAdminClass();
+        $member_admin_obj ->init($fp);
         $member_admin_obj -> delete_data();
 
         return;
