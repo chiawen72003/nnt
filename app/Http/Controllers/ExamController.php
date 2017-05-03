@@ -144,7 +144,8 @@ class ExamController extends Controller
             'item_id' => app('request')->get('item_id'),
             'exam_paper_id' => app('request')->get('exam_paper_id'),
         );
-        $t = new Semantic($t_input);
+        $t = new Semantic();
+        $t -> init($t_input);
         $t->get_item_data();
         $analy_result = $t->analy();
 
