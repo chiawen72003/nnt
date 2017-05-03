@@ -22,7 +22,7 @@ class QuestionsItemClass
         'score' => '0',
     );
 
-    public function __construct($input_data)
+    public function init($input_data)
     {
         foreach ($input_data as $key => $value) {
             $this->item_data[$key] = $value;
