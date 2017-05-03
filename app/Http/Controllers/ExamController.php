@@ -68,7 +68,8 @@ class ExamController extends Controller
     public function testPage()
     {
         $unit_id = app('request')->get('unit_id');
-        $exam_class_obj = new ExamClass(array(
+        $exam_class_obj = new ExamClass();
+        $exam_class_obj -> init(array(
             'unit_id' => $unit_id
         ));
         $data = array();
@@ -115,7 +116,8 @@ class ExamController extends Controller
     public function GetModelPage()
     {
         $item_id = app('request')->get('item_id');
-        $exam_class_obj = new ExamClass(array(
+        $exam_class_obj = new ExamClass();
+        $exam_class_obj ->init(array(
             'item_id' => $item_id,
         ));
         $data['item_num'] = 1;
@@ -156,7 +158,8 @@ class ExamController extends Controller
         $cs_id = app('request')->get('csID');
         $item_num = app('request')->get('itemNum');
         $paper_vol = app('request')->get('paperVol');
-        $exam_class_obj = new ExamClass(array(
+        $exam_class_obj = new ExamClass();
+        $exam_class_obj ->init(array(
             'cs_id' => $cs_id,
             'paper_vol' => $paper_vol,
             'item_num' => $item_num,
