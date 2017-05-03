@@ -13,7 +13,7 @@ class MemberAdminClass
         'login_pw' => null,
     );
 
-    public function __construct($data = array())
+    public function init($data = array())
     {
         foreach ($data as $key => $value) {
             $this -> input_data[$key] = $value;
