@@ -9,7 +9,7 @@
                     <h3 class="search-title">請選取班級及學生</h3>
                     <div class="select-group">
                         <span class="search-title">帳號</span>
-                        <select id="user_id" class="select-s">
+                        <select id="uid" class="select-s">
                             @foreach($all_teacher as $v)
                                 <option value="[! $v['uid'] !]">[! $v['user_id'] !]【[! $all_level[$v['access_level']] !]】</option>
                             @endforeach
@@ -42,7 +42,7 @@
 </div>
 [! Html::script('js/jquery-1.11.3.js') !]
 <script>
-    var now_user_id = '';
+    var now_uid = '';
 
     //更換教師的科目資料
     function chgTableData()
@@ -50,14 +50,14 @@
         $("#unlock-version option").remove();
         $("#locked-version option").remove();
 
-        now_user_id = $('#user_id').val();
+        now_uid = $('#uid').val();
         $.ajax({
             url: "[! route('ad.subject.lock.unlock') !]",
             type:'POST',
             dataType: "json",
             data: {
                 _token: '[! csrf_token() !]',
-                user_id:$('#user_id').val(),
+                uid:$('#uid').val(),
             },
             error: function(xhr) {
                 //alert('Ajax request 發生錯誤');
@@ -100,7 +100,7 @@
                 type:'POST',
                 data: {
                     _token: '[! csrf_token() !]',
-                    user_id: now_user_id,
+                    uid: now_uid,
                     unlock:unlock,
                 },
                 error: function(xhr) {
@@ -129,7 +129,7 @@
                 type:'POST',
                 data: {
                     _token: '[! csrf_token() !]',
-                    user_id: now_user_id,
+                    uid: now_uid,
                     lock:lock,
                 },
                 error: function(xhr) {
