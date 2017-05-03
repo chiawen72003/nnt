@@ -26,7 +26,12 @@ class ExamClass
         'item_id' => null,//試題id
     );
 
-    public function __construct($set_data = array())
+    public function __construct()
+    {
+
+    }
+
+    public function init($set_data = array())
     {
         foreach ($set_data as $key => $value) {
             $this -> use_data[$key] = $value;
