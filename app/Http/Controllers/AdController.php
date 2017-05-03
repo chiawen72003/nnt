@@ -167,7 +167,7 @@ class AdController extends Controller
         $data['unit_data'] = $unit_obj -> get_all_unit();
         if(!in_array(app('request')->session()->get('user_data.access_level'),array('91','92')))
         {
-            $subject_obj -> init(array('user_id'=>app('request')->session()->get('user_data.id')));
+            $subject_obj -> init(array('uid'=>app('request')->session()->get('user_data.uid')));
             $data['subject_access'] = $subject_obj -> get_access_subject();
         }
 
@@ -379,7 +379,8 @@ class AdController extends Controller
     public function subjectDelete()
     {
         $fp = Input::all();
-        $subject_obj = new SubjectClass($fp);
+        $subject_obj = new SubjectClass();
+        $subject_obj -> init($fp);
         $subject_obj -> delete_data();
 
         return ;
@@ -621,7 +622,8 @@ class AdController extends Controller
     public function userSubjectLockUnLock()
     {
         $fp = Input::all();
-        $subject_obj = new SubjectClass($fp);
+        $subject_obj = new SubjectClass();
+        $subject_obj -> init($fp);
         $access_data = $subject_obj -> get_access_subject();
         $subject_data = $subject_obj -> subject_list();
         $return_data = array(
@@ -638,7 +640,8 @@ class AdController extends Controller
     public function userSubjectSetUnLock()
     {
         $fp = Input::all();
-        $subject_obj = new SubjectClass($fp);
+        $subject_obj = new SubjectClass();
+        $subject_obj -> init($fp);
         $subject_obj -> set_access_subject();
 
         return ;
@@ -650,7 +653,8 @@ class AdController extends Controller
     public function userSubjectSetLock()
     {
         $fp = Input::all();
-        $subject_obj = new SubjectClass($fp);
+        $subject_obj = new SubjectClass();
+        $subject_obj -> init($fp);
         $subject_obj -> unset_access_subject();
 
         return ;
