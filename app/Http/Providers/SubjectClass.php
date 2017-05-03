@@ -10,7 +10,7 @@ use \Input;
 class SubjectClass
 {
     public $input_data = array(
-        'user_id' => null,
+        'uid' => null,
         'unlock' => null,
         'lock' => null,
     );
@@ -122,9 +122,9 @@ class SubjectClass
     public function get_access_subject()
     {
         $data = array();
-        if($this->input_data['user_id'])
+        if($this->input_data['uid'])
         {
-            $t_obj = SubjectAccess::where('user_id', $this->input_data['user_id'])
+            $t_obj = SubjectAccess::where('uid', $this->input_data['uid'])
                 ->get();
             foreach ($t_obj as $v)
             {
@@ -140,12 +140,12 @@ class SubjectClass
      */
     public function set_access_subject()
     {
-        if($this->input_data['user_id'] AND $this->input_data['unlock'] AND is_array($this->input_data['unlock']))
+        if($this->input_data['uid'] AND $this->input_data['unlock'] AND is_array($this->input_data['unlock']))
         {
             $data = array();
             foreach($this->input_data['unlock'] as $v)
             {
-                $data[] = array('user_id'=> $this->input_data['user_id'], 'subject_id'=> $v);
+                $data[] = array('uid'=> $this->input_data['uid'], 'subject_id'=> $v);
             }
             //以批次新增的方式處理
             SubjectAccess::insert($data);
@@ -157,9 +157,9 @@ class SubjectClass
      */
     public function unset_access_subject()
     {
-        if($this->input_data['user_id'] AND $this->input_data['lock'] AND is_array($this->input_data['lock']))
+        if($this->input_data['uid'] AND $this->input_data['lock'] AND is_array($this->input_data['lock']))
         {
-            SubjectAccess::where('user_id', $this->input_data['user_id'])
+            SubjectAccess::where('uid', $this->input_data['uid'])
                 ->whereIn('subject_id', $this->input_data['lock'])
                 ->delete();
         }
