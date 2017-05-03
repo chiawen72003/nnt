@@ -79,7 +79,8 @@ class MemberController extends Controller
     public function adminAdd()
     {
         $fp = Input::all();
-        $member_admin_obj = new MemberAdminClass($fp);
+        $member_admin_obj = new MemberAdminClass();
+        $member_admin_obj ->init($fp);
         $member_admin_obj -> add();
 
         return '';
@@ -92,7 +93,8 @@ class MemberController extends Controller
     public function adminUpdate()
     {
         $fp = Input::all();
-        $member_admin_obj = new MemberAdminClass($fp);
+        $member_admin_obj = new MemberAdminClass();
+        $member_admin_obj -> init($fp);
         $member_admin_obj -> update_data();
 
         return '';
@@ -105,7 +107,8 @@ class MemberController extends Controller
     public function adminDelete()
     {
         $fp = Input::all();
-        $member_admin_obj = new MemberAdminClass($fp);
+        $member_admin_obj = new MemberAdminClass();
+        $member_admin_obj ->init($fp);
         $member_admin_obj -> delete_data();
 
         return;
