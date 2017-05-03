@@ -18,7 +18,7 @@ class Semantic
     );
     private $user_id = 'kbc';
 
-    public function __construct($data)
+    public function init($data)
     {
         foreach ($data as $key => $value) {
             $this->input_data[$key] = $value;
