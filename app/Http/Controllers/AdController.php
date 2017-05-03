@@ -203,7 +203,8 @@ class AdController extends Controller
     {
         $get_id = app('request')->get('getID');
         $exam_class_obj = new ExamClass();
-        $questions_obj = new QuestionsItemClass(array('exam_paper_id' => $get_id));
+        $questions_obj = new QuestionsItemClass();
+        $questions_obj -> init(array('exam_paper_id' => $get_id));
         $exam_class_obj -> exampaper_delete($get_id);
         $questions_obj ->delete_by_exam_paper_id();
 
@@ -260,7 +261,8 @@ class AdController extends Controller
             foreach($fp['add_data'] as $v){
                 $get_input = array_merge($get_input,$v);
             }
-            $t = new QuestionsItemClass($get_input);
+            $t = new QuestionsItemClass();
+            $t -> init($get_input);
             $id = $t -> add();
         }
 
@@ -278,7 +280,8 @@ class AdController extends Controller
             foreach($fp['update_data'] as $v){
                 $get_input = array_merge($get_input,$v);
             }
-            $t = new QuestionsItemClass($get_input);
+            $t = new QuestionsItemClass();
+            $t -> init($get_input);
             $id = $t -> update_data();
         }
 
@@ -300,7 +303,8 @@ class AdController extends Controller
 
         $fp = Input::all();
         if(isset($fp['question_id'])){
-            $t = new QuestionsItemClass(array('id'=>$fp['question_id'],'exam_paper_id'=>$paper_id));
+            $t = new QuestionsItemClass();
+            $t -> init(array('id'=>$fp['question_id'],'exam_paper_id'=>$paper_id));
             $return_data = $t -> next_data($return_data);
         }
 
@@ -322,7 +326,8 @@ class AdController extends Controller
 
         $fp = Input::all();
         if(isset($fp['question_id'])){
-            $t = new QuestionsItemClass(array('id'=>$fp['question_id'],'exam_paper_id'=>$paper_id));
+            $t = new QuestionsItemClass();
+            $t -> init(array('id'=>$fp['question_id'],'exam_paper_id'=>$paper_id));
             $return_data = $t -> back_data($return_data);
         }
 
@@ -829,7 +834,8 @@ class AdController extends Controller
         $subject_obj = new SubjectClass();
         $exampaper_obj = new ExamPaperClass();
         $exampaper_obj ->init(array('uid'=>$uid));
-        $questions_obj = new QuestionsItemClass(array('exam_paper_id'=>$id));
+        $questions_obj = new QuestionsItemClass();
+        $questions_obj -> init(array('exam_paper_id'=>$id));
         $data['unit_data'] = $unit_obj -> get_all_unit();
         $data['subject_data'] = $subject_obj -> subject_list();
         $data['exampaper_data'] = $exampaper_obj->get_all_exampaper();
@@ -846,7 +852,8 @@ class AdController extends Controller
     {
         $fp = Input::all();
         if(isset($fp['id'])){
-            $t = new QuestionsItemClass(array('id'=>$fp['id'],'exam_paper_id'=>$fp['exam_paper_id']));
+            $t = new QuestionsItemClass();
+            $t -> init(array('id'=>$fp['id'],'exam_paper_id'=>$fp['exam_paper_id']));
             $t -> delete_data();
         }
 
