@@ -80,7 +80,8 @@ class ExamController extends Controller
         $data['user_data'] = app('request')->session()->get('user_data');
         $data['paper_data'] = $exam_class_obj -> get_paper_by_unit_id($unit_id);
         $data['questions_item_data'] = $exam_class_obj -> get_questions_item_paper_id($data['paper_data']);
-        $examrecord = new ExamRecordClass(array(
+        $examrecord = new ExamRecordClass();
+        $examrecord -> init(array(
             'student_id'=>app('request')->session()->get('user_data')['uid'],
             'unit_id'=>$unit_id,
         ));
@@ -231,7 +232,8 @@ class ExamController extends Controller
         $data['questions_item_data'] = $exam_class_obj -> get_questions_item_paper_id($data['paper_data']);
         $data['begin_paper_index'] = 0;//起始試卷的index位置
         $data['begin_item_index'] = 0;//起始試題的index位置
-        $t = new ExamRecordClass(array(
+        $t = new ExamRecordClass();
+        $t ->init(array(
             'student_id' => app('request')->session()->get('user_data')['uid'],
             'unit_id' => $unit_id,
         ));
