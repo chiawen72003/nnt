@@ -503,7 +503,8 @@ class AdController extends Controller
     public function userAdd()
     {
         $fp = Input::all();
-        $school_tmp = new MemberClass($fp);
+        $school_tmp = new MemberClass();
+        $school_tmp -> init($fp);
         $school_tmp -> set_add_user();
 
         return ;
@@ -538,6 +539,7 @@ class AdController extends Controller
         $data['user_data'] = app('request')->session()->get('user_data');
         $school_tmp = new SchoolClass();
         $member_tmp = new MemberClass();
+        $member_tmp -> init($fp);
         $data['city_data'] = $school_tmp -> get_all_city_data();
         $data['all_school'] = $school_tmp -> get_all_school();
         $data['all_level'] = $member_tmp -> get_all_level();
@@ -572,7 +574,9 @@ class AdController extends Controller
      */
     public function userDataUpdate()
     {
+        $fp = Input::all();
         $member_obj = new MemberClass();
+        $member_obj -> init($fp);
         $member_obj -> update_user_data();
 
         return ;
@@ -586,6 +590,7 @@ class AdController extends Controller
     {
         $fp = Input::all();
         $school_tmp = new MemberClass();
+        $school_tmp -> init($fp);
         $school_tmp -> set_remove_student();
 
         return ;
@@ -599,6 +604,7 @@ class AdController extends Controller
     {
         $fp = Input::all();
         $school_tmp = new MemberClass();
+        $school_tmp -> init($fp);
         $school_tmp -> set_remove_all_student();
 
         return ;
