@@ -20,11 +20,7 @@
 			</table>
 		</div>
 		<div class="page-select-wrap">
-			<ul class="clearfix">
-				<li><a href="#">1</a></li>
-				<li><a href="#">2</a></li>
-				<li><a class="current" href="#">3</a></li>
-			</ul>
+			[! $list_data -> links()  !]
 		</div>
 	</div>
 </div>
