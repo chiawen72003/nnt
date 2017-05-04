@@ -17,7 +17,7 @@ class IsAdLoginCheck
     public function handle($request, Closure $next, $guard = null)
     {
         if ($request->session()->has('admin_data')) {
-            return redirect()->route('ad.index');
+            return redirect()->route('ad.news.list');
         }
 
         return $next($request);
