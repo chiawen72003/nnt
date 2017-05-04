@@ -34,7 +34,7 @@ class SchoolClass
     {
         $temp_obj = Organization::select('id','organization_id', 'type', 'city_code', 'name', 'address', 'telno', 'used')
             ->where('city_code', $this->input_data['city_code'])
-            ->orderby('id', 'ASC')
+            ->orderby('name', 'ASC')
             ->paginate(20);
 
         return $temp_obj;
@@ -50,7 +50,7 @@ class SchoolClass
         $return_data = array();
         $temp_obj = Organization::select('id','organization_id', 'type', 'city_code', 'name', 'address', 'telno', 'used')
             ->orderby('city_code', 'ASC')
-            ->orderby('id', 'ASC')
+            ->orderby('name', 'ASC')
             ->get();
         foreach($temp_obj as $v ){
             $return_data[] = $v;
