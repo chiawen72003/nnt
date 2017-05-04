@@ -31,35 +31,21 @@ class AdController extends Controller
     }
 
     /**
-     * 首頁 單元列表
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function index()
-    {
-        $exam_class_obj = new ExamClass();
-        $subject_obj = new SubjectClass();
-        $data = array();
-        $data['user_data'] = app('request')->session()->get('user_data');
-        $data['list_data'] = $exam_class_obj -> unit_list();
-        $data['subject_list'] = $subject_obj -> subject_list();
-        $data['module_type'] = self::$module_type;
-
-        return view('admin.unit.unit_list', $data);
-    }
-
-    /**
-     * 建立結構
+     * 建立結構(單元)
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function unitList()
     {
-        $exam_class_obj = new ExamClass();
+        $unit_class_obj = new UnitClass();
+        if(!in_array(app('request')->session()->get('user_data.access_level'),array('91','92')))
+        {
+            $unit_class_obj -> init(array('uid'=>app('request')->session()->get('user_data.uid')));
+        }
         $subject_obj = new SubjectClass();
         $data = array();
         $data['user_data'] = app('request')->session()->get('user_data');
-        $data['list_data'] = $exam_class_obj -> unit_list();
+        $data['list_data'] = $unit_class_obj -> get_all_unit();
         $data['subject_list'] = $subject_obj -> subject_list();
         $data['module_type'] = self::$module_type;
 
@@ -67,7 +53,7 @@ class AdController extends Controller
     }
 
     /**
-     * 新增一個單元的頁面
+     * 新增一個結構(單元)的頁面
      *
      */
     public function unitAddPage()
@@ -82,7 +68,7 @@ class AdController extends Controller
     }
 
     /**
-     * 編輯一個單元的頁面
+     * 編輯一個結構(單元)的頁面
      *
      */
     public function unitEditPage($id)
@@ -100,14 +86,14 @@ class AdController extends Controller
 
 
     /**
-     * 新增一筆單元的資料
+     * 新增一筆結構(單元)的資料
      *
      */
     public function unitAddData()
     {
         $exam_class_obj = new ExamClass();
         $data = array();
-        $data['uid'] = app('request')->session()->get('user_data')['uid'];
+        $data['uid'] = app('request')->session()->get('user_data.uid');
         $data['module_type'] = app('request')->get('module_type');
         $data['subject'] = app('request')->get('subject');
         $data['vol'] = app('request')->get('vol');
