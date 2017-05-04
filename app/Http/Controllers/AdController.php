@@ -73,12 +73,13 @@ class AdController extends Controller
      */
     public function unitEditPage($id)
     {
-        $exam_class_obj = new ExamClass();
+        $unit_class_obj = new UnitClass();
+        $unit_class_obj ->init(array('id' => $id));
         $subject_obj = new SubjectClass();
         $data = array();
         $data['title'] = '編輯 ';
         $data['subject_list'] = $subject_obj -> subject_list();
-        $data['old_data'] = $exam_class_obj -> get_unit($id);
+        $data['old_data'] = $unit_class_obj -> get_unit();
         $data['form_path'] = 'ad.unit.update.data';
 
         return view('admin.unit.unit_edit_page', $data);
@@ -91,7 +92,7 @@ class AdController extends Controller
      */
     public function unitAddData()
     {
-        $exam_class_obj = new ExamClass();
+        $unit_class_obj = new UnitClass();
         $data = array();
         $data['uid'] = app('request')->session()->get('user_data.uid');
         $data['module_type'] = app('request')->get('module_type');
@@ -101,18 +102,18 @@ class AdController extends Controller
         $data['unit'] = app('request')->get('unit');
         $data['title'] = app('request')->get('title');
         $data['indicator_nums'] = app('request')->get('indicator_nums');
-        $exam_class_obj -> unit_add($data);
+        $unit_class_obj -> unit_add($data);
 
         return redirect()->route('ad.unit.list')->with('message', '單元結構新增完畢!');
     }
 
     /**
-     * 更新一筆單元的資料
+     * 更新一筆結構(單元)的資料
      *
      */
     public function unitUpdateData()
     {
-        $exam_class_obj = new ExamClass();
+        $unit_class_obj = new UnitClass();
         $data = array();
         $id = app('request')->get('cs_sn');
         $data['publisher_id'] = app('request')->get('publisher_id');
@@ -122,20 +123,22 @@ class AdController extends Controller
         $data['unit'] = app('request')->get('unit');
         $data['concept'] = app('request')->get('concept');
         $data['indicator_nums'] = app('request')->get('indicator_nums');
-        $exam_class_obj -> unit_update($id,$data);
+        $unit_class_obj -> init(array('id'=>$id));
+        $unit_class_obj -> unit_update($data);
 
         return redirect()->route('ad.unit.list')->with('message', '單元結構更新完畢!');
     }
 
     /**
-     * 移除一個單元
+     * 移除一個結構(單元)
      *
      */
     public function unitDelete()
     {
-        $exam_class_obj = new ExamClass();
         $get_id = app('request')->get('getID');
-        $exam_class_obj -> unit_delete($get_id);
+        $unit_class_obj = new UnitClass();
+        $unit_class_obj -> init(array('id'=>$get_id));
+        $unit_class_obj -> unit_delete();
 
         return ;
     }
@@ -246,9 +249,11 @@ class AdController extends Controller
     public function questionsEdit($id)
     {
         $exam_class_obj = new ExamClass();
+        $unit_class_obj = new UnitClass();
         $data = array();
         $data['exampaper_data'] = $exam_class_obj -> get_exam_paper($id);
-        $data['unit_data'] = $exam_class_obj -> get_unit($data['exampaper_data']['unit_list_id']);
+        $unit_class_obj -> init(array('id'=>$data['exampaper_data']['unit_list_id']));
+        $data['unit_data'] = $unit_class_obj -> get_unit();
         $t = new FeedbackListClass();
         $data['feedback_list'] = $t->get_list_data();
 
