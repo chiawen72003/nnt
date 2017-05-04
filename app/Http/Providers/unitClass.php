@@ -9,6 +9,7 @@ class UnitClass
 {
     private $input_data = array(
         'id' => null,
+        'uid' => null,
         'unlock' => null,
         'lock' => null,
     );
@@ -25,8 +26,12 @@ class UnitClass
     function get_all_unit()
     {
         $data = array();
-        $t_obj = UnitList::orderBy('module_type')
-            ->orderBy('subject')
+        $t_obj = UnitList::orderBy('module_type');
+        if($this->input_data['uid'])
+        {
+            $t_obj = $t_obj->where('uid', $this->input_data['uid']);
+        }
+        $t_obj = $t_obj->orderBy('subject')
             ->orderBy('vol')
             ->orderBy('unit')
             ->orderBy('grade')
@@ -67,4 +72,82 @@ class UnitClass
                     ]);
         }
     }
+
+    /**
+     * 取得一筆單元資料
+     *
+     * @param array $return_data
+     */
+    public function get_unit()
+    {
+        $return_data = array();
+        $temp_obj = UnitList::select(
+            'id',
+            'unit_key',
+            'module_type',
+            'subject',
+            'vol',
+            'unit',
+            'title',
+            'grade',
+            'indicator_nums'
+        )
+            ->where('id',$this->input_data['id'])
+            ->get();
+        if($temp_obj)
+        {
+            foreach ($temp_obj as $unit_data){
+                $return_data = $unit_data->toArray();
+            }
+        }
+
+        return $return_data;
+    }
+
+    /**
+     * 新增一筆單元資料
+     *
+     * @param array $insert_data 要新增的資料
+     */
+    public function unit_add($insert_data)
+    {
+        $temp_obj = new UnitList();
+        foreach ($insert_data as $key => $value){
+            $temp_obj->$key = $value;
+        }
+        $temp_obj->save();
+
+        return ;
+    }
+
+    /**
+     * 更新一筆單元資料
+     *
+     * @param array $insert_data 要新增的資料
+     */
+    public function unit_update($insert_data)
+    {
+        $temp_obj = UnitList::find($this->input_data['id']);
+        if($temp_obj){
+            foreach ($insert_data as $key => $value){
+                $temp_obj->$key = $value;
+            }
+            $temp_obj->save();
+        }
+
+        return ;
+    }
+
+    /**
+     * 移除一個單元
+     *
+     * @param int/string $getID 要移除單元的id
+     */
+    public function unit_delete()
+    {
+        UnitList::destroy($this->input_data['id']);
+
+        return ;
+    }
+
 }
