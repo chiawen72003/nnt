@@ -171,40 +171,6 @@ class ExamClass
         return $subject_list;
     }
 
-
-
-    /**
-     * 單元列表
-     *
-     */
-    public function unit_list()
-    {
-        $subject_obj = new SubjectClass();
-        $subject_list = $subject_obj -> subject_list();
-        $unit_list = array();
-
-        $temp_obj = UnitList::select(
-            'id',
-            'unit_key',
-            'module_type',
-            'subject',
-            'vol',
-            'grade',
-            'unit',
-            'title'
-            )
-            ->get();
-        if($temp_obj)
-        {
-            foreach ($temp_obj as $value){
-                $value['subject_name'] = isset($subject_list[$value['subject']])?$subject_list[$value['subject']]:'';
-                $unit_list[] = $value;
-            }
-        }
-
-        return $unit_list;
-    }
-
     /**
      * 取得一筆單元資料
      *
