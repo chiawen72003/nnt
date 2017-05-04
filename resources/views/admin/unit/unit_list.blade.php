@@ -26,7 +26,11 @@
                         <td>[! $v['unit'] !]</td>
                         <td>[! $v['title'] !]</td>
                         <td>
-                            <a class="icon-action icon-edit" href="[! route('ad.exampaper.list',array($v['id'])) !]"></a>
+                            @if($v['is_lock'] == 1 )
+                                <a class="icon-action icon-edit" href="#" onclick="alert('單元被上鎖，無法編輯!!')"></a>
+                            @else
+                                <a class="icon-action icon-edit" href="[! route('ad.unit.edit.page',array($v['id'])) !]"></a>
+                            @endif
                             <a class="icon-action icon-delete" onclick="del_unit('[! $v['id'] !]','[! $v['title'] !]')" href="#"></a>
                             <a class="icon-action icon-lock" href="#"></a>
                         </td>
