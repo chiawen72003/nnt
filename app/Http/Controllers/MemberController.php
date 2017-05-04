@@ -38,7 +38,7 @@ class MemberController extends Controller
             if(in_array($user_data['access_level'],array(1,2,3,8,9)))
             {
 
-                return redirect()->route('ad.news.list');
+                return redirect()->route('mem.index');
             }
 
             return redirect()->route('ad.news.list');
