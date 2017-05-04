@@ -6,7 +6,7 @@
         <div class="version-wrap">
             <form id="form-version">
                 <div class="sarch-bg">
-                    <h3 class="search-title">請選取班級及學生</h3>
+                    <h3 class="search-title">帳號列表</h3>
                     <div class="select-group">
                         <span class="search-title">帳號</span>
                         <select id="uid" class="select-s">

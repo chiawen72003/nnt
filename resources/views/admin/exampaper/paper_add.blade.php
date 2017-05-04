@@ -50,7 +50,7 @@
                 </div>
                 <div class="select-group">
                     <div class="label-title"><span class="txt-red">*</span>示意圖</div>
-                    <input class="select-input" type="file" name="img" id="img" accept="image/*"><span class="txt-red">(必填)</span>
+                    <input type="file" name="img" id="img" accept="image/*"><span class="txt-red">(必填)</span>
                 </div>
                 <div class="form-button-wrap">
                     <input class="btn-yellow" type="button" value="選擇完畢，送出" onclick="chk()"/>
