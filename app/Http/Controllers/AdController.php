@@ -45,7 +45,25 @@ class AdController extends Controller
         $data['subject_list'] = $subject_obj -> subject_list();
         $data['module_type'] = self::$module_type;
 
-        return view('admin.unit_list', $data);
+        return view('admin.unit.unit_list', $data);
+    }
+
+    /**
+     * 建立結構
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function unitList()
+    {
+        $exam_class_obj = new ExamClass();
+        $subject_obj = new SubjectClass();
+        $data = array();
+        $data['user_data'] = app('request')->session()->get('user_data');
+        $data['list_data'] = $exam_class_obj -> unit_list();
+        $data['subject_list'] = $subject_obj -> subject_list();
+        $data['module_type'] = self::$module_type;
+
+        return view('admin.unit.unit_list', $data);
     }
 
     /**
@@ -77,7 +95,7 @@ class AdController extends Controller
         $data['old_data'] = $exam_class_obj -> get_unit($id);
         $data['form_path'] = 'ad.unit.update.data';
 
-        return view('admin.unitedit', $data);
+        return view('admin.unit.unit_edit_page', $data);
     }
 
 
@@ -99,7 +117,7 @@ class AdController extends Controller
         $data['indicator_nums'] = app('request')->get('indicator_nums');
         $exam_class_obj -> unit_add($data);
 
-        return redirect()->route('ad.unit.add.page')->with('message', '單元結構新增完畢!');
+        return redirect()->route('ad.unit.list')->with('message', '單元結構新增完畢!');
     }
 
     /**
@@ -120,7 +138,7 @@ class AdController extends Controller
         $data['indicator_nums'] = app('request')->get('indicator_nums');
         $exam_class_obj -> unit_update($id,$data);
 
-        return '';
+        return redirect()->route('ad.unit.list')->with('message', '單元結構更新完畢!');
     }
 
     /**
