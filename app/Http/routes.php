@@ -101,6 +101,7 @@ Route::post('/Ad/Unit/Set/Lock', ['as' => 'ad.unit.set.lock', 'uses' => 'AdContr
 Route::post('/Ad/Unit/Set/UnLock', ['as' => 'ad.unit.set.unlock', 'uses' => 'AdController@unitSetUnLock']);
 
 //管理員端 建立(單元)結構
+Route::get('/Ad/Unit/List', ['middleware' => 'AdSessionCheck','as' => 'ad.unit.list', 'uses' => 'AdController@unitList']);
 Route::get('/Ad/Unit/Add/Page', ['middleware' => 'AdSessionCheck','as' => 'ad.unit.add.page', 'uses' => 'AdController@unitAddPage']);
 
 //管理員端 新增試題頁面
