@@ -62,7 +62,6 @@ class AdController extends Controller
         $data = array();
         $data['title'] = '新增 ';
         $data['subject_list'] = $subject_obj -> subject_list();
-        $data['form_path'] = 'ad.unit.add.data';
 
         return view('admin.unit.unit_add_page', $data);
     }
@@ -80,7 +79,6 @@ class AdController extends Controller
         $data['title'] = '編輯 ';
         $data['subject_list'] = $subject_obj -> subject_list();
         $data['old_data'] = $unit_class_obj -> get_unit();
-        $data['form_path'] = 'ad.unit.update.data';
 
         return view('admin.unit.unit_edit_page', $data);
     }
@@ -115,13 +113,13 @@ class AdController extends Controller
     {
         $unit_class_obj = new UnitClass();
         $data = array();
-        $id = app('request')->get('cs_sn');
-        $data['publisher_id'] = app('request')->get('publisher_id');
-        $data['subject_id'] = app('request')->get('subject_id');
+        $id = app('request')->get('id');
+        $data['module_type'] = app('request')->get('module_type');
+        $data['subject'] = app('request')->get('subject');
         $data['vol'] = app('request')->get('vol');
         $data['grade'] = app('request')->get('grade');
         $data['unit'] = app('request')->get('unit');
-        $data['concept'] = app('request')->get('concept');
+        $data['title'] = app('request')->get('title');
         $data['indicator_nums'] = app('request')->get('indicator_nums');
         $unit_class_obj -> init(array('id'=>$id));
         $unit_class_obj -> unit_update($data);
@@ -748,7 +746,7 @@ class AdController extends Controller
         $data = array();
         $data['user_data'] = app('request')->session()->get('user_data');
         $organization = new NewsClass();
-        $data['list_data'] = $organization->get_news_list();
+        $data['list_data'] = $organization->get_all_news();
 
         return view('admin.news_list', $data);
     }
