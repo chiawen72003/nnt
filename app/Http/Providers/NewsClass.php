@@ -25,11 +25,11 @@ class NewsClass
     }
 
     /**
-     * 取得 系統公告列表
+     * 取得 所有的系統公告列表
      *
      * @return Array $list_data 系統公告資料
      */
-    public function get_news_list()
+    public function get_all_news()
     {
         $list_data = array();
         $temp_obj = NewsList::orderBy('id','DESC')
@@ -39,6 +39,20 @@ class NewsClass
         }
 
         return $list_data;
+    }
+
+    /**
+     * 取得 系統公告列表
+     *
+     * @return Array $list_data 系統公告資料
+     */
+    public function get_news_list()
+    {
+        $list_data = array();
+        $temp_obj = NewsList::orderBy('id','DESC')
+            ->paginate(20);
+
+        return $temp_obj;
     }
 
     /**
