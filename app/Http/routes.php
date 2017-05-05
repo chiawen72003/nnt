@@ -125,7 +125,7 @@ Route::get('/Ad/ExamPaper/Add/Page', ['middleware' => 'AdSessionCheck','as' => '
 
 
 //管理員端 單元列表
-Route::get('/Ad', ['middleware' => 'AdSessionCheck','as' => 'ad.index', 'uses' => 'AdController@index']);
+Route::get('/Ad', ['middleware' => 'AdSessionCheck','as' => 'ad.index', 'uses' => 'AdController@newsList']);
 Route::get('/Ad/Subject/List', ['middleware' => 'AdSessionCheck','as' => 'ad.subject.list', 'uses' => 'AdController@subjectList']);
 Route::get('/Ad/Questions/Edit/{id}', ['middleware' => 'AdSessionCheck','as' => 'ad.questions.edit', 'uses' => 'AdController@questionsEdit']);
 Route::get('/Ad/Questions/Next/{paper_id}/', ['middleware' => 'AdSessionCheck','as' => 'ad.questions.next', 'uses' => 'AdController@questionsNext']);
