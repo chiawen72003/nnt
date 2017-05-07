@@ -297,7 +297,8 @@ class ExamClass
     public function set_exam_record($mem_id,$inputData)
     {
         $inputData['student_id'] = $mem_id;
-        $temp_obj = new ExamRecordClass($inputData);
+        $temp_obj = new ExamRecordClass();
+        $temp_obj ->init($inputData);
         $temp_obj->set_record();
 
         return '';
