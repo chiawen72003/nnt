@@ -42,7 +42,7 @@
                     <div class="record-inner">
                         @if($class_student != null)
                             <h3 class="record-title record-title-class">新北市縣立新莊國中7年1班
-                                <a class="record-download" href="#">下載帳號密碼檔</a>
+                                <a class="record-download" href="#" onclick="$('#addForm').submit()">下載帳號密碼檔</a>
                                 <a class="record-delete" href="#" onclick="remove_all()">全部刪除</a>
                             </h3>
                             <table class="table-detail2">
@@ -76,6 +76,14 @@
         </div>
     </div>
 </div>
+@if($class_student != null)
+    [! Form::open(array('url'=>route('ad.user.search.download'),'id'=>'addForm', 'name'=>'addForm', 'target' => '_blank')) !]
+    [! Form::hidden('city_code', $city_code) !]
+    [! Form::hidden('organization_id', $organization_id) !]
+    [! Form::hidden('grade', $grade) !]
+    [! Form::hidden('class', $class) !]
+    [! Form::close() !]
+@endif
 [! Html::script('js/jquery-1.11.3.js') !]
 <script>
     var school_data = [];
