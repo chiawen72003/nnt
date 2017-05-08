@@ -10,10 +10,12 @@ class PhpExcel
     private $excel_data = array();
     private $spreadsheet_obj = null;
     private $writer_obj = null;
+    private $file_name = null;
 
     public function __construct()
     {
         $this -> spreadsheet_obj = new Spreadsheet();
+        $this -> file_name = date("Y-m-d") . ".xls";
     }
 
     /**
@@ -27,13 +29,22 @@ class PhpExcel
     }
 
     /**
-     * 輸出excel資料成為下載檔案
+     * 設定存檔名稱
+     *
+     * @param $get_data 輸出的資料
      */
-    public function get_excel_file()
+    public function set_file_name($get_data)
     {
-        $filename = date("Y-m-d") . ".xls";
+        $this -> file_name = $get_data;
+    }
+
+    /**
+     * 輸出 操作紀錄
+     */
+    public function get_exam_record_file()
+    {
         header('Content-type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Content-Disposition: attachment; filename="' .  $this -> file_name . '"');
         $sheet = $this -> spreadsheet_obj->getActiveSheet();
         $sheet->setCellValue('A1', '對話順序');
         $sheet->setCellValue('B1', '作答題號');
@@ -59,5 +70,31 @@ class PhpExcel
         $writer->save('php://output');
     }
 
+
+    /**
+     * 輸出 班級所有學生帳密
+     */
+    public function get_class_data()
+    {
+        header('Content-type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment; filename="' .  $this -> file_name . '"');
+        $sheet = $this -> spreadsheet_obj->getActiveSheet();
+        $sheet->setCellValue('A1', '帳號');
+        $sheet->setCellValue('B1', '姓名');
+        $sheet->setCellValue('C1', '密碼');
+        if(is_array($this -> excel_data)  AND count($this -> excel_data) > 0)
+        {
+            $y_index = 2;
+            foreach($this -> excel_data as $k => $v)
+            {
+                $sheet->setCellValue('A'.$y_index, $v['user_id']);
+                $sheet->setCellValue('B'.$y_index, $v['uname']);
+                $sheet->setCellValue('C'.$y_index, $v['viewpass']);
+                $y_index++;
+            }
+        }
+        $writer = new Excel5($this -> spreadsheet_obj);
+        $writer->save('php://output');
+    }
 
 }
