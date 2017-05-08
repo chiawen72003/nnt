@@ -16,6 +16,7 @@ use App\Http\Providers\FeedbackListClass;
 use App\Http\Providers\SubjectClass;
 use App\Http\Providers\UnitClass;
 use App\Http\Providers\ExamPaperClass;
+use App\Http\Providers\PhpExcel;
 
 class AdController extends Controller
 {
@@ -567,6 +568,43 @@ class AdController extends Controller
         $data['class'] = isset($fp['class'])?$fp['class']:null;
 
         return view('admin.user.user_search_page', $data);
+    }
+
+    /**
+     * 下載 指定學校-班級的所有學生資料
+     *
+     */
+    public function userSearchDownload()
+    {
+        $fp = Input::all();
+        $data = array();
+        $data['user_data'] = app('request')->session()->get('user_data');
+        $school_tmp = new SchoolClass();
+        $school_tmp -> init($fp);
+        $member_tmp = new MemberClass();
+        $member_tmp -> init($fp);
+        $city_data = $school_tmp -> get_all_city_data();
+        $school_data = $school_tmp -> get_school_data();
+        $class_student = $member_tmp -> get_all_class_student_data();
+        $city_code = isset($fp['city_code'])?$fp['city_code']:null;
+        $organization_id = isset($fp['organization_id'])?$fp['organization_id']:null;
+        $grade = isset($fp['grade'])?$fp['grade']:null;
+        $class = isset($fp['class'])?$fp['class']:null;
+        if($class_student
+            and isset($city_data[$city_code])
+            and count($school_data) > 0
+        )
+        {
+            $file_name = $city_data[$city_code];
+            $file_name .= $school_data['name'];
+            $file_name .= $grade.'年';
+            $file_name .= $grade.'班';
+            $file_name .= '.xls';
+            $excel_obj = new PhpExcel();
+            $excel_obj ->set_file_name($file_name);
+            $excel_obj ->set_excel_data($class_student);
+            $excel_obj ->get_class_data();
+        }
     }
 
     /**
