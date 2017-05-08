@@ -60,7 +60,7 @@ class SchoolClass
     }
 
     /**
-     * 回傳一筆學校資訊
+     * 回傳一筆學校資訊 by id或organization_id
      *
      * @return mixed
      */
@@ -77,9 +77,18 @@ class SchoolClass
             }
         }
 
+        if($this -> input_data['organization_id']){
+            $temp_obj = Organization::select('id','organization_id', 'city_code', 'name')
+                ->where('organization_id', $this -> input_data['organization_id'])
+                ->get();
+            foreach($temp_obj as $v)
+            {
+                $return_data = $v -> toArray();
+            }
+        }
+
         return $return_data;
     }
-
 
     /**
      * 新增 學校
