@@ -292,7 +292,7 @@ class ExamController extends Controller
         {
             $excel_obj = new PhpExcel();
             $excel_obj ->set_excel_data($exam_record['use_item']);
-            $excel_obj ->get_excel_file();
+            $excel_obj ->get_exam_record_file();
         }
 
     }
