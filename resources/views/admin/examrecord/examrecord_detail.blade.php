@@ -6,12 +6,12 @@
             <div class="record-wrap clearfix">
                 <div class="record-menu">
                     <ul>
-                        <li><a class="active" href="[! route('ad.achievement.list.page') !]" tittle="學習紀錄查詢">學習紀錄查詢</a></li>
+                        <li><a class="active" href="[! route('ad.examrecord.list.page') !]" tittle="學習紀錄查詢">學習紀錄查詢</a></li>
                     </ul>
                 </div>
                 <div class="record-content">
                     <div class="record-inner">
-                        <h3 class="record-title">學習紀錄詳細表<a class="record-download" href="[! route('mem.exam.download.record',array($exam_record['unit_id'],$uid)) !]#" target="_blank">下載</a></h3>
+                        <h3 class="record-title">學習紀錄詳細表<a class="record-download" href="[! route('ad.examrecord.download.record',array($exam_record['id'],$uid)) !]" target="_blank">下載</a></h3>
                         <table class="table-detail2">
                             <tr>
                                 <th>對話順序</th>
