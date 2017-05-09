@@ -24,6 +24,7 @@
     <div id="boad-wrap" class="boad-wrap">
         <div id="boad-nav">
             <a href="[! route('ad.news.list') !]" title="建立系統公告">建立系統公告</a>
+            <a href="[! route('ad.examrecord.list.page') !]" title="學習紀錄查詢">學習紀錄查詢</a>
             <a href="[! route('ad.unit.list') !]" title="建立結構">建立結構</a>
             <a href="[! route('ad.exampaper.add.page') !]" title="建立試題">建立試題</a>
             <a href="[! route('ad.subject.list') !]" title="科目列表">科目列表</a>
