@@ -109,7 +109,7 @@
         @if($grade)
              $('#grade').val('[! $grade !]');
         @endif
-        @if($city_code)
+        @if($class)
              $('#class').val('[! $class !]');
         @endif
 
