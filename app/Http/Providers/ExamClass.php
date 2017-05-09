@@ -338,17 +338,16 @@ class ExamClass
     /**
      *  取出一筆指定的單元操作紀錄
      */
-    public  function get_exam_record($mem_id,$unit_id)
+    public  function get_exam_record($mem_id,$id)
     {
-
         $return_data = array();
-        $temp_obj = ExamRecord::where('student_id', $mem_id['uid'])
-            ->where('unit_id',$unit_id)
-            ->select('id', 'unit_id', 'record', 'use_item')
+        $temp_obj = ExamRecord::where('student_id', $mem_id)
+            ->where('id',$id)
+            ->select('id', 'exam_paper_id', 'record', 'use_item')
             ->get();
         foreach ($temp_obj as $t){
             $return_data['id'] = $t['id'];
-            $return_data['unit_id'] = $t['unit_id'];
+            $return_data['exam_paper_id'] = $t['exam_paper_id'];
             $return_data['record'] = json_decode($t['record'],true);
             $use_item = json_decode($t['use_item'],true);
             $return_data['use_item'] = $use_item;
@@ -358,17 +357,27 @@ class ExamClass
     }
 
     /**
-     *  取出已經學習過的科目
+     *  取出已經學習過的試卷
      */
-    public  function get_record_list_all_subject($mem_id)
+    public  function get_record_list_all($mem_id)
     {
         $return_data = array();
         $temp_obj = ExamRecord::
-        leftJoin('unit_list', 'exam_record.unit_id', '=', 'unit_list.id')
-            ->where('exam_record.student_id', $mem_id['uid'])
+        leftJoin('exam_paper', 'exam_record.exam_paper_id', '=', 'exam_paper.id')
+        ->leftJoin('unit_list', 'exam_paper.unit_list_id', '=', 'unit_list.id')
+            ->where('exam_record.student_id', $mem_id)
             ->where('exam_record.is_finish', '1')
-            ->select('unit_list.subject')
-            ->groupBy('unit_list.subject')
+            ->select(
+                'exam_paper.unit_list_id',
+                'exam_paper.paper_vol',
+                'exam_record.id',
+                'exam_record.updated_at',
+                'unit_list.subject',
+                'unit_list.vol',
+                'unit_list.unit',
+                'unit_list.title'
+            )
+            ->orderBy('exam_record.created_at','DESC')
             ->get();
         if(count($temp_obj) > 0){
             $return_data = $temp_obj->toArray();
