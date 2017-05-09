@@ -4,6 +4,7 @@ Blade::setEscapedContentTags('[[[', ']]]'); 	// for escaped data
 Blade::setRawTags('[!', '!]');	// for raw data
 
 Route::pattern('id', '[0-9]+');
+Route::pattern('uid', '[0-9]+');
 
 /*
 |--------------------------------------------------------------------------
@@ -124,10 +125,17 @@ Route::post('/Ad/ExamPaper/Delete', ['middleware' => 'AdSessionCheck','as' => 'a
 //管理員端 建立試卷頁面
 Route::get('/Ad/ExamPaper/Add/Page', ['middleware' => 'AdSessionCheck','as' => 'ad.exampaper.add.page', 'uses' => 'AdController@examPaperAddPage']);
 
+//管理員端 科目列表
+Route::get('/Ad/Subject/List', ['middleware' => 'AdSessionCheck','as' => 'ad.subject.list', 'uses' => 'AdController@subjectList']);
+
+//管理員端 學習紀錄查詢
+Route::get('/Ad/ExamRecord/List/page', ['middleware' => 'AdSessionCheck','as' => 'ad.examrecord.list.page', 'uses' => 'AdController@ExamRecordListPage']);
+Route::get('/Ad/ExamRecord/View/{id}/{uid}', ['middleware' => 'AdSessionCheck','as' => 'ad.examrecord.view', 'uses' => 'AdController@ExamRecordView']);
+Route::get('/Ad/ExamRecord/Download/Record/{id}/{uid}', ['middleware' => 'AdSessionCheck','as' => 'ad.examrecord.download.record', 'uses' => 'AdController@getDownloadRecord']);
+Route::post('/Ad/ExamRecord/Student', ['middleware' => 'AdSessionCheck','as' => 'ad.examrecord.student', 'uses' => 'AdController@ExamRecordStudent']);
 
 //管理員端 單元列表
 Route::get('/Ad', ['middleware' => 'AdSessionCheck','as' => 'ad.index', 'uses' => 'AdController@newsList']);
-Route::get('/Ad/Subject/List', ['middleware' => 'AdSessionCheck','as' => 'ad.subject.list', 'uses' => 'AdController@subjectList']);
 Route::get('/Ad/Questions/Edit/{id}', ['middleware' => 'AdSessionCheck','as' => 'ad.questions.edit', 'uses' => 'AdController@questionsEdit']);
 Route::get('/Ad/Questions/Next/{paper_id}/', ['middleware' => 'AdSessionCheck','as' => 'ad.questions.next', 'uses' => 'AdController@questionsNext']);
 Route::get('/Ad/Questions/Back/{paper_id}/', ['middleware' => 'AdSessionCheck','as' => 'ad.questions.back', 'uses' => 'AdController@questionsBack']);
