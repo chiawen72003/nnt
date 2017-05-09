@@ -6,7 +6,7 @@
         <div class="record-wrap clearfix">
             <div class="record-menu">
                 <ul>
-                    <li><a class="active" href="[! route('ad.achievement.list.page') !]" tittle="學習紀錄查詢">學習紀錄查詢</a></li>
+                    <li><a class="active" href="[! route('ad.examrecord.list.page') !]" tittle="學習紀錄查詢">學習紀錄查詢</a></li>
                 </ul>
             </div>
             <div class="record-content">
@@ -52,7 +52,7 @@
                             @foreach($list_data as $v)
                                 <tr>
                                     <td>[! substr($v['updated_at'],0,10) !]</td>
-                                    <td>數學</td>
+                                    <td>[! $v['title'] !]</td>
                                     <td>第[! $v['vol'] !]冊第[! $v['unit'] !]單元</td>
                                     <td><a class="link-view" href="[! route('ad.examrecord.view',[$v['id'],$uid]) !]">檢視</a></td>
                                 </tr>
@@ -125,7 +125,7 @@
         dsc = dsc + '&grade=' + $('#grade').val();
         dsc = dsc + '&class=' + $('#class').val();
         dsc = dsc + '&uid=' + $('#uid').val();
-        location.href = "[! route('ad.achievement.list.page') !]"+dsc;
+        location.href = "[! route('ad.examrecord.list.page') !]"+dsc;
     }
 
     /**
@@ -140,7 +140,7 @@
 
         if(city_code > '' && organization_id > '' && grade > '' && class_val > ''){
             $.ajax({
-                url: "[! route('ad.achievement.student') !]",
+                url: "[! route('ad.examrecord.student') !]",
                 type:'POST',
                 dataType: "json",
                 data: {
