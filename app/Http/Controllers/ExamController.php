@@ -200,7 +200,7 @@ class ExamController extends Controller
     {
         $exam_class_obj = new ExamClass();
         $data = array();
-        $mem_id = app('request')->session()->get('user_data');
+        $mem_id = app('request')->session()->get('user_data.uid');
         $data['exam_record'] = $exam_class_obj -> get_exam_record($mem_id,$id);
         $unit_id = $data['exam_record']['unit_id'];
         $data['unit_id'] = $unit_id;
@@ -223,7 +223,7 @@ class ExamController extends Controller
         $data = array();
         $t = new FeedbackListClass();
         $data['feedback_list'] = $t->get_list_data();//回饋類型
-        $mem_id = app('request')->session()->get('user_data');
+        $mem_id = app('request')->session()->get('user_data.uid');
         $data['exam_record'] = $exam_class_obj -> get_exam_record($mem_id,$id);
         $unit_id = $data['exam_record']['unit_id'];
         $data['is_view_record'] = true;//是否為操作紀錄觀看模式
@@ -272,7 +272,7 @@ class ExamController extends Controller
         $data = array();
         $data['subject_list'] = $subject_obj -> subject_list();
         $data['user_data'] = app('request')->session()->get('user_data');
-        $mem_id = app('request')->session()->get('user_data');
+        $mem_id = app('request')->session()->get('user_data.uid');
         $data['list_data'] = $exam_class_obj -> get_record_list_by_subject($mem_id, $unit_id);
         //dd($data['list_data']);
         $data['unit_id'] = $unit_id;
@@ -286,7 +286,7 @@ class ExamController extends Controller
     public function getDownloadRecord($id)
     {
         $exam_class_obj = new ExamClass();
-        $mem_id = app('request')->session()->get('user_data');
+        $mem_id = app('request')->session()->get('user_data.uid');
         $exam_record = $exam_class_obj -> get_exam_record($mem_id,$id);
         if(isset($exam_record['use_item']) AND count($exam_record['use_item']) > 0)
         {
