@@ -938,7 +938,7 @@ class AdController extends Controller
             $exam_class_obj = new ExamClass();
             $subject_obj = new SubjectClass();
             $data['subject_list'] = $subject_obj -> subject_list();
-            $data['list_data'] = $exam_class_obj -> get_record_list_all_subject($data['uid']);
+            $data['list_data'] = $exam_class_obj -> get_record_list_all($data['uid']);
         }
 
 
@@ -955,7 +955,7 @@ class AdController extends Controller
         $data['exam_record'] = $exam_class_obj -> get_exam_record($uid,$id);
         $data['uid'] = $uid;
 
-        return view('ad.examrecord.detail', $data);
+        return view('admin.examrecord.examrecord_detail', $data);
     }
 
     /**
@@ -970,7 +970,7 @@ class AdController extends Controller
         $class_student = $member_tmp -> get_all_class_student_data();
         foreach($class_student as $v)
         {
-            $return_array[$v['uid']] = $v['name'];
+            $return_array[$v['uid']] = $v['uname'];
         }
 
         return json_encode($return_array);
