@@ -134,6 +134,10 @@ Route::get('/Ad/ExamRecord/View/{id}/{uid}', ['middleware' => 'AdSessionCheck','
 Route::get('/Ad/ExamRecord/Download/Record/{id}/{uid}', ['middleware' => 'AdSessionCheck','as' => 'ad.examrecord.download.record', 'uses' => 'AdController@getDownloadRecord']);
 Route::post('/Ad/ExamRecord/Student', ['middleware' => 'AdSessionCheck','as' => 'ad.examrecord.student', 'uses' => 'AdController@ExamRecordStudent']);
 
+//管理員端 試卷存取頁面
+Route::get('/Ad/ExamPaperAccess/list/Page', ['middleware' => 'AdSessionCheck','as' => 'ad.exampaperaccess.list.page', 'uses' => 'AdController@examPaperAccessListPage']);
+
+
 //管理員端 單元列表
 Route::get('/Ad', ['middleware' => 'AdSessionCheck','as' => 'ad.index', 'uses' => 'AdController@newsList']);
 Route::get('/Ad/Questions/Edit/{id}', ['middleware' => 'AdSessionCheck','as' => 'ad.questions.edit', 'uses' => 'AdController@questionsEdit']);
