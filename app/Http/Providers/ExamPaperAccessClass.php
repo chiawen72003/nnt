@@ -29,7 +29,7 @@ class ExamPaperAccessClass
     /**
      * 取得試卷存取的資料
      */
-    function get_exampaperaccess_data()
+    public function get_exampaperaccess_data()
     {
         $data = array();
         $t_obj = ExamPaperAccess::where('id','>','0');
@@ -61,4 +61,37 @@ class ExamPaperAccessClass
         return $data;
     }
 
+    /**
+     * 更新班級-試卷存取資料
+     *
+     */
+    public function update_data()
+    {
+        if(
+            $this->input_data['organization_id']
+            AND $this->input_data['grade']
+            AND $this->input_data['class']
+        )
+        {
+            ExamPaperAccess::where('organization_id', $this->input_data['organization_id'])
+                ->where('grade', $this->input_data['grade'])
+                ->where('class', $this->input_data['class'])
+                ->delete();
+            if(is_array($this->input_data['exam_paper_id']))
+            {
+                $data = array();
+                foreach($this->input_data['exam_paper_id'] as $v)
+                {
+                    $data[] = array(
+                        'organization_id'=> $this->input_data['organization_id'],
+                        'grade'=> $this->input_data['grade'],
+                        'class'=> $this->input_data['class'],
+                        'exam_paper_id'=> $v
+                    );
+                }
+                //以批次新增的方式處理
+                ExamPaperAccess::insert($data);
+            }
+        }
+    }
 }
