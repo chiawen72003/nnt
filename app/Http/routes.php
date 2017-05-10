@@ -136,6 +136,7 @@ Route::post('/Ad/ExamRecord/Student', ['middleware' => 'AdSessionCheck','as' => 
 
 //管理員端 試卷存取頁面
 Route::get('/Ad/ExamPaperAccess/list/Page', ['middleware' => 'AdSessionCheck','as' => 'ad.exampaperaccess.list.page', 'uses' => 'AdController@examPaperAccessListPage']);
+Route::post('/Ad/ExamPaperAccess/Update', ['middleware' => 'AdSessionCheck','as' => 'ad.exampaperaccess.update', 'uses' => 'AdController@examPaperAccessUpdate']);
 
 
 //管理員端 單元列表
