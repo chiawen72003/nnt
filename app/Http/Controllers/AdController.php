@@ -1019,6 +1019,7 @@ class AdController extends Controller
             $unit_obj = new UnitClass();
             $exampaper_obj = new ExamPaperClass();
             $exampaper_access_obj = new ExamPaperAccessClass();
+            $exampaper_access_obj->init($data);
             $data['subject_data'] = $subject_obj -> subject_list();
             $data['unit_data'] = $unit_obj -> get_all_unit();
             $data['exampaper_data'] = $exampaper_obj -> get_all_exampaper();
@@ -1027,5 +1028,16 @@ class AdController extends Controller
         }
 
         return view('admin.exampaperaccess.exampaper_access_list', $data);
+    }
+
+    /**
+     * 試卷存取頁面 更新資料
+     */
+    public function examPaperAccessUpdate()
+    {
+        $fp = Input::all();
+        $t_tmp = new ExamPaperAccessClass();
+        $t_tmp -> init($fp);
+        $t_tmp -> update_data();
     }
 }
