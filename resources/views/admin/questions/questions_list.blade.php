@@ -14,24 +14,6 @@
                 <input class="btn btn-delete" type="button" value="刪除試卷" onclick="del_exampaper()">
             </div>
             <form id="form-addexam-question">
-                <div class="select-group">
-                    <div class="label-title">請選擇試題題號</div>
-                    <select name="select-level" id="select-level" class="select-s">
-                        <option value="二階段">二階段</option>
-                    </select>
-                    <select name="select-subject" id="select-subject" class="select-s">
-                        <option value="數學(單代理人)">數學(單代理人)</option>
-                    </select>
-                    <select name="select-book" id="select-book" class="select-s">
-                        <option value="第5冊">第5冊</option>
-                    </select>
-                    <select name="select-unit" id="select-unit" class="select-s">
-                        <option value="第1單元(時間與月曆)">第1單元(時間與月曆)</option>
-                    </select>
-                    <select name="select-exam" id="select-exam" class="select-s">
-                        <option value="卷6">卷6</option>
-                    </select>
-                </div>
                 @foreach($questions as $k => $v)
                     <div class="question-unit">
                         <div class="question-number">【[! $k+1 !]】</div>
@@ -40,32 +22,6 @@
                                 [! $v["title"] !]
                             </div>
                             <div class="question-text-wrap clearfix">
-                                <div class="question-left-wrap">
-                                    <div class="question-item">
-                                        <span>(1)</span>
-                                        <div class="question-item-img">
-                                            <img src="images/question-item1.png">
-                                        </div>
-                                    </div>
-                                    <div class="question-item">
-                                        <span>(2)</span>
-                                        <div class="question-item-img">
-                                            <img src="images/question-item2.png">
-                                        </div>
-                                    </div>
-                                    <div class="question-item">
-                                        <span>(3)</span>
-                                        <div class="question-item-img">
-                                            <img src="images/question-item3.png">
-                                        </div>
-                                    </div>
-                                    <div class="question-item">
-                                        <span>(4)</span>
-                                        <div class="question-item-img">
-                                            <img src="images/question-item4.png">
-                                        </div>
-                                    </div>
-                                </div>
                                 <div class="question-right-wrap">
                                     <div class="question-button clearfix">
                                         <a href="#" class="button-edit">修改</a>
