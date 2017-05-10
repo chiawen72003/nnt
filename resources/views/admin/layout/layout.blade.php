@@ -30,6 +30,7 @@
             <a href="[! route('ad.subject.list') !]" title="科目列表">科目列表</a>
             <a href="[! route('ad.unit.lock.page') !]" title="版本控管">單元上鎖</a>
             <a href="[! route('ad.subject.limit.page') !]" title="版本控管">版本控管</a>
+            <a href="[! route('ad.exampaperaccess.list.page') !]" title="試卷存取">試卷存取</a>
             <a href="[! route('ad.school.list') !]" title="使用者管理">使用者管理</a>
             <a href="[! route('ad.logout') !]" title="登出系統">登出</a>
         </div>
