@@ -38,10 +38,10 @@
                         </div>
                         @if($begin_edit)
                             <div class="record-inner record-control">
-                                <h3 class="record-title record-title-class">新北市縣立新莊國中7年1班</h3>
+                                <h3 class="record-title record-title-class" id="school_name"></h3>
                                 <div class="select-group">
                                     <div class="label-title label-title-s">施測類型</div>
-                                    <select class="select-s" id="module_type" onchange="sw_module_type()">
+                                    <select class="select-s" id="module_type" onchange="change_data()">
                                         <option value="1">單代理人</option>
                                         <option value="2">雙代理人</option>
                                         <option value="3">多代理人</option>
@@ -50,28 +50,21 @@
                                 <div class="unitlock-examp-inner clearfix">
                                     <div class="unlock-examp-wrap">
                                         <h1 class="change-title">尚未開放之試卷</h1>
-                                        <select name="unlock-version" id="unlock-version" class="multiple-select" size="12" multiple>
-                                            <option value="二階段數學(單代理人)第05冊第01單元-卷01" title="二階段數學(單代理人)第05冊第01單元-卷01">二階段數學(單代理人)第05冊第01單元-卷01</option>
-                                            <option value="二階段數學(單代理人)第05冊第01單元-卷02" title="二階段數學(單代理人)第05冊第01單元-卷02">二階段數學(單代理人)第05冊第01單元-卷02</option>
-                                            <option value="二階段數學(單代理人)第11冊第05單元-卷01" title="二階段數學(單代理人)第11冊第05單元-卷01">二階段數學(單代理人)第11冊第05單元-卷01</option>
-                                            <option value="二階段數學(單代理人)第11冊第05單元-卷02" title="二階段數學(單代理人)第11冊第05單元-卷02">二階段數學(單代理人)第11冊第05單元-卷02</option>
-                                            <option value="二階段數學(單代理人)第11冊第08單元-卷01" title="二階段數學(單代理人)第11冊第08單元-卷01">二階段數學(單代理人)第11冊第08單元-卷01</option>
+                                        <select id="locked-version" class="multiple-select" size="12" multiple>
                                         </select>
                                     </div>
                                     <div class="lock-button-wrap">
-                                        <input type="button" value="新增 →">
-                                        <input type="button" value="← 刪除">
+                                        <input type="button" value="新增 →" onclick="setAccess()">
+                                        <input type="button" value="← 刪除" onclick="setLock()">
                                     </div>
                                     <div class="locked-examp-wrap">
                                         <h1 class="change-title">已開放試卷</h1>
-                                        <select name="locked-version" id="locked-version" class="multiple-select" size="12" multiple>
-                                            <option value="ECD教材數學(單代理人)第13冊第01單元-卷01【貝氏適性出題，全測】" title="ECD教材數學(單代理人)第13冊第01單元-卷01【貝氏適性出題，全測】">ECD教材數學(單代理人)第13冊第01單元-卷01【貝氏適性出題，全測】</option>
-                                            <option value="ECD教材數學(單代理人)第13冊第06單元-卷01【亂數出題】" title="ECD教材數學(單代理人)第13冊第06單元-卷01【亂數出題】">ECD教材數學(單代理人)第13冊第06單元-卷01【亂數出題】</option>
+                                        <select id="access-version" class="multiple-select" size="12" multiple>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-button-wrap">
-                                    <input class="btn-yellow" type="submit" value="執行" />
+                                    <input class="btn-yellow" type="button" value="執行" onclick="update_data()" />
                                 </div>
                             </div>
                         @endif
@@ -126,7 +119,8 @@
                 {
                     'id':'[! $v['id'] !]',
                     'paper_vol':'[! $v['paper_vol'] !]',
-                    'title':'[! $v['title'] !]',
+                    'unit_list_id':'[! $v['unit_list_id'] !]',
+
                 }
             );
         @endforeach
@@ -135,7 +129,6 @@
         @foreach($access_data as $v)
             access_data.push(
                 {
-                    'id':'[! $v['id'] !]',
                     'exam_paper_id':'[! $v['exam_paper_id'] !]',
                 }
              );
@@ -155,6 +148,12 @@ $( document ).ready(function() {
         @endif
         @if($class)
              $('#class').val('[! $class !]');
+            change_data();
+            var school_name = $('#city_code :selected').text();
+            school_name = school_name + $('#organization_id :selected').text();
+            school_name = school_name + '[! $grade !]年';
+            school_name = school_name + '[! $class !]班';
+            $('#school_name').html(school_name);
         @endif
     });
     /**
@@ -187,11 +186,145 @@ $( document ).ready(function() {
     }
 
     /**
-     * 選擇代理人類型
+     * 更換不同代理人的試卷存取資料
      */
-    function sw_module_type()
+    function change_data()
     {
+        $("#access-version option").remove();
+        $("#locked-version option").remove();
 
+        var exampaper_data_num = exampaper_data.length;
+        var access_data_num = access_data.length;
+        var unit_data_num = unit_data.length;
+        var type_data = $('#module_type').val();
+        var switch_unit = [];
+        //取出指定代理人的單元
+        for(var x=0; x < unit_data_num; x++)
+        {
+            if(unit_data[x]['module_type'] == type_data)
+            {
+                switch_unit.push(unit_data[x]['id']);
+            }
+        }
+
+        for(var x=0;x < exampaper_data_num;x++)
+        {
+            if(switch_unit.indexOf(exampaper_data[x]['unit_list_id']) != -1)
+            {
+                var has_access = false;
+                for(var y=0;y< access_data_num;y++)
+                {
+
+                    if(access_data[y]['exam_paper_id'] == exampaper_data[x]['id'])
+                    {
+                        has_access = true;
+                    }
+                }
+                var name = build_name(exampaper_data[x]['unit_list_id']);
+                    name = name + exampaper_data[x]['paper_vol'] + '卷';
+                if(has_access)
+                {
+                    $("#access-version").append($("<option></option>").attr("value", exampaper_data[x]['id']).text(name));
+
+                }else{
+                    $("#locked-version").append($("<option></option>").attr("value", exampaper_data[x]['id']).text(name));
+                }
+            }
+        }
+    }
+
+    /**
+     * 組合出試卷名稱
+     */
+    function build_name(unit_id)
+    {
+        var name = '';
+        for(var x=0;x<unit_data.length;x++)
+        {
+            if(unit_data[x]['id'] == unit_id){
+                if(unit_data[x]['module_type'] == 1){
+                    name = name + '(單代理人)';
+                }
+                if(unit_data[x]['module_type'] == 2){
+                    name = name + '(雙代理人)';
+                }
+                if(unit_data[x]['module_type'] == 3){
+                    name = name + '(多代理人)';
+                }
+                for(var y=0;y< subject_data.length;y++){
+                    if(subject_data[y]['id'] == unit_data[x]['subject'])
+                    {
+                        name = subject_data[y]['name'] + name ;
+                    }
+                }
+                name =  name + unit_data[x]['vol'] + '冊';
+                name =  name + unit_data[x]['unit'] + '單元';
+            }
+        }
+
+        return name;
+    }
+
+    //取消存取
+    function setLock()
+    {
+        $('#access-version :selected').each(function(i, selected){
+            for(var x=0;x<access_data.length;x++)
+            {
+               if(access_data[x]['exam_paper_id'] == $(selected).val())
+               {
+                   access_data.splice(x,1);
+                   break;
+               }
+            }
+        });
+        change_data();
+    }
+
+    //可以存取
+    function setAccess()
+    {
+        $('#locked-version :selected').each(function(i, selected){
+            access_data.push(
+                {
+                    'exam_paper_id':$(selected).val(),
+                }
+            );
+        });
+        change_data();
+    }
+
+    //更新資料
+    var isSend = false;
+    function update_data() {
+        var new_access_data = [];
+        for(var x=0;x < access_data.length;x++)
+        {
+            new_access_data.push(access_data[x]['exam_paper_id']);
+        }
+
+        if(!isSend)
+        {
+            //isSend = true;
+            $.ajax({
+                url: "[! route('ad.exampaperaccess.update') !]",
+                type:'POST',
+                data: {
+                    _token: '[! csrf_token() !]',
+                    exam_paper_id:new_access_data,
+                    organization_id:'[! $organization_id !]',
+                    grade:'[! $grade !]',
+                    class:'[! $class !]',
+                },
+                error: function(xhr) {
+                    //alert('Ajax request 發生錯誤');
+                },
+                success: function(response) {
+                    alert('更新完畢!!');
+                    location.reload();
+                }
+            });
+        }
     }
 </script>
 @stop
