@@ -224,10 +224,10 @@ $( document ).ready(function() {
                     name = name + exampaper_data[x]['paper_vol'] + '卷';
                 if(has_access)
                 {
-                    $("#access-version").append($("<option></option>").attr("value", exampaper_data[x]['id']).text(name));
+                    $("#access-version").append($("<option></option>").attr("value", exampaper_data[x]['id']).attr("title", name).text(name));
 
                 }else{
-                    $("#locked-version").append($("<option></option>").attr("value", exampaper_data[x]['id']).text(name));
+                    $("#locked-version").append($("<option></option>").attr("value", exampaper_data[x]['id']).attr("title", name).text(name));
                 }
             }
         }
