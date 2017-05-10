@@ -28,15 +28,16 @@ class ExamPaperClass
     function get_all_exampaper()
     {
         $data = array();
+        $t_obj = ExamPaper::where('id','>','0');
         if($this->input_data['uid'])
         {
-            $t_obj = ExamPaper::where('uid', $this->input_data['uid'])
-                ->orderBy('unit_list_id')
-                ->get();
-            foreach ($t_obj as $v)
-            {
-                $data[] = $v->toArray();
-            }
+            $t_obj = $t_obj ->where('uid', $this->input_data['uid']);
+        }
+        $t_obj = $t_obj ->orderBy('unit_list_id')
+            ->get();
+        foreach ($t_obj as $v)
+        {
+            $data[] = $v->toArray();
         }
 
         return $data;
