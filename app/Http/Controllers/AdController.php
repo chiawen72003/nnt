@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Models\ExamPaperAccess;
+use App\Http\Providers\ExamPaperAccessClass;
 use App\Http\Providers\MemberClass;
 use \Input;
 use \Validator;
@@ -992,5 +994,38 @@ class AdController extends Controller
                 $excel_obj ->get_exam_record_file();
             }
         }
+    }
+
+    /**
+     * 試卷存取頁面
+     */
+    public function examPaperAccessListPage()
+    {
+        $fp = Input::all();
+        $data = array();
+        $data['user_data'] = app('request')->session()->get('user_data');
+        $school_tmp = new SchoolClass();
+        $data['city_data'] = $school_tmp -> get_all_city_data();
+        $data['all_school'] = $school_tmp -> get_all_school();
+        $data['city_code'] = isset($fp['city_code'])?$fp['city_code']:null;
+        $data['organization_id'] = isset($fp['organization_id'])?$fp['organization_id']:null;
+        $data['grade'] = isset($fp['grade'])?$fp['grade']:null;
+        $data['class'] = isset($fp['class'])?$fp['class']:null;
+        $data['begin_edit'] = false;
+        //有指定到班級時
+        if($data['organization_id'] AND $data['grade'] AND $data['class'])
+        {
+            $subject_obj = new SubjectClass();
+            $unit_obj = new UnitClass();
+            $exampaper_obj = new ExamPaperClass();
+            $exampaper_access_obj = new ExamPaperAccessClass();
+            $data['subject_data'] = $subject_obj -> subject_list();
+            $data['unit_data'] = $unit_obj -> get_all_unit();
+            $data['exampaper_data'] = $exampaper_obj -> get_all_exampaper();
+            $data['access_data'] = $exampaper_access_obj ->get_exampaperaccess_data();
+            $data['begin_edit'] = true;
+        }
+
+        return view('admin.exampaperaccess.exampaper_access_list', $data);
     }
 }
