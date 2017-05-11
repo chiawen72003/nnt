@@ -23,6 +23,19 @@ class MemController extends Controller
     }
 
     /**
+     * 學生端 首頁
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function index()
+    {
+        $data = array();
+        $data['user_data'] = app('request')->session()->get('user_data');
+
+        return view('student.index', $data);
+    }
+
+    /**
      * 學生端 系統公告
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
