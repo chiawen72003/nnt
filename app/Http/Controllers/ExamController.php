@@ -70,23 +70,18 @@ class ExamController extends Controller
     public function testPage()
     {
         $paper_id = app('request')->get('paper_id');
-        $unit_id = app('request')->get('paper_id');
         $exam_class_obj = new ExamClass();
-        $exam_class_obj -> init(array(
-            'unit_id' => $unit_id
-        ));
         $data = array();
         $data['is_view_record'] = false;//是否為操作紀錄觀看模式
         $t = new FeedbackListClass();
         $data['feedback_list'] = $t->get_list_data();//回饋類型
-        $data['unit_id'] = $unit_id;
         $data['user_data'] = app('request')->session()->get('user_data');
-        $data['paper_data'] = $exam_class_obj -> get_paper_by_unit_id($unit_id);
+        $data['paper_id'] = $paper_id;
         $data['questions_item_data'] = $exam_class_obj -> get_questions_item_paper_id($paper_id);
         $examrecord = new ExamRecordClass();
         $examrecord -> init(array(
             'student_id'=>app('request')->session()->get('user_data')['uid'],
-            'unit_id'=>$unit_id,
+            'exam_paper_id'=>$paper_id,
         ));
         $last_exam_record = $examrecord->get_one_record();
         $data['begin_paper_index'] = 0;//起始試卷的index位置
