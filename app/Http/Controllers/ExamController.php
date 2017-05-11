@@ -53,6 +53,7 @@ class ExamController extends Controller
         $subject_obj = new SubjectClass();
         $data = array();
         $data['user_data'] = app('request')->session()->get('user_data');
+        //todo 確認頁面是否正常
         $data['list_data'] = $exam_class_obj -> get_exam_paper_list($data['user_data'], $id);
         $data['subject_list'] = $subject_obj -> subject_list();
 
@@ -68,7 +69,8 @@ class ExamController extends Controller
      */
     public function testPage()
     {
-        $unit_id = app('request')->get('unit_id');
+        $paper_id = app('request')->get('paper_id');
+        $unit_id = app('request')->get('paper_id');
         $exam_class_obj = new ExamClass();
         $exam_class_obj -> init(array(
             'unit_id' => $unit_id
@@ -80,7 +82,7 @@ class ExamController extends Controller
         $data['unit_id'] = $unit_id;
         $data['user_data'] = app('request')->session()->get('user_data');
         $data['paper_data'] = $exam_class_obj -> get_paper_by_unit_id($unit_id);
-        $data['questions_item_data'] = $exam_class_obj -> get_questions_item_paper_id($data['paper_data']);
+        $data['questions_item_data'] = $exam_class_obj -> get_questions_item_paper_id($paper_id);
         $examrecord = new ExamRecordClass();
         $examrecord -> init(array(
             'student_id'=>app('request')->session()->get('user_data')['uid'],
