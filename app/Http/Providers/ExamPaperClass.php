@@ -10,6 +10,7 @@ class ExamPaperClass
     private $input_data = array(
         'uid' => null,
         'id' => null,
+        'unit_list_id' => null,
     );
 
     public function __construct()
@@ -21,6 +22,35 @@ class ExamPaperClass
         foreach ($data as $key => $value) {
             $this->input_data[$key] = $value;
         }
+    }
+
+    /**
+     * 試卷的資料
+     */
+    function get_exampaper()
+    {
+        $data = array();
+        $t_obj = ExamPaper::where('id','>','0');
+        if( is_array($this->input_data['id']))
+        {
+            $t_obj = $t_obj -> whereIn('id', $this->input_data['id']);
+        }
+        if( is_numeric($this -> input_data['id']))
+        {
+            $t_obj = $t_obj -> where('id', $this->input_data['id']);
+        }
+        if( $this -> input_data['unit_list_id'])
+        {
+            $t_obj = $t_obj -> where('unit_list_id', $this->input_data['unit_list_id']);
+        }
+        $t_obj = $t_obj ->orderBy('paper_vol')
+            ->get();
+        foreach ($t_obj as $v)
+        {
+            $data[] = $v->toArray();
+        }
+
+        return $data;
     }
 
     /**
