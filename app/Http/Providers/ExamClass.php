@@ -45,7 +45,7 @@ class ExamClass
      *
      * @return Array $list_data 可測驗的單元資料
      */
-    public  function get_exam_list($mem_data)
+    public  function get_exam_unit_list($mem_data)
     {
         $list_data = array();
         $has_test_data = array();//已經受測過得單元
