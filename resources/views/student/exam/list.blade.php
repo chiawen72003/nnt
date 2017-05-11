@@ -16,7 +16,7 @@
                                 @endif
                                 </a>
                                 <div class="select-button-wrrap">
-                                    <a class="btn btn-yellow" onclick='send("[!$value['id']!]")'>學習</a>
+                                    <a class="btn btn-yellow" href="[! route('mem.exam.paper.list',array($value['id'])) !]" >學習</a>
                                     @if( isset($exam_review_data[$value['id']]) )
                                         <a class="btn btn-gray"
                                            href="[! route('mem.achievement.list',[$value['subject']]) !]">觀看紀錄</a>
