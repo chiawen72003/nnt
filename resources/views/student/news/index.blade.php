@@ -12,7 +12,7 @@
 				</tr>
 				@foreach($list_data as $v)
 					<tr>
-						<td>[! substr($v['updated_at'],0,10) !]</td>
+						<td>[! str_replace('-','/',substr($v['updated_at'],0,10)) !]</td>
 						<td><a class="link-title" href="[! route('mem.news.detail',array($v['id'])) !]" title="[! $v['title'] !]">[! $v['title'] !]</a></td>
 						<td><a class="link-download" target="_blank" href="[! route('mem.news.file',array($v['id'])) !]">[! $v['file_name'] !]</a></td>
 					</tr>

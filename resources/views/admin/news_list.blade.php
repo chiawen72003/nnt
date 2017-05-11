@@ -20,7 +20,7 @@
                         @foreach($list_data as $key => $news)
                             <tr>
                                 <td>[! $key+1 !]</td>
-                                <td>[! substr($news['updated_at'],0,10) !]</td>
+                                <td>[! str_replace('-','/',substr($news['updated_at'],0,10)) !]</td>
                                 <td>[! $news['title'] !]</td>
                                 <td>[! $news['file_name'] !]</td>
                                 <td>
