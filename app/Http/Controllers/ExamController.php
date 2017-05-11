@@ -24,23 +24,6 @@ class ExamController extends Controller
     }
 
     /**
-     * 首頁
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function index()
-    {
-        $exam_class_obj = new ExamClass();
-        $data = array();
-        $data['user_data'] = app('request')->session()->get('user_data');
-        $data['list_data'] = $exam_class_obj -> get_exam_list($data['user_data']);
-        $member_obj = new MemberClass();
-        $data['user_access_data'] = $member_obj -> get_all_level();
-
-        return view('student.exam.index', $data);
-    }
-
-    /**
      * 可受測的單元列表
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -51,8 +34,9 @@ class ExamController extends Controller
         $subject_obj = new SubjectClass();
         $data = array();
         $data['user_data'] = app('request')->session()->get('user_data');
-        $data['list_data'] = $exam_class_obj -> get_exam_list($data['user_data']);
+        $data['list_data'] = $exam_class_obj -> get_exam_unit_list($data['user_data']);
         $data['subject_list'] = $subject_obj -> subject_list();
+        //todo 下面要重構單元完成的方法
         //$data['exam_review_data'] = $exam_class_obj -> get_review_data($data['user_data']);
 
         return view('student.exam.list', $data);
@@ -63,7 +47,7 @@ class ExamController extends Controller
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function examPaperList()
+    public function examPaperList($id)
     {
         $exam_class_obj = new ExamClass();
         $subject_obj = new SubjectClass();
