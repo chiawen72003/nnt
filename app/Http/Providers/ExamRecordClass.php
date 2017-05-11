@@ -8,7 +8,7 @@ class ExamRecordClass
 {
     private $item_data = array(
         'student_id' => null,
-        'unit_id' => null,
+        'exam_paper_id' => null,
         'record' => array(),
         'itemData' => array(),
         'isFinish' => null,
@@ -29,12 +29,12 @@ class ExamRecordClass
     {
         $return_data = array();
 
-        $item_obj = ExamRecord::select('unit_id', 'has_review')
+        $item_obj = ExamRecord::select('exam_paper_id', 'has_review')
             ->where('student_id', $student_id)
             ->where('has_review', '1')
             ->get();
         foreach ($item_obj as $value) {
-            $return_data[$value['unit_id']] = true;
+            $return_data[$value['exam_paper_id']] = true;
         }
 
         return $return_data;
@@ -47,11 +47,11 @@ class ExamRecordClass
     public function set_record()
     {
         if ($this->item_data['student_id']
-            AND $this->item_data['unit_id']
+            AND $this->item_data['exam_paper_id']
             AND $this->item_data['itemData']
             AND is_numeric($this->item_data['isFinish'])
         ) {
-            $t_obj = ExamRecord::where('unit_id', $this->item_data['unit_id'])
+            $t_obj = ExamRecord::where('exam_paper_id', $this->item_data['exam_paper_id'])
                 ->where('student_id', $this->item_data['student_id'])
                 ->get();
             if (count($t_obj) == 1) {
@@ -72,7 +72,7 @@ class ExamRecordClass
             } else {
                 $t_obj = new ExamRecord();
                 $t_obj->student_id = $this->item_data['student_id'];
-                $t_obj->unit_id = $this->item_data['unit_id'];
+                $t_obj->exam_paper_id = $this->item_data['exam_paper_id'];
                 $t_obj->record = json_encode($this->item_data['record']);
                 $t_obj->use_item = json_encode($this->item_data['itemData']);
                 $t_obj->is_finish = $this->item_data['isFinish'];
@@ -91,7 +91,7 @@ class ExamRecordClass
     public function get_one_record()
     {
         $return_data = null;
-        $t_obj = ExamRecord::where('unit_id', $this->item_data['unit_id'])
+        $t_obj = ExamRecord::where('exam_paper_id', $this->item_data['exam_paper_id'])
             ->where('student_id', $this->item_data['student_id'])
             ->get();
         foreach ($t_obj as $v) {
@@ -107,7 +107,7 @@ class ExamRecordClass
      */
     public function set_clear_record()
     {
-        $t_obj = ExamRecord::where('unit_id', $this->item_data['unit_id'])
+        $t_obj = ExamRecord::where('exam_paper_id', $this->item_data['exam_paper_id'])
             ->where('student_id', $this->item_data['student_id'])
             ->get();
         foreach ($t_obj as $v) {
@@ -126,7 +126,7 @@ class ExamRecordClass
      */
     public function set_has_view_record()
     {
-        $t_obj = ExamRecord::where('unit_id', $this->item_data['unit_id'])
+        $t_obj = ExamRecord::where('exam_paper_id', $this->item_data['exam_paper_id'])
             ->where('student_id', $this->item_data['student_id'])
             ->get();
         foreach ($t_obj as $v) {
