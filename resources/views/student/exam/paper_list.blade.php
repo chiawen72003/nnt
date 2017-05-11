@@ -25,7 +25,7 @@
     </div>
     [! Form::open(array('url'=>route('mem.exam.testpg'),'id'=>'beginTest', 'name'=>'beginTest')) !]
     [! Form::hidden('domain', 'addForm') !]
-    <input type="hidden" name="unit_id" id="unit_id"/>
+    <input type="hidden" name="paper_id" id="paper_id"/>
     [! Form::close() !]
 
     [! Html::script('js/jquery-1.11.3.js') !]
@@ -34,7 +34,7 @@
          * 開始受測
          */
         function send(getID) {
-            $('#unit_id').val(getID);
+            $('#paper_id').val(getID);
             $('#beginTest').submit();
         }
     </script>
