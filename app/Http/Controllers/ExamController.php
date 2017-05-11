@@ -41,11 +41,29 @@ class ExamController extends Controller
     }
 
     /**
-     * 測驗單元列表
+     * 可受測的單元列表
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function examList()
+    {
+        $exam_class_obj = new ExamClass();
+        $subject_obj = new SubjectClass();
+        $data = array();
+        $data['user_data'] = app('request')->session()->get('user_data');
+        $data['list_data'] = $exam_class_obj -> get_exam_list($data['user_data']);
+        $data['subject_list'] = $subject_obj -> subject_list();
+        //$data['exam_review_data'] = $exam_class_obj -> get_review_data($data['user_data']);
+
+        return view('student.exam.list', $data);
+    }
+
+    /**
+     * 指定單元下可受測的試卷
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function examPaperList()
     {
         $exam_class_obj = new ExamClass();
         $subject_obj = new SubjectClass();
