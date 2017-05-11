@@ -99,6 +99,65 @@ class ExamClass
     }
 
     /**
+     * 取得指定單元下可以受測的試卷
+     *
+     * @param Array $mem_data 學生個人資料
+     *
+     * @return Array $list_data 可測驗的試卷資料
+     */
+    public  function get_exam_paper_list($mem_data, $unit_id)
+    {
+        $list_data = array();
+        $has_test_data = array();//已經受測過得單元
+        $access_data = array();
+        $can_test_data = null;
+
+        //根據學生的班級資料取得可受測的試卷資料
+        $access_obj = new ExamPaperAccessClass();
+        $access_obj -> init(
+            array(
+                'organization_id' => $mem_data['organization_id'],
+                'grade' => $mem_data['grade'],
+                'class' => $mem_data['class'],
+            )
+        );
+        $t_data = $access_obj -> get_exampaperaccess_data();
+        foreach($t_data as $v)
+        {
+            $access_data[] = $v['exam_paper_id'];
+        }
+        if(count($access_data) > 0)
+        {
+            //已經受測且操作完成的試卷
+            $temp_obj = ExamRecord::where('student_id', $mem_data['uid'])
+                ->where('is_finish','1')
+                ->get();
+            foreach ($temp_obj as $value) {
+                $has_test_data[] = $value['exam_paper_id'];
+            }
+            //還沒有操作完成的試卷
+            if(count($has_test_data) > 0)
+            {
+                $can_test_data = array_diff($access_obj,$has_test_data);
+            }else{
+                $can_test_data = $access_data;
+            }
+            //根據試卷id取得單元id
+            $paper_obj = new ExamPaperClass();
+            $paper_obj ->init(
+                array(
+                    'id' => $can_test_data,
+                    'unit_list_id' => $unit_id,
+                )
+            );
+            $list_data = $paper_obj->get_exampaper();
+        }
+
+        return $list_data;
+    }
+
+
+    /**
      * 取得試題item的資料
      *
      */
