@@ -37,10 +37,8 @@
             can_update_record = true;
             student_ans = '';
             if (right_ans[0].jump == '999') {
-                now_paper_index++;
-                now_item_index = 0;
-                operating_record({'fun': 'setPaperIndex', 'value': now_paper_index});
-                operating_record({'fun': 'setItemIndex', 'value': '0'});
+                now_item_index = 999;
+                operating_record({'fun': 'setItemIndex', 'value': '999'});
             } else {
                 now_item_index = right_ans[0].jump - 1;
                 operating_record({'fun': 'setItemIndex', 'value': now_item_index});
@@ -66,6 +64,6 @@
      * @param getIndex
      */
     function setPaperIndex(getIndex) {
-        now_paper_index = getIndex;
+        //now_paper_index = getIndex;
     }
 </script>

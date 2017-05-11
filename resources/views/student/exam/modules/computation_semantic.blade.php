@@ -59,7 +59,7 @@
                 data: {
                     _token: token,
                     student_ans:$('#module_text_area').val(),
-                    exam_paper_id:paper_data[now_paper_index],
+                    exam_paper_id:paper_id,
                     item_id:item_id
                 },
 				error:function (data) {
@@ -69,10 +69,8 @@
                         if(error_ans[x].number == '999')
                         {
                             if(error_ans[x].jump == '999'){
-                                now_paper_index++;
-                                now_item_index = 0;
-                                operating_record({'fun':'setPaperIndex','value':now_paper_index});
-                                operating_record({'fun':'setItemIndex','value':'0'});
+                                now_item_index = 999;
+                                operating_record({'fun':'setItemIndex','value':'999'});
                             }else{
                                 now_item_index = error_ans[x].jump - 1;
                                 operating_record({'fun':'setItemIndex','value':now_item_index});
@@ -91,10 +89,8 @@
                             if(error_ans[x].number == '999')
                             {
                                 if(error_ans[x].jump == '999'){
-                                    now_paper_index++;
-                                    now_item_index = 0;
-                                    operating_record({'fun':'setPaperIndex','value':now_paper_index});
-                                    operating_record({'fun':'setItemIndex','value':'0'});
+                                    now_item_index = 999;
+                                    operating_record({'fun':'setItemIndex','value':'999'});
                                 }else{
                                     now_item_index = error_ans[x].jump - 1;
                                     operating_record({'fun':'setItemIndex','value':now_item_index});
@@ -107,10 +103,8 @@
 					}
                     if(data['type'] == 'right'){
                         if(data['jump'] == '999'){
-                            now_paper_index++;
-                            now_item_index = 0;
-                            operating_record({'fun':'setPaperIndex','value':now_paper_index});
-                            operating_record({'fun':'setItemIndex','value':'0'});
+                            now_item_index = 999;
+                            operating_record({'fun':'setItemIndex','value':'999'});
                         }else{
                             now_item_index = data['jump'] - 1;
                             operating_record({'fun':'setItemIndex','value':now_item_index});
@@ -120,10 +114,8 @@
                     }
                     if(data['type'] == 'error'){
                         if(data['jump'] == '999'){
-                            now_paper_index++;
-                            now_item_index = 0;
-                            operating_record({'fun':'setPaperIndex','value':now_paper_index});
-                            operating_record({'fun':'setItemIndex','value':'0'});
+                            now_item_index = 999;
+                            operating_record({'fun':'setItemIndex','value':'999'});
                         }else{
                             now_item_index = data['jump'] - 1;
                             operating_record({'fun':'setItemIndex','value':now_item_index});
@@ -156,6 +148,6 @@
 	* @param getIndex
 	*/
 	function setPaperIndex(getIndex) {
-		now_paper_index = getIndex;
+		//now_paper_index = getIndex;
 	}
 </script>

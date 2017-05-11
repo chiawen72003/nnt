@@ -60,10 +60,8 @@
         for(var x=0;x<right_ans.length;x++){
             if(right_ans[x].answer > '' && right_ans[x].answer == ans){
                 if(right_ans[x].jump == '999'){
-                    now_paper_index++;
-                    now_item_index = 0;
-                    operating_record({'fun':'setPaperIndex','value':now_paper_index});
-                    operating_record({'fun':'setItemIndex','value':'0'});
+                    now_item_index = 999;
+                    operating_record({'fun':'setItemIndex','value':'999'});
                 }else{
                     now_item_index = right_ans[x].jump - 1;
                     operating_record({'fun':'setItemIndex','value':now_item_index});
@@ -76,10 +74,8 @@
             if(right_ans[x].keyword > '' && ans.match(right_ans[x].keyword)!=null)
             {
                 if(right_ans[x].jump == '999'){
-                    now_paper_index++;
-                    now_item_index = 0;
-                    operating_record({'fun':'setPaperIndex','value':now_paper_index});
-                    operating_record({'fun':'setItemIndex','value':'0'});
+                    now_item_index = 999;
+                    operating_record({'fun':'setItemIndex','value':'999'});
                 }else{
                     now_item_index = right_ans[x].jump - 1;
                     operating_record({'fun':'setItemIndex','value':now_item_index});
@@ -96,10 +92,8 @@
             for(var x=0;x<error_ans.length;x++){
                 if(error_ans[x].answer > '' && error_ans[x].answer == ans){
                     if(error_ans[x].jump == '999'){
-                        now_paper_index++;
-                        now_item_index = 0;
-                        operating_record({'fun':'setPaperIndex','value':now_paper_index});
-                        operating_record({'fun':'setItemIndex','value':'0'});
+                        now_item_index = 999;
+                        operating_record({'fun':'setItemIndex','value':'999'});
                     }else{
                         now_item_index = error_ans[x].jump - 1;
                         operating_record({'fun':'setItemIndex','value':now_item_index});
@@ -112,10 +106,8 @@
                 if(error_ans[x].keyword > '' && ans.match(error_ans[x].keyword)!=null && error_ans[x].number != '999')
                 {
                     if(error_ans[x].jump == '999'){
-                        now_paper_index++;
-                        now_item_index = 0;
-                        operating_record({'fun':'setPaperIndex','value':now_paper_index});
-                        operating_record({'fun':'setItemIndex','value':'0'});
+                        now_item_index = 999;
+                        operating_record({'fun':'setItemIndex','value':'999'});
                     }else{
                         now_item_index = error_ans[x].jump - 1;
                         operating_record({'fun':'setItemIndex','value':now_item_index});
@@ -132,10 +124,8 @@
             for (var x = 0; x < error_ans.length; x++) {
                 if (error_ans[x].number == '999') {
                     if (error_ans[x].jump == '999') {
-                        now_paper_index++;
-                        now_item_index = 0;
-                        operating_record({'fun': 'setPaperIndex', 'value': now_paper_index});
-                        operating_record({'fun': 'setItemIndex', 'value': '0'});
+                        now_item_index = 999;
+                        operating_record({'fun': 'setItemIndex', 'value': '999'});
                     } else {
                         now_item_index = error_ans[x].jump - 1;
                         operating_record({'fun': 'setItemIndex', 'value': now_item_index});
@@ -168,7 +158,7 @@
 	* @param getIndex
 	*/
 	function setPaperIndex(getIndex) {
-		now_paper_index = getIndex;
+		//ow_paper_index = getIndex;
 	}
 
 </script>
