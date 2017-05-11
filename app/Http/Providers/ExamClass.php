@@ -9,7 +9,7 @@ use App\Http\Providers\QuestionsItemClass;
 use App\Http\Providers\ExamRecordClass;
 use App\Http\Models\UnitList;
 use App\Http\Models\Subject;
-
+use App\Http\Providers\ExamPaperAccessClass;
 class ExamClass
 {
     const _SPLIT_SYMBOL = '@XX@';
@@ -49,20 +49,50 @@ class ExamClass
     {
         $list_data = array();
         $has_test_data = array();//已經受測過得單元
-        $temp_obj = ExamRecord::where('student_id', $mem_data['uid'])
-            ->where('is_finish','1')
-            ->get();
-        foreach ($temp_obj as $value) {
-            $has_test_data[] = $value['unit_id'];
+        $access_data = array();
+        $can_test_data = null;
+
+        //根據學生的班級資料取得可受測的試卷資料
+        $access_obj = new ExamPaperAccessClass();
+        $access_obj -> init(
+            array(
+                'organization_id' => $mem_data['organization_id'],
+                'grade' => $mem_data['grade'],
+                'class' => $mem_data['class'],
+            )
+        );
+        $t_data = $access_obj -> get_exampaperaccess_data();
+        foreach($t_data as $v)
+        {
+            $access_data[] = $v['exam_paper_id'];
         }
-        $temp_obj = UnitList::get();
-        foreach ($temp_obj as $value) {
-            if( in_array($value['id'], $has_test_data)){
-                $value['has_exam_record'] = true;
-            }else{
-                $value['has_exam_record'] = false;
+        if(count($access_data) > 0)
+        {
+            //已經受測且操作完成的試卷
+            $temp_obj = ExamRecord::where('student_id', $mem_data['uid'])
+                ->where('is_finish','1')
+                ->get();
+            foreach ($temp_obj as $value) {
+                $has_test_data[] = $value['exam_paper_id'];
             }
-            $list_data[] = $value;
+            //還沒有操作完成的試卷
+            if(count($has_test_data) > 0)
+            {
+                $can_test_data = array_diff($access_obj,$has_test_data);
+            }else{
+                $can_test_data = $access_data;
+            }
+            //根據試卷id取得單元id
+            $paper_obj = new ExamPaperClass();
+            $paper_obj ->init(
+                array('id' => $can_test_data)
+            );
+            $unit_id = $paper_obj->get_unit_id();
+            $temp_obj = UnitList::whereIn('id', $unit_id)
+            ->get();
+            foreach ($temp_obj as $value) {
+                $list_data[] = $value;
+            }
         }
 
         return $list_data;
