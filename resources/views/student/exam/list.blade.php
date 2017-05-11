@@ -8,7 +8,7 @@
                     @foreach($list_data as $value)
                         <div class="select-unit-box">
                             <p>[! isset($subject_list[$value['subject']])?$subject_list[$value['subject']]:'' !]</p>
-                            <a class="select-img" onclick='send("[!$value[' id']!]")'>
+                            <a class="select-img" href="[! route('mem.exam.paper.list',array($value['id'])) !]">
                             <img src="[! ($value['img'] != '')?url('/upfire/image/'.$value['img']):'' !]" width="206"
                                  height="130">
                             @if( $value['has_exam_record'] === false  )
@@ -16,7 +16,7 @@
                                 @endif
                                 </a>
                                 <div class="select-button-wrrap">
-                                    <a class="btn btn-yellow" onclick='send("[!$value[' id']!]")'>學習</a>
+                                    <a class="btn btn-yellow" onclick='send("[!$value['id']!]")'>學習</a>
                                     @if( isset($exam_review_data[$value['id']]) )
                                         <a class="btn btn-gray"
                                            href="[! route('mem.achievement.list',[$value['subject']]) !]">觀看紀錄</a>
@@ -42,12 +42,6 @@
 
     [! Html::script('js/jquery-1.11.3.js') !]
     <script>
-        /**
-         * 開始受測
-         */
-        function send(getID) {
-            $('#unit_id').val(getID);
-            $('#beginTest').submit();
-        }
+
     </script>
 @stop
