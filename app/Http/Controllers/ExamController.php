@@ -53,11 +53,10 @@ class ExamController extends Controller
         $subject_obj = new SubjectClass();
         $data = array();
         $data['user_data'] = app('request')->session()->get('user_data');
-        $data['list_data'] = $exam_class_obj -> get_exam_list($data['user_data']);
+        $data['list_data'] = $exam_class_obj -> get_exam_paper_list($data['user_data'], $id);
         $data['subject_list'] = $subject_obj -> subject_list();
-        $data['exam_review_data'] = $exam_class_obj -> get_review_data($data['user_data']);
 
-        return view('student.exam.list', $data);
+        return view('student.exam.paper_list', $data);
     }
 
     /**
