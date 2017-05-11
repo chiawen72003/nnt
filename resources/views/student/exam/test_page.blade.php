@@ -12,8 +12,6 @@
     var token = "[! csrf_token() !]";
     var model_obj = [];//模組資料
     var now_item_index = [! $begin_item_index !];//現在試題的index
-    var now_paper_index = [! $begin_paper_index !];//現在試卷的index
-    var paper_data = [];//試卷資料
     var item_data = [];//試題資料
     var item_id = 0;
     var operating_array = [];
@@ -22,39 +20,37 @@
     var feedback_list = [];//回饋類型
     var feedback_dsc = '';
     var can_update_record = false;//可否上傳操作紀錄，需要在答案分析時變true，換試卷後變成false
+    var paper_id = '[! $paper_id !]';//試卷id
 
-    @foreach($paper_data as $key => $value)
-        paper_data.push("[! $value !]");
-    @endforeach
-    @foreach($questions_item_data as $id => $v)
-        @foreach($v as $key => $value)
+    @foreach($questions_item_data as $key => $v)
         item_data.push(
             {
-                'paper_id': '[! $id !]',
+                'paper_id': '[! $paper_id !]',
                 'item_index': '[! $key !]',
-                'item_id': '[! $value["id"] !]',
-                'feedback_type': '[! $value["feedback_type"] !]'
+                'item_id': '[! $v["id"] !]',
+                'feedback_type': '[! $v["feedback_type"] !]'
             }
         );
-        @endforeach
     @endforeach
         feedback_list.push('');
     @foreach($feedback_list as $v)
         feedback_list.push('[! $v !]');
     @endforeach
 
-    /** todo 系統可以循環到結束，接下來測試試題正確與錯誤時，index不規則變動的狀況。 **/
-
+    /**
+     * 進行跳題，若無對應試題代表測驗結束
+     */
     function go_next() {
         var has_item = false;
         var new_item_id = 0;
         for (var x = 0; x < item_data.length; x++) {
-            if (item_data[x].paper_id == paper_data[now_paper_index] && item_data[x].item_index == now_item_index) {
+            if ( item_data[x].item_index == now_item_index ) {
                 new_item_id = item_data[x].item_id;
                 feedback_dsc = feedback_list[item_data[x].feedback_type];
                 has_item = true;
             }
         }
+        //判斷跳題，如果沒有對應到的試題就代表結束了。
         if (has_item) {
             if(can_update_record)
             {
@@ -63,8 +59,7 @@
             item_id = new_item_id;
             operating_array = [];//重置操作紀錄
             load_module_page(item_id);
-        }
-        if (paper_data[now_paper_index] == undefined) {
+        }else{
             update_record('1');
             item_id = 0;
             feedback_dsc = '';
@@ -73,7 +68,6 @@
             location.href="[! route('mem.exam') !]";
         }
         can_update_record = false;
-
     }
 
     //載入模組頁面
@@ -158,11 +152,10 @@
                 type: 'POST',
                 data: {
                     _token: token,
-                    unit_id: '[! $unit_id !]',
+                    exam_paper_id:paper_id,
                     record:operating_array,
                     itemData : [{
-                        'paper_index':now_paper_index,
-                        'paper_id':paper_data[now_paper_index],
+                        'paper_id':'[! $paper_id !]',
                         'item_index':now_item_index,
                         'item_id':item_id,
                         'student_ans':student_ans,
