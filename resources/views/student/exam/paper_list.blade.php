@@ -7,16 +7,16 @@
                 @if(isset($list_data) and count($list_data) > 0)
                     @foreach($list_data as $value)
                         <div class="select-unit-box">
-                            <p>[! isset($subject_list[$value['subject']])?$subject_list[$value['subject']]:'' !]</p>
-                            <a class="select-img" onclick='send("[!$value[' id']!]")'>
-                            <img src="[! ($value['img'] != '')?url('/upfire/image/'.$value['img']):'' !]" width="206"
-                                 height="130">
-                            @if( $value['has_exam_record'] === false  )
+                            <p>[! $value['paper_vol'] !]卷</p>
+                            <a class="select-img" href="#" onclick='send("[! $value['id'] !]")'>
+                                <img src="[! ($value['img'] != '')?url('/upfire/image/'.$value['img']):'' !]" width="206"
+                                     height="130">
                                 <div class="unlearnd-img-wrap"></div>
-                                @endif
-                                </a>
-                                <div class="select-button-wrrap">
-                                </div>
+                            </a>
+                            <div class="select-button-wrrap">
+                                <a class="btn btn-yellow" onclick='send("[! $value['id'] !]")' >學習</a>
+
+                            </div>
                         </div>
                     @endforeach
                 @endif
