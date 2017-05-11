@@ -9,6 +9,7 @@ class ExamPaperClass
 {
     private $input_data = array(
         'uid' => null,
+        'id' => null,
     );
 
     public function __construct()
@@ -43,4 +44,32 @@ class ExamPaperClass
         return $data;
     }
 
+    /**
+     * 根據指定試卷，回傳對應的的單元id
+     */
+    function get_unit_id()
+    {
+        $data = array();
+        if( is_array($this->input_data['id']))
+        {
+            $t_obj = ExamPaper::whereIn('id', $this->input_data['id'])
+                ->groupBy('unit_list_id')
+                ->get();
+            foreach ($t_obj as $v)
+            {
+                $data[] = $v['unit_list_id'];
+            }
+        }
+        if( is_numeric($this -> input_data['id']))
+        {
+            $t_obj = ExamPaper::where('id', $this->input_data['id'])
+                ->get();
+            foreach ($t_obj as $v)
+            {
+                $data[] = $v['unit_list_id'];
+            }
+        }
+
+        return $data;
+    }
 }
