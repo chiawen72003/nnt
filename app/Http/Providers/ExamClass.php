@@ -78,7 +78,7 @@ class ExamClass
             //還沒有操作完成的試卷
             if(count($has_test_data) > 0)
             {
-                $can_test_data = array_diff($access_obj,$has_test_data);
+                $can_test_data = array_diff($access_data,$has_test_data);
             }else{
                 $can_test_data = $access_data;
             }
