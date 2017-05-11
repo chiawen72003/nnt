@@ -412,13 +412,13 @@ class ExamClass
     /**
      * 取得試卷下的試題資料
      */
-    public function get_questions_item_paper_id($paper_id_array){
+    public function get_questions_item_paper_id($paper_id){
         $return_data = array();
-        $temp_obj = QuestionsItem::whereIn('exam_paper_id',$paper_id_array)
+        $temp_obj = QuestionsItem::where('exam_paper_id',$paper_id)
             ->orderBy('id')
             ->get();
         foreach ($temp_obj as $t){
-            $return_data[$t['exam_paper_id']][] = $t;
+            $return_data[] = $t;
         }
 
         return $return_data;
