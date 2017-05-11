@@ -23,7 +23,6 @@ Route::get('/Mem/LogOut', ['as' => 'mem.logout', 'uses' => 'MemberController@Log
 Route::post('/Mem/LoginChk', ['middleware' => 'LoginDataCheck','as' => 'mem.loginchk', 'uses' => 'MemberController@LoginChk']);
 
 //學生端 測驗
-Route::get('/Mem', ['middleware' => 'MemSessionCheck','as' => 'mem.index', 'uses' => 'ExamController@index']);
 Route::get('/Mem/Exam', ['middleware' => 'MemSessionCheck','as' => 'mem.exam', 'uses' => 'ExamController@examList']);
 Route::get('/Mem/Exam/Paper/List/{id}', ['middleware' => 'MemSessionCheck','as' => 'mem.exam.paper.list', 'uses' => 'ExamController@examPaperList']);
 Route::get('/Mem/Exam/View/Record/list/{id}', ['middleware' => 'MemSessionCheck','as' => 'mem.exam.viewrecord.list', 'uses' => 'ExamController@viewExamRecordList']);
