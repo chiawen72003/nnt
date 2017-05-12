@@ -446,6 +446,29 @@ class ExamClass
     }
 
     /**
+     *  取出已經學習過的科目
+     */
+    public  function get_record_unit_all($mem_id)
+    {
+        $return_data = array();
+        $temp_obj = ExamRecord::
+        leftJoin('exam_paper', 'exam_record.exam_paper_id', '=', 'exam_paper.id')
+            ->leftJoin('unit_list', 'exam_paper.unit_list_id', '=', 'unit_list.id')
+            ->where('exam_record.student_id', $mem_id)
+            ->where('exam_record.is_finish', '1')
+            ->select(
+                'unit_list.subject'
+            )
+            ->orderBy('unit_list.subject')
+            ->get();
+        if(count($temp_obj) > 0){
+            $return_data = $temp_obj->toArray();
+        }
+
+        return $return_data;
+    }
+
+    /**
      *  取出已經學習過的試卷
      */
     public  function get_record_list_all($mem_id)
@@ -482,11 +505,18 @@ class ExamClass
     {
         $return_data = array();
         $temp_obj = ExamRecord::
-            leftJoin('unit_list', 'exam_record.unit_id', '=', 'unit_list.id')
-            ->where('exam_record.student_id', $mem_id['uid'])
+        leftJoin('exam_paper', 'exam_record.exam_paper_id', '=', 'exam_paper.id')
+            ->leftJoin('unit_list', 'exam_paper.unit_list_id', '=', 'unit_list.id')
+            ->where('exam_record.student_id', $mem_id)
             ->where('exam_record.is_finish', '1')
             ->where('unit_list.subject',$subject_id)
-            ->select('unit_list.id', 'exam_record.updated_at', 'unit_list.vol', 'unit_list.unit')
+            ->select(
+                'exam_record.updated_at',
+                'unit_list.id',
+                'unit_list.vol',
+                'unit_list.unit'
+            )
+            ->orderBy('exam_record.created_at','DESC')
             ->get();
        if(count($temp_obj) > 0){
            $return_data = $temp_obj->toArray();
