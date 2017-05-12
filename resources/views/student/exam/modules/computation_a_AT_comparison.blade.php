@@ -71,7 +71,7 @@
             if(right_ans[x].keyword > '' && ans.match(right_ans[x].keyword)!=null)
             {
                 if(right_ans[x].jump == '999'){
-                    now_item_index = 0;
+                    now_item_index = 999;
                     operating_record({'fun':'setItemIndex','value':'999'});
                 }else{
                     now_item_index = right_ans[x].jump - 1;
@@ -89,7 +89,7 @@
             for(var x=0;x<error_ans.length;x++){
                 if(error_ans[x].answer > '' && error_ans[x].answer == ans){
                     if(error_ans[x].jump == '999'){
-                        now_item_index = 0;
+                        now_item_index = 999;
                         operating_record({'fun':'setItemIndex','value':'999'});
                     }else{
                         now_item_index = error_ans[x].jump - 1;
