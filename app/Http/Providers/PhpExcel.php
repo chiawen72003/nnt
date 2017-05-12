@@ -2,6 +2,7 @@
 
 namespace App\Http\Providers;
 
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Excel5;
 
@@ -11,11 +12,22 @@ class PhpExcel
     private $spreadsheet_obj = null;
     private $writer_obj = null;
     private $file_name = null;
+    private $input_data = array(
+        'import_file_name' => null,
+    );
 
     public function __construct()
     {
         $this -> spreadsheet_obj = new Spreadsheet();
         $this -> file_name = date("Y-m-d") . ".xls";
+    }
+
+    public function init($data = array())
+    {
+        foreach($data as $k => $v)
+        {
+            $this -> input_data[$k] = $v;
+        }
     }
 
     /**
@@ -97,4 +109,14 @@ class PhpExcel
         $writer->save('php://output');
     }
 
+    /**
+     * 匯入 班級內學生的資料
+     */
+    public function import_student_data()
+    {
+        $inputFileName = './sampleData/example1.xls';
+
+        /** Load $inputFileName to a Spreadsheet Object  **/
+        $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($inputFileName);
+    }
 }
