@@ -255,7 +255,7 @@ class ExamController extends Controller
         $data['subject_list'] = $subject_obj -> subject_list();
         $data['user_data'] = app('request')->session()->get('user_data');
         $mem_id = app('request')->session()->get('user_data');
-        $data['list_data'] = $exam_class_obj -> get_record_list_all_subject($mem_id);
+        $data['list_data'] = $exam_class_obj -> get_record_unit_all($mem_id);
 
         return view('student.exam.achievement_level_one', $data);
     }
