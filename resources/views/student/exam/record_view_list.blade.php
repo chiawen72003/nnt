@@ -5,7 +5,7 @@
 		<h1 class="section-title title-result">成果查詢</h1>
 		<div class="result-detail-wrap">
 			<div class="result-button-wrap">
-				<a class="button-download" href="[! route('mem.exam.download.record',array($exam_record['unit_id'])) !]" target="_blank">下載</a>
+				<a class="button-download" href="[! route('mem.exam.download.record',array($exam_record['exam_paper_id'])) !]" target="_blank">下載</a>
 			</div>
 			<table class="table-detail2">
 				<tr>
