@@ -64,6 +64,10 @@
                         @endfor
                     </select>
                 </div>
+                <div class="select-group">
+                    <div class="label-title"><span class="txt-red">*</span>示意圖</div>
+                    <input type="file" name="img" id="img" accept="image/*"><span class="txt-red">(必填)</span>
+                </div>
                 <div class="form-button-wrap">
                     <input class="btn-yellow" type="button"  value="輸入完畢，建立結構" onclick="chk()" />
                 </div>
@@ -85,6 +89,7 @@
         var grade_value = $("#grade").val();
         var title_value = $("#title").val();
         var indicator_nums_value = $("#indicator_nums").val();
+        var img_value = $("#img").val();
 
         if(module_type_value != ''
             && subject_value != ''
@@ -93,6 +98,7 @@
             && grade_value !=''
             && title_value !=''
             && indicator_nums_value !=''
+            && img_value !=''
         )
         {
             if(is_Go){
