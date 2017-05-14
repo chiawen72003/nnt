@@ -30,6 +30,7 @@ class MemberClass
         'class_group' => null,
         'seme' => null,
         'access_level'=>null,
+        'import_user_file'=>null,
     );
 
     public function __construct()
@@ -290,5 +291,35 @@ class MemberClass
         }
 
         return $teacher_data;
+    }
+
+    /**
+     * 從excel匯入學生的檔案
+     */
+    function get_import_student()
+    {
+        if(
+            $this -> input_data['city_code']
+            AND $this -> input_data['organization_id']
+            AND $this -> input_data['grade']
+            AND $this -> input_data['class']
+            AND $this -> input_data['access_level']
+            AND $this -> input_data['import_user_file']
+        )
+        {
+            if ( $this -> input_data['import_user_file'] ->isValid() )
+            {
+                $extension = $this -> input_data['import_user_file'] -> getClientOriginalExtension(); // getting image extension
+                $fileName = time().'.'.$extension; // renameing image
+                $this -> input_data['import_user_file'] -> move('upfire/tmp/', $fileName); // uploading file to given path
+                $this -> input_data['import_file_name'] = 'upfire/tmp/'.$fileName;
+
+                $excel_obj = new PhpExcel();
+                $excel_obj -> init($this -> input_data);
+                $insert_data = $excel_obj -> import_student_data();
+                //todo 接下來批次插入user_info跟user_status
+
+            }
+        }
     }
 }
