@@ -513,10 +513,12 @@ class ExamClass
             ->where('unit_list.subject',$subject_id)
             ->select(
                 'exam_record.updated_at',
-                'unit_list.id',
+                'exam_record.id',
                 'unit_list.vol',
-                'unit_list.unit'
+                'unit_list.unit',
+                'exam_paper.paper_vol'
             )
+            //->groupBy('unit_list.vol')
             ->orderBy('exam_record.created_at','DESC')
             ->get();
        if(count($temp_obj) > 0){
