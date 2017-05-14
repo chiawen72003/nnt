@@ -114,9 +114,24 @@ class PhpExcel
      */
     public function import_student_data()
     {
-        $inputFileName = './sampleData/example1.xls';
+        $return_data = array(
+        );
 
-        /** Load $inputFileName to a Spreadsheet Object  **/
-        $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($inputFileName);
+        if($this -> input_data['import_file_name'])
+        {
+            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($this -> input_data['import_file_name']);
+            $worksheet = $spreadsheet-> getActiveSheet();
+            $highestRow = $worksheet -> getHighestRow(); // e.g. 10
+            //如果對應欄位沒有值，會用null代替
+            $dataArray = $worksheet-> rangeToArray(
+                'B2:k'.$highestRow,
+                NULL,        // Value that should be returned for empty cells
+                TRUE,        // Should formulas be calculated (the equivalent of getCalculatedValue() for each cell)
+                TRUE,        // Should values be formatted (the equivalent of getFormattedValue() for each cell)
+                TRUE         // Should the array be indexed by cell row and cell column
+            );
+
+            return $dataArray;
+        }
     }
 }
