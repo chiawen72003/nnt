@@ -196,7 +196,7 @@ class MemberClass
         if($this->input_data['organization_id']  AND $this->input_data['grade'] AND $this->input_data['class'])
         {
             $temp_obj = UserInfo::leftJoin('user_status', 'user_status.user_id', '=', 'user_info.user_id')
-                ->where('user_status.access_level', '1')
+                ->whereIn('user_status.access_level', array(1,2,3,8,9))
                 ->where('user_info.organization_id', $this->input_data['organization_id'])
                 ->where('user_info.grade', $this->input_data['grade'])
                 ->where('user_info.class', $this->input_data['class'])
@@ -229,7 +229,7 @@ class MemberClass
         if($this->input_data['organization_id']  AND $this->input_data['grade'] AND $this->input_data['class'])
         {
             $temp_obj = UserInfo::leftJoin('user_status', 'user_status.user_id', '=', 'user_info.user_id')
-                ->where('user_status.access_level', '1')
+                ->whereIn('user_status.access_level', array(1,2,3,8,9))
                 ->where('user_info.organization_id', $this->input_data['organization_id'])
                 ->where('user_info.grade', $this->input_data['grade'])
                 ->where('user_info.class', $this->input_data['class'])
