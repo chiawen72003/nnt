@@ -82,6 +82,8 @@ Route::post('/Ad/User/Add', ['as' => 'ad.user.add', 'uses' => 'AdController@user
 
 //管理員端 匯入使用者頁面
 Route::get('/Ad/User/Import/Page', ['as' => 'ad.user.import.page', 'uses' => 'AdController@userImportPage']);
+Route::post('/Ad/User/Import/File', ['as' => 'ad.user.import.file', 'uses' => 'AdController@userImportFile']);
+
 
 //管理員端 查詢使用者資料頁面
 Route::get('/Ad/User/Search/Page', ['as' => 'ad.user.search.page', 'uses' => 'AdController@userSearchPage']);
