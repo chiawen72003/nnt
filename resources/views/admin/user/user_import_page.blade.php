@@ -13,25 +13,26 @@
                 </ul>
             </div>
             <div class="record-content">
-                <form id="addschool-form">
+                [! Form::open(array('url'=>route('ad.user.import.file'),'id'=>'addForm', 'name'=>'addForm', 'files' => true)) !]
+                [! Form::hidden('domain', 'addForm') !]
                     <div class="title-feature">匯入使用者<span class="tip">有<span class="star">*</span>的欄位不可空白</span></div>
                     <div class="record-inner">
                         <div class="select-group">
                             <div class="label-title label-title-s">班級</div>
-                            <select class="select-s" id="city_code" onchange="get_city_school()">
+                            <select class="select-s" name="city_code"  id="city_code" onchange="get_city_school()">
                                 @foreach($city_data as $k => $v)
                                     <option value="[! $k !]" >[! $v !]</option>
                                 @endforeach
                             </select>
-                            <select class="select-s" id="organization_id">
+                            <select class="select-s" name="organization_id" id="organization_id">
                                 <option value="學校名稱">學校名稱</option>
                             </select>
-                            <select class="select-s" id="grade">
+                            <select class="select-s" name="grade" id="grade">
                                 @for($x=1;$x<21;$x++)
                                     <option value="[! $x !]">[! $x !]年級</option>
                                 @endfor
                             </select>
-                            <select class="select-s" id="class">
+                            <select class="select-s" name="class" id="class">
                                 @for($x=1;$x<21;$x++)
                                     <option value="[! $x !]">[! $x !]班級</option>
                                 @endfor
@@ -39,13 +40,13 @@
                         </div>
                         <div class="select-group">
                             <div class="label-title label-title-s">身份</div>
-                            <select>
-                                <option value="學生">學生</option>
+                            <select id="user_level" name="user_level">
+                                <option value="1" >學生</option>
                             </select>
                         </div>
                         <div class="select-group">
                             <div class="label-title"><span class="txt-red">*</span>EXCEL 檔案</div>
-                            <input type="file" accept=".xls,.xlsx">
+                            <input type="file" name="import_file" id="import_file" accept=".xls,.xlsx">
                         </div>
                         <div class="example-wrap">
                             <p>說明：</p>
@@ -54,10 +55,10 @@
                             <p>3.本功能適用「同學校、同班級」帳號之匯入。</p>
                         </div>
                         <div class="form-button-wrap">
-                            <input class="btn-yellow" type="submit" value="開始匯入" />
+                            <input class="btn-yellow" type="button" value="開始匯入"  onclick="chk()"/>
                         </div>
                     </div>
-                </form>
+                [! Form::close() !]
             </div>
         </div>
     </div>
@@ -94,6 +95,41 @@
             {
                 $("#organization_id").append($("<option></option>").attr("value", school_data[x]['organization_id']).text(school_data[x]['name']));
             }
+        }
+    }
+
+    /**
+     * 檢查上傳資料是否正確
+     */
+    function chk()
+    {
+        var is_Go = true;
+        var error_dsc ="";
+        var city_code = $("#city_code").val();
+        var organization_id = $("#organization_id").val();
+        var grade = $("#grade").val();
+        var get_class = $("#class").val();
+        var user_level = $("#user_level").val();
+        var import_file = $("#import_file").val();
+
+        if(city_code != ''
+            && organization_id != ''
+            && grade !=''
+            && get_class !=''
+            && user_level !=''
+            && import_file !=''
+        )
+        {
+            if(is_Go){
+                is_Go = false;
+                $('#addForm').submit();
+            }
+        }else{
+            error_dsc +="請檢查選項是否有缺少!!\r\n";
+        }
+
+        if(error_dsc !=''){
+            alert(error_dsc);
         }
     }
 </script>
