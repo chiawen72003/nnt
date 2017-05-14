@@ -970,9 +970,12 @@ class AdController extends Controller
         $member_tmp = new MemberClass();
         $member_tmp -> init($fp);
         $class_student = $member_tmp -> get_all_class_student_data();
-        foreach($class_student as $v)
+        if($class_student)
         {
-            $return_array[$v['uid']] = $v['uname'];
+            foreach($class_student as $v)
+            {
+                $return_array[$v['uid']] = $v['uname'];
+            }
         }
 
         return json_encode($return_array);
