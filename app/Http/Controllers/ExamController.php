@@ -194,17 +194,17 @@ class ExamController extends Controller
     /**
      * 成果查詢 第三層 查看學生操作某單元的細項資訊
      */
-    public function viewExamRecordList($exampaper_id)
+    public function viewExamRecordList($examrecord_id)
     {
         $exam_class_obj = new ExamClass();
         $data = array();
         $mem_id = app('request')->session()->get('user_data.uid');
-        $data['exam_record'] = $exam_class_obj -> get_exam_record($mem_id,$exampaper_id);
-        $data['exam_paper_id'] = $exampaper_id;
+        $data['exam_record'] = $exam_class_obj -> get_exam_record($mem_id,$examrecord_id);
+        $data['exam_paper_id'] = $examrecord_id;
         $data['user_data'] = app('request')->session()->get('user_data');
         $t = new ExamRecordClass(array(
             'student_id' => app('request')->session()->get('user_data')['uid'],
-            'exam_paper_id' => $exampaper_id,
+            'exam_paper_id' => $examrecord_id,
         ));
         $t->set_has_view_record();
 
@@ -271,7 +271,6 @@ class ExamController extends Controller
         $data['user_data'] = app('request')->session()->get('user_data');
         $mem_id = app('request')->session()->get('user_data.uid');
         $data['list_data'] = $exam_class_obj -> get_record_list_by_subject($mem_id, $unit_id);
-        //dd($data['list_data']);
         $data['unit_id'] = $unit_id;
 
         return view('student.exam.achievement_level_two', $data);
@@ -280,11 +279,11 @@ class ExamController extends Controller
     /**
      * 學生端 成果查詢 下載成果查詢的資料
      */
-    public function getDownloadRecord($exampaper_id)
+    public function getDownloadRecord($examrecord_id)
     {
         $exam_class_obj = new ExamClass();
         $mem_id = app('request')->session()->get('user_data.uid');
-        $exam_record = $exam_class_obj -> get_exam_record($mem_id,$exampaper_id);
+        $exam_record = $exam_class_obj -> get_exam_record($mem_id,$examrecord_id);
         if(isset($exam_record['use_item']) AND count($exam_record['use_item']) > 0)
         {
             $excel_obj = new PhpExcel();
