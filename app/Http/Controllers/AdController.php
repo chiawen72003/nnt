@@ -555,6 +555,27 @@ class AdController extends Controller
     }
 
     /**
+     * 匯入使用者的資料
+     *
+     */
+    public function userImportFile()
+    {
+        $fp = Input::all();
+        $data = array(
+            'city_code' => isset($fp['city_code'])?$fp['city_code']:null,
+            'organization_id' => isset($fp['organization_id'])?$fp['organization_id']:null,
+            'grade' => isset($fp['grade'])?$fp['grade']:null,
+            'class' => isset($fp['class'])?$fp['class']:null,
+            'access_level' => isset($fp['user_level'])?$fp['user_level']:null,
+            'import_user_file' => Input::file('import_file')?Input::file('import_file'):null,
+        );
+        $member_obj = new MemberClass();
+        $member_obj -> init($data);
+        $member_obj -> get_import_student();
+
+    }
+
+    /**
      * 查詢使用者資料頁面
      *
      */
