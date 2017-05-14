@@ -459,6 +459,7 @@ class ExamClass
             ->select(
                 'unit_list.subject'
             )
+            ->groupBy('unit_list.subject')
             ->orderBy('unit_list.subject')
             ->get();
         if(count($temp_obj) > 0){
