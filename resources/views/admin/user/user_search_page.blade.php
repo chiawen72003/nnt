@@ -40,7 +40,7 @@
                         </div>
                     </div>
                     <div class="record-inner">
-                        @if($class_student != null)
+                        @if($class_member != null)
                             <h3 class="record-title record-title-class">新北市縣立新莊國中7年1班
                                 <a class="record-download" href="#" onclick="$('#addForm').submit()">下載帳號密碼檔</a>
                                 <a class="record-delete" href="#" onclick="remove_all()">全部刪除</a>
@@ -53,12 +53,12 @@
                                     <th>身份</th>
                                     <th>功能</th>
                                 </tr>
-                                @foreach($class_student['student_data'] as $v)
+                                @foreach($class_member['member_data'] as $v)
                                     <tr>
                                         <td>[! $v['user_id'] !]</td>
                                         <td>[! $v['uname'] !]</td>
                                         <td>[! $v['viewpass'] !]</td>
-                                        <td>學生</td>
+                                        <td>[! isset($all_level[$v['access_level']])?$all_level[$v['access_level']]:'' !]</td>
                                         <td>
                                             <a class="icon-action icon-edit" href="[! route('ad.user.edit.page',array($v['uid'])) !]"></a>
                                             <a class="icon-action icon-delete" href="#" onclick='del_unit("[! $v['user_id'] !]","[! $v['uname'] !]")'></a>
@@ -67,7 +67,7 @@
                                 @endforeach
                             </table>
                             <div class="page-select-wrap">
-                                [! $class_student['page_data'] !]
+                                [! $class_member['page_data'] !]
                             </div>
                         @endif
                     </div>
@@ -76,7 +76,7 @@
         </div>
     </div>
 </div>
-@if($class_student != null)
+@if($class_member != null)
     [! Form::open(array('url'=>route('ad.user.search.download'),'id'=>'addForm', 'name'=>'addForm', 'target' => '_blank')) !]
     [! Form::hidden('city_code', $city_code) !]
     [! Form::hidden('organization_id', $organization_id) !]
