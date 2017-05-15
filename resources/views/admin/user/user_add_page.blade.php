@@ -28,7 +28,7 @@
                             <input class="select-input" type="password" id="re_pass"  value="">
                         </div>
                         <div class="select-group">
-                            <div class="label-title label-title-s">服務單位</div>
+                            <div class="label-title label-title-s"><span class="txt-red">*</span>服務單位</div>
                             <select class="select-s" id="city_code" onchange="get_city_school()">
                                 @foreach($city_data as $k => $v)
                                     <option value="[! $k !]">[! $v !]</option>
