@@ -39,9 +39,9 @@
                             <input id="input-search" class="btn-yellow" type="button" value="選擇完畢，送出" onclick="send()">
                         </div>
                     </div>
-                    <div class="record-inner">
+                    <p class="record-inner">
                         @if($class_member != null)
-                            <h3 class="record-title record-title-class">新北市縣立新莊國中7年1班
+                            <h3 class="record-title record-title-class" id="school_name">
                                 <a class="record-download" href="#" onclick="$('#addForm').submit()">下載帳號密碼檔</a>
                                 <a class="record-delete" href="#" onclick="remove_all()">全部刪除</a>
                             </h3>
@@ -112,6 +112,11 @@
         @if($class)
              $('#class').val('[! $class !]');
         @endif
+        var school_name = $('#city_code :selected').text();
+        school_name = school_name + $('#organization_id :selected').text();
+        school_name = school_name + '[! $grade !]年';
+        school_name = school_name + '[! $class !]班';
+        $('#school_name').append(school_name);
 
     });
 
