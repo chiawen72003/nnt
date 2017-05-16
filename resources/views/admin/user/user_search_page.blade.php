@@ -151,7 +151,7 @@
 
     //確認是否刪除學生
     function del_unit(get_id,unit_dsc){
-        if(confirm("確定是否刪除學生嗎?\r\n"+unit_dsc)){
+        if(confirm("確定是否刪除資料嗎?\r\n"+unit_dsc)){
             $.ajax({
                 url: "[! route('ad.user.search.delete') !]",
                 type:'POST',
@@ -163,7 +163,7 @@
                     //alert('Ajax request 發生錯誤');
                 },
                 success: function(response) {
-                    alert('學生刪除成功!!');
+                    alert('資料刪除成功!!');
                     location.reload();
                 }
             });
@@ -174,7 +174,7 @@
     function remove_all()
     {
         @if( $organization_id AND $grade AND $class)
-            if(confirm("確定是否刪除全部的學生嗎?")){
+            if(confirm("確定是否刪除全部的資料嗎?")){
                 $.ajax({
                     url: "[! route('ad.user.search.alldelete') !]",
                     type:'POST',
