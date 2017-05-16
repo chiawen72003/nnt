@@ -26,12 +26,12 @@
                             </select>
                             <select class="select-s" id="grade">
                                 @for($x=1;$x<21;$x++)
-                                    <option value="[! $x !]">[! $x !]年級</option>
+                                    <option value="[! $x !]">[! $x !]年</option>
                                 @endfor
                             </select>
                             <select class="select-s" id="class">
                                 @for($x=1;$x<21;$x++)
-                                    <option value="[! $x !]">[! $x !]班級</option>
+                                    <option value="[! $x !]">[! $x !]班</option>
                                 @endfor
                             </select>
                         </div>
