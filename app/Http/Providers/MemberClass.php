@@ -348,9 +348,55 @@ class MemberClass
 
                 $excel_obj = new PhpExcel();
                 $excel_obj -> init($this -> input_data);
-                $insert_data = $excel_obj -> import_student_data();
-                //todo 接下來批次插入user_info跟user_status
-
+                $cell_data = $excel_obj -> import_student_data();
+                $user_info = null;
+                $user_status = null;
+                //系統產生登入帳號
+                $t_id = time();
+                $data_total = count($cell_data);
+                if($data_total > 0)
+                {
+                    $user_info = array();
+                    $user_status = array();
+                    for($x=0;$x<$data_total;$x++ )
+                    {
+                        if(
+                            $data_total[x]['B']
+                            AND $data_total[x]['C']
+                            AND $data_total[x]['D']
+                            AND $data_total[x]['E']
+                            AND $data_total[x]['F']
+                            AND $data_total[x]['G']
+                            AND $data_total[x]['H']
+                            AND $data_total[x]['I']
+                            AND $data_total[x]['J']
+                            AND $data_total[x]['K']
+                        )
+                        {
+                            //todo 需要調整插入欄位的內容值
+                            $user_info[] = array(
+                                'user_id' => ($t_id + $x),
+                                'user_id' => is_null($data_total[x]['B'])?$data_total[x]['B']:'',
+                                'user_id' => is_null($data_total[x]['C'])?$data_total[x]['C']:'',
+                                'user_id' => is_null($data_total[x]['D'])?$data_total[x]['D']:'',
+                                'user_id' => is_null($data_total[x]['E'])?$data_total[x]['E']:'',
+                                'user_id' => is_null($data_total[x]['F'])?$data_total[x]['F']:'',
+                                'user_id' => is_null($data_total[x]['G'])?$data_total[x]['G']:'',
+                                'user_id' => is_null($data_total[x]['H'])?$data_total[x]['H']:'',
+                                'user_id' => is_null($data_total[x]['I'])?$data_total[x]['I']:'',
+                                'user_id' => is_null($data_total[x]['J'])?$data_total[x]['J']:'',
+                                'user_id' => is_null($data_total[x]['K'])?$data_total[x]['K']:'',
+                            );
+                            $user_status[] = array(
+                                'user_id' => ($t_id + $x),
+                                'access_level' => $this -> input_data['access_level']
+                            );
+                        }
+                    }
+                    //以批次新增的方式處理
+                    UserInfo::insert($user_info);
+                    UserStatus::insert($user_status);
+                }
             }
         }
     }
