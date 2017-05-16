@@ -573,6 +573,7 @@ class AdController extends Controller
         $member_obj -> init($data);
         $member_obj -> get_import_student();
 
+        return redirect()->route('ad.user.import.page')->with('message', '匯入完畢!');
     }
 
     /**
