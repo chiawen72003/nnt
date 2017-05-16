@@ -50,7 +50,7 @@
                         </div>
                         <div class="example-wrap">
                             <p>說明：</p>
-                            <p>1.利用 excel 或其他工具鍵入學生資料，存成 xls 檔（xlsx檔案格式不接受），並保留第一列標題檔，如 <a class="example-file" href="#">範例檔</a>。</p>
+                            <p>1.利用 excel 或其他工具鍵入學生資料，存成 xlsx 檔，並保留第一列標題檔，如 <a class="example-file" href="[! url('/demo_file/import_userALL.xlsx') !]">範例檔</a>。</p>
                             <p>2.匯入前先選取帳號之身份、班級。</p>
                             <p>3.本功能適用「同學校、同班級」帳號之匯入。</p>
                         </div>
