@@ -8,6 +8,7 @@ use \Session;
 use \DB;
 use \Response;
 use App\Http\Providers\NewsClass;
+use App\Http\Providers\MemberClass;
 
 class MemController extends Controller
 {
@@ -30,6 +31,8 @@ class MemController extends Controller
     public function index()
     {
         $data = array();
+        $member_tmp = new MemberClass();
+        $data['all_level'] = $member_tmp -> get_all_level();
         $data['user_data'] = app('request')->session()->get('user_data');
 
         return view('student.index', $data);
