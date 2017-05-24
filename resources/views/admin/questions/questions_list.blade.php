@@ -24,7 +24,7 @@
                             <div class="question-text-wrap clearfix">
                                 <div class="question-right-wrap">
                                     <div class="question-button clearfix">
-                                        <a href="#" class="button-edit">修改</a>
+                                        <a href="[! route('ad.questions.edit',array($v['id'])) !]" class="button-edit">修改</a>
                                         <a href="#" class="button-delete" onclick="del_questions('[! $v["id"] !]')">刪除</a>
                                     </div>
                                     <table id="table-data">
