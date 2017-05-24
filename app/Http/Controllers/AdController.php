@@ -255,16 +255,22 @@ class AdController extends Controller
      */
     public function questionsEdit($id)
     {
-        $exam_class_obj = new ExamClass();
-        $unit_class_obj = new UnitClass();
+        $uid = app('request')->session()->get('user_data')['uid'];
         $data = array();
-        $data['exampaper_data'] = $exam_class_obj -> get_exam_paper($id);
-        $unit_class_obj -> init(array('id'=>$data['exampaper_data']['unit_list_id']));
-        $data['unit_data'] = $unit_class_obj -> get_unit();
+        $unit_obj = new UnitClass();
+        $subject_obj = new SubjectClass();
+        $exampaper_obj = new ExamPaperClass();
+        $exampaper_obj ->init(array('uid'=>$uid));
+        $questions_item_obj = new QuestionsItemClass();
+        $questions_item_obj ->init(array('id'=>$id));
         $t = new FeedbackListClass();
+        $data['unit_data'] = $unit_obj -> get_all_unit();
+        $data['subject_data'] = $subject_obj -> subject_list();
         $data['feedback_list'] = $t->get_list_data();
-
-        return view('admin.questions_item_edit', $data);
+        $data['exampaper_data'] = $exampaper_obj->get_all_exampaper();
+        $data['item_data'] = $questions_item_obj->get_one_item_data();
+//dd($data['item_data'] );
+        return view('admin.questions.questions_item_edit', $data);
     }
 
     /**
