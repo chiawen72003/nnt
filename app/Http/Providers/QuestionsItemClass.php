@@ -163,4 +163,22 @@ class QuestionsItemClass
 
         return $return_data;
     }
+
+    /**
+     * 取得單一試題資料
+     */
+    public function get_one_item_data()
+    {
+        $return_data = array();
+
+        $item_obj = QuestionsItem::where('id', $this->item_data['id'])
+            ->get();
+        if ($item_obj) {
+            foreach ($item_obj as $value) {
+                $return_data = $value->toArray();
+            }
+        }
+
+        return $return_data;
+    }
 }
