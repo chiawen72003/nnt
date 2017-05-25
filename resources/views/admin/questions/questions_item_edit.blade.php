@@ -9,7 +9,7 @@
                 <li><a href="[! route('ad.questions.add.page') !]">新增試題</a></li>
                 <li><a class="current-page"  href="[! route('ad.exampaper.vol.list.page') !]">編修試卷</a></li>
             </ul>
-            <form id="form-editexam-question">
+            <form id="addschool-form">
                 <div class="select-group">
                     <div class="label-title">題目</div>
                     <div class="edit-wrap">
@@ -27,12 +27,21 @@
                     </select>
                 </div>
                 <!-- 選擇題選項區塊 開始 -->
-                <div id="multiple_choice_questions_area" style="display:none;">
+                <div id="multiple_choice_questions_area" style="[! ($item_data['model_item_id'] == 4)?'':'display:none;' !]">
                     <div class="select-group" id="add_option_area">
                         <div class="label-title">選擇題選項</div>
-                        <input class="select-input" type="text" value="" name="multiple_choice_questions[]">
+                        <input class="select-input" type="text" value="[! isset($item_data['model_item_options'][0])?$item_data['model_item_options'][0]:'' !]" name="multiple_choice_questions[]">
                         <input class="btn btn-option" type="button" value="新增" onclick="add_multiple_choice_questions_div()">
                     </div>
+                    @if( $item_data['model_item_id'] == 4 AND count($item_data['model_item_options']) >1)
+                        @for($x=1;$x<count($item_data['model_item_options']);$x++)
+                            <div class="select-group" id="option_item_[! $x !]" >
+                                <div class="label-title">選擇題選項</div>
+                                <input class="select-input" type="text" value="[! $item_data['model_item_options'][$x] !]" name="multiple_choice_questions[]">
+                                <input class="btn btn-option" type="button" value="移除選項" onclick='$("#option_item_[! $x !]").remove()'>
+                            </div>
+                        @endfor
+                    @endif
                 </div>
                 <!-- 選擇題選項區塊 結束 -->
                 <div class="select-group">
@@ -53,45 +62,257 @@
                 </div>
                 <!-- 電腦代理人設定區塊-->
                 <div id="div_people_pic_setting">
+                    @if(isset($item_data['module_type']) AND $item_data['module_type'] == 1)
+                        <div class="chat" id="avatar_single_switch" >
+                            <div class="select-group">
+                                <div class="label-title">代理人頭像設定(教師)</div>
+                                <select name="avatar_type[]">
+                                    <option value="1">Anna</option>
+                                    <option value="2" [! ($item_data['avatar_type'][0] == 2)?'selected':'' !]>Susan</option>
+                                    <option value="3" [! ($item_data['avatar_type'][0] == 3)?'selected':'' !]>Carla</option>
+                                    <option value="4" [! ($item_data['avatar_type'][0] == 4)?'selected':'' !]>Tom</option>
+                                    <option value="5" [! ($item_data['avatar_type'][0] == 5)?'selected':'' !]>Carl</option>
+                                    <option value="6" [! ($item_data['avatar_type'][0] == 6)?'selected':'' !]>John</option>
+                                </select>
+                            </div>
+                            <div class="select-group">
+                                <div class="label-title">代理人對話</div>
+                                <select name="avatar_dsc_type[]" class="select-s">
+                                    <option value="0">教師</option>
+                                </select>
+                                <input class="select-input" type="text" value="[! isset($item_data['avatar_dsc']['dsc'][0])?$item_data['avatar_dsc']['dsc'][0]:'' !]" name="avatar_dsc[]">
+                            </div>
+                            <div class="select-group">
+                                <div class="label-title">代理人對話</div>
+                                <select name="avatar_dsc_type[]" class="select-s">
+                                    <option value="0">教師</option>
+                                </select>
+                                <input class="select-input" type="text" value="[! isset($item_data['avatar_dsc']['dsc'][1])?$item_data['avatar_dsc']['dsc'][1]:'' !]" name="avatar_dsc[]">
+                            </div>
+                            <div class="select-group">
+                                <div class="label-title">代理人對話</div>
+                                <select name="avatar_dsc_type[]" class="select-s">
+                                    <option value="0">教師</option>
+                                </select>
+                                <input class="select-input" type="text" value="[! isset($item_data['avatar_dsc']['dsc'][2])?$item_data['avatar_dsc']['dsc'][2]:'' !]" name="avatar_dsc[]">
+                            </div>
+                        </div>
+                    @endif
+                    @if(isset($item_data['module_type']) AND $item_data['module_type'] == 2)
+
+                            <div class="chat" id="avatar_multiple_switch" >
+                                <div class="select-group">
+                                    <div class="label-title">代理人頭像設定(教師)</div>
+                                    <select name="avatar_type[]" >
+                                        <option value="1">Anna</option>
+                                        <option value="2" [! ($item_data['avatar_type'][0] == 2)?'selected':'' !]>Susan</option>
+                                        <option value="3" [! ($item_data['avatar_type'][0] == 3)?'selected':'' !]>Carla</option>
+                                        <option value="4" [! ($item_data['avatar_type'][0] == 4)?'selected':'' !]>Tom</option>
+                                        <option value="5" [! ($item_data['avatar_type'][0] == 5)?'selected':'' !]>Carl</option>
+                                        <option value="6" [! ($item_data['avatar_type'][0] == 6)?'selected':'' !]>John</option>
+                                    </select>
+                                </div>
+                                <div class="select-group">
+                                    <div class="label-title">代理人頭像設定(學生)</div>
+                                    <select name="avatar_type[]" >
+                                        <option value="1">Anna</option>
+                                        <option value="2" [! ($item_data['avatar_type'][1] == 2)?'selected':'' !]>Susan</option>
+                                        <option value="3" [! ($item_data['avatar_type'][1] == 3)?'selected':'' !]>Carla</option>
+                                        <option value="4" [! ($item_data['avatar_type'][1] == 4)?'selected':'' !]>Tom</option>
+                                        <option value="5" [! ($item_data['avatar_type'][1] == 5)?'selected':'' !]>Carl</option>
+                                        <option value="6" [! ($item_data['avatar_type'][1] == 6)?'selected':'' !]>John</option>
+                                    </select>
+                                </div>
+                                <div class="select-group">
+                                    <div class="label-title">代理人對話</div>
+                                    <select name="avatar_dsc_type[]" class="select-s">
+                                        <option value="0">教師</option>
+                                        <option value="1" [! ($item_data['avatar_dsc']['type'][0] == 1)?'selected':'' !]>學生</option>
+                                    </select>
+                                    <input class="select-input" type="text" value="[! isset($item_data['avatar_dsc']['dsc'][0])?$item_data['avatar_dsc']['dsc'][0]:'' !]" name="avatar_dsc[]">
+                                </div>
+                                <div class="select-group">
+                                    <div class="label-title">代理人對話</div>
+                                    <select name="avatar_dsc_type[]" class="select-s">
+                                        <option value="0">教師</option>
+                                        <option value="1" [! ($item_data['avatar_dsc']['type'][1] == 1)?'selected':'' !]>學生</option>
+                                    </select>
+                                    <input class="select-input" type="text" value="[! isset($item_data['avatar_dsc']['dsc'][1])?$item_data['avatar_dsc']['dsc'][1]:'' !]" name="avatar_dsc[]">
+                                </div>
+                                <div class="select-group">
+                                    <div class="label-title">代理人對話</div>
+                                    <select name="avatar_dsc_type[]" class="select-s">
+                                        <option value="0">教師</option>
+                                        <option value="1" [! ($item_data['avatar_dsc']['type'][2] == 1)?'selected':'' !]>學生</option>
+                                    </select>
+                                    <input class="select-input" type="text" value="[! isset($item_data['avatar_dsc']['dsc'][2])?$item_data['avatar_dsc']['dsc'][2]:'' !]" name="avatar_dsc[]">
+                                </div>
+                                <div class="select-group">
+                                    <div class="label-title">代理人對話</div>
+                                    <select name="avatar_dsc_type[]" class="select-s">
+                                        <option value="0">教師</option>
+                                        <option value="1" [! ($item_data['avatar_dsc']['type'][3] == 1)?'selected':'' !]>學生</option>
+                                    </select>
+                                    <input class="select-input" type="text" value="[! isset($item_data['avatar_dsc']['dsc'][3])?$item_data['avatar_dsc']['dsc'][3]:'' !]" name="avatar_dsc[]">
+                                </div>
+                                <div class="select-group">
+                                    <div class="label-title">代理人對話</div>
+                                    <select name="avatar_dsc_type[]" class="select-s">
+                                        <option value="0">教師</option>
+                                        <option value="1" [! ($item_data['avatar_dsc']['type'][4] == 1)?'selected':'' !]>學生</option>
+                                    </select>
+                                    <input class="select-input" type="text" value="[! isset($item_data['avatar_dsc']['dsc'][4])?$item_data['avatar_dsc']['dsc'][4]:'' !]" name="avatar_dsc[]">
+                                </div>
+                            </div>
+                    @endif
+                    @if(isset($item_data['module_type']) AND $item_data['module_type'] == 3)
+
+                            <div class="chat" id="avatar_multiple_switch" >
+                                <div class="select-group">
+                                    <div class="label-title">代理人頭像設定(教師)</div>
+                                    <select name="avatar_type[]" >
+                                        <option value="1">Anna</option>
+                                        <option value="2" [! ($item_data['avatar_type'][0] == 2)?'selected':'' !]>Susan</option>
+                                        <option value="3" [! ($item_data['avatar_type'][0] == 3)?'selected':'' !]>Carla</option>
+                                        <option value="4" [! ($item_data['avatar_type'][0] == 4)?'selected':'' !]>Tom</option>
+                                        <option value="5" [! ($item_data['avatar_type'][0] == 5)?'selected':'' !]>Carl</option>
+                                        <option value="6" [! ($item_data['avatar_type'][0] == 6)?'selected':'' !]>John</option>
+                                    </select>
+                                </div>
+                                <div class="select-group">
+                                    <div class="label-title">代理人頭像設定(學生)</div>
+                                    <select name="avatar_type[]" >
+                                        <option value="1">Anna</option>
+                                        <option value="2" [! ($item_data['avatar_type'][1] == 2)?'selected':'' !]>Susan</option>
+                                        <option value="3" [! ($item_data['avatar_type'][1] == 3)?'selected':'' !]>Carla</option>
+                                        <option value="4" [! ($item_data['avatar_type'][1] == 4)?'selected':'' !]>Tom</option>
+                                        <option value="5" [! ($item_data['avatar_type'][1] == 5)?'selected':'' !]>Carl</option>
+                                        <option value="6" [! ($item_data['avatar_type'][1] == 6)?'selected':'' !]>John</option>
+                                    </select>
+                                </div>
+                                <div class="select-group">
+                                    <div class="label-title">代理人對話</div>
+                                    <select name="avatar_dsc_type[]" class="select-s">
+                                        <option value="0">教師</option>
+                                        <option value="1" [! ($item_data['avatar_dsc']['type'][0] == 1)?'selected':'' !]>學生</option>
+                                    </select>
+                                    <input class="select-input" type="text" value="[! isset($item_data['avatar_dsc']['dsc'][0])?$item_data['avatar_dsc']['dsc'][0]:'' !]" name="avatar_dsc[]">
+                                </div>
+                                <div class="select-group">
+                                    <div class="label-title">代理人對話</div>
+                                    <select name="avatar_dsc_type[]" class="select-s">
+                                        <option value="0">教師</option>
+                                        <option value="1" [! ($item_data['avatar_dsc']['type'][1] == 1)?'selected':'' !]>學生</option>
+                                    </select>
+                                    <input class="select-input" type="text" value="[! isset($item_data['avatar_dsc']['dsc'][1])?$item_data['avatar_dsc']['dsc'][1]:'' !]" name="avatar_dsc[]">
+                                </div>
+                                <div class="select-group">
+                                    <div class="label-title">代理人對話</div>
+                                    <select name="avatar_dsc_type[]" class="select-s">
+                                        <option value="0">教師</option>
+                                        <option value="1" [! ($item_data['avatar_dsc']['type'][2] == 1)?'selected':'' !]>學生</option>
+                                    </select>
+                                    <input class="select-input" type="text" value="[! isset($item_data['avatar_dsc']['dsc'][2])?$item_data['avatar_dsc']['dsc'][2]:'' !]" name="avatar_dsc[]">
+                                </div>
+                                <div class="select-group">
+                                    <div class="label-title">代理人對話</div>
+                                    <select name="avatar_dsc_type[]" class="select-s">
+                                        <option value="0">教師</option>
+                                        <option value="1" [! ($item_data['avatar_dsc']['type'][3] == 1)?'selected':'' !]>學生</option>
+                                    </select>
+                                    <input class="select-input" type="text" value="[! isset($item_data['avatar_dsc']['dsc'][3])?$item_data['avatar_dsc']['dsc'][3]:'' !]" name="avatar_dsc[]">
+                                </div>
+                                <div class="select-group">
+                                    <div class="label-title">代理人對話</div>
+                                    <select name="avatar_dsc_type[]" class="select-s">
+                                        <option value="0">教師</option>
+                                        <option value="1" [! ($item_data['avatar_dsc']['type'][4] == 1)?'selected':'' !]>學生</option>
+                                    </select>
+                                    <input class="select-input" type="text" value="[! isset($item_data['avatar_dsc']['dsc'][4])?$item_data['avatar_dsc']['dsc'][4]:'' !]" name="avatar_dsc[]">
+                                </div>
+                            </div>
+                    @endif
                 </div>
                 <!-- 電腦代理人設定區塊 結束-->
                 <div id="div_right" class="tab_content">
                     <div class="select-group">
                         <div class="label-title">正確答案</div>
-                        <input class="select-input" type="text" value="" name="correct_answer[]">
+                        <input class="select-input" type="text" value="[! $item_data['correct_answer'][0]['answer'] !]" name="correct_answer[]">
                     </div>
                     <div class="select-group">
                         <div class="label-title">正確跳題</div>
-                        <input class="select-input" type="text" value="" name="correct_jump_num[]">
+                        <input class="select-input" type="text" value="[! $item_data['correct_answer'][0]['jump'] !]" name="correct_jump_num[]">
                     </div>
                     <div class="select-group">
                         <div class="label-title">正確關鍵字</div>
-                        <input class="select-input" type="text" value="" name="correct_keyword[]">
+                        <input class="select-input" type="text" value="[! $item_data['correct_answer'][0]['keyword'] !]" name="correct_keyword[]">
                         <input class="btn btn-option" type="button" value="新增選項" onclick="add_correct_div()">
                     </div>
                 </div>
+                @if(count($item_data['correct_answer']) > 1)
+                    @for($x=1;$x<count($item_data['correct_answer']);$x++)
+                        <div id="correct_[! $x !]">
+                            <div class="select-group">
+                                <div class="label-title">正確答案</div>
+                                <input class="select-input" type="text" value="[! $item_data['correct_answer'][$x]['answer'] !]" name="correct_answer[]">
+                            </div>
+                            <div class="select-group">
+                                <div class="label-title">正確跳題</div>
+                                <input class="select-input" type="text" value="[! $item_data['correct_answer'][$x]['jump'] !]" name="correct_jump_num[]">
+                            </div>
+                            <div class="select-group">
+                                <div class="label-title">正確關鍵字</div>
+                                <input class="select-input" type="text" value="[! $item_data['correct_answer'][$x]['keyword'] !]" name="correct_keyword[]">
+                                <input class="btn btn-option" type="button" value="移除選項" onclick='$("#correct_[! $x !]").remove()'>
+                            </div>
+                        </div>
+                    @endfor
+                @endif
                 <div id="div_error" >
                     <div class="select-group">
                         <div class="label-title">錯誤bug號碼</div>
-                        <input class="select-input" type="text" value="" name="error_number[]">
+                        <input class="select-input" type="text" value="[! $item_data['error_answer'][0]['number'] !]" name="error_number[]">
                     </div>
                     <div class="select-group">
                         <div class="label-title">錯誤bug跳題</div>
-                        <input class="select-input" type="text" value="" name="error_jump_num[]">
+                        <input class="select-input" type="text" value="[! $item_data['error_answer'][0]['jump'] !]" name="error_jump_num[]">
                     </div>
                     <div class="select-group">
                         <div class="label-title">錯誤答案</div>
-                        <input class="select-input" type="text" value="" name="error_answer[]">
+                        <input class="select-input" type="text" value="[! $item_data['error_answer'][0]['answer'] !]" name="error_answer[]">
                     </div>
                     <div class="select-group">
                         <div class="label-title">錯誤答案(關鍵字)</div>
-                        <input class="select-input" type="text" value="" name="error_keyword[]">
+                        <input class="select-input" type="text" value="[! $item_data['error_answer'][0]['keyword'] !]" name="error_keyword[]">
                         <input class="btn btn-option" type="button" value="新增選項" onclick="add_error_div()">
                     </div>
                 </div>
+                @if(count($item_data['error_answer']) > 1)
+                    @for($x=1;$x<count($item_data['error_answer']);$x++)
+                        <div  id="error_[! $x !]">
+                            <div class="select-group">
+                                <div class="label-title">錯誤bug號碼</div>
+                                <input class="select-input" type="text" value="[! $item_data['error_answer'][$x]['number'] !]" name="error_number[]">
+                            </div>
+                            <div class="select-group">
+                                <div class="label-title">錯誤bug跳題</div>
+                                <input class="select-input" type="text" value="[! $item_data['error_answer'][$x]['jump'] !]" name="error_jump_num[]">
+                            </div>
+                            <div class="select-group">
+                                <div class="label-title">錯誤答案</div>
+                                <input class="select-input" type="text" value="[! $item_data['error_answer'][$x]['answer'] !]" name="error_answer[]">
+                            </div>
+                            <div class="select-group">
+                                <div class="label-title">錯誤答案(關鍵字)</div>
+                                <input class="select-input" type="text" value="[! $item_data['error_answer'][$x]['keyword'] !]" name="error_keyword[]">
+                                <input class="btn btn-option" type="button" value="移除選項" onclick='$("#error_[! $x !]").remove()'>
+                            </div>
+                        </div>
+                    @endfor
+                @endif
                 <div class="form-button-wrap" id="sendbutton">
                     <input class="btn-yellow" type="button" value="回上一頁" onclick="history.back();" />
-                    <input class="btn-green" type="submit" value="儲存" />
+                    <input class="btn-green" type="button" value="儲存" onclick="update_item()" />
                 </div>
             </form>
         </div>
@@ -131,109 +352,6 @@
         <input class="btn btn-option" type="button" value="移除選項" id="del_btn">
     </div>
 </div>
-
-<!-- 單代理人對話區 開始-->
-<div class="chat" id="avatar_single_switch" style="display: none">
-    <div class="select-group">
-        <div class="label-title">代理人頭像設定(教師)</div>
-        <select name="avatar_type[]">
-            <option value="1">Anna</option>
-            <option value="2">Susan</option>
-            <option value="3">Carla</option>
-            <option value="4">Tom</option>
-            <option value="5">Carl</option>
-            <option value="6">John</option>
-        </select>
-    </div>
-    <div class="select-group">
-        <div class="label-title">代理人對話</div>
-        <select name="avatar_dsc_type[]" class="select-s">
-            <option value="0">教師</option>
-        </select>
-        <input class="select-input" type="text" value="" name="avatar_dsc[]">
-    </div>
-    <div class="select-group">
-        <div class="label-title">代理人對話</div>
-        <select name="avatar_dsc_type[]" class="select-s">
-            <option value="0">教師</option>
-        </select>
-        <input class="select-input" type="text" value="" name="avatar_dsc[]">
-    </div>
-    <div class="select-group">
-        <div class="label-title">代理人對話</div>
-        <select name="avatar_dsc_type[]" class="select-s">
-            <option value="0">教師</option>
-        </select>
-        <input class="select-input" type="text" value="" name="avatar_dsc[]">
-    </div>
-</div>
-<!-- 單代理人對話區  結束-->
-<!-- 雙代理人對話區  開始-->
-<div class="chat" id="avatar_multiple_switch" style="display: none">
-    <div class="select-group">
-        <div class="label-title">代理人頭像設定(教師)</div>
-        <select name="avatar_type[]" >
-            <option value="1">Anna</option>
-            <option value="2">Susan</option>
-            <option value="3">Carla</option>
-            <option value="4">Tom</option>
-            <option value="5">Carl</option>
-            <option value="6">John</option>
-        </select>
-    </div>
-    <div class="select-group">
-        <div class="label-title">代理人頭像設定(學生)</div>
-        <select name="avatar_type[]" >
-            <option value="1">Anna</option>
-            <option value="2">Susan</option>
-            <option value="3">Carla</option>
-            <option value="4">Tom</option>
-            <option value="5">Carl</option>
-            <option value="6">John</option>
-        </select>
-    </div>
-    <div class="select-group">
-        <div class="label-title">代理人對話</div>
-        <select name="avatar_dsc_type[]" class="select-s">
-            <option value="0">教師</option>
-            <option value="1">學生</option>
-        </select>
-        <input class="select-input" type="text" value="" name="avatar_dsc[]">
-    </div>
-    <div class="select-group">
-        <div class="label-title">代理人對話</div>
-        <select name="avatar_dsc_type[]" class="select-s">
-            <option value="0">教師</option>
-            <option value="1">學生</option>
-        </select>
-        <input class="select-input" type="text" value="" name="avatar_dsc[]">
-    </div>
-    <div class="select-group">
-        <div class="label-title">代理人對話</div>
-        <select name="avatar_dsc_type[]" class="select-s">
-            <option value="0">教師</option>
-            <option value="1">學生</option>
-        </select>
-        <input class="select-input" type="text" value="" name="avatar_dsc[]">
-    </div>
-    <div class="select-group">
-        <div class="label-title">代理人對話</div>
-        <select name="avatar_dsc_type[]" class="select-s">
-            <option value="0">教師</option>
-            <option value="1">學生</option>
-        </select>
-        <input class="select-input" type="text" value="" name="avatar_dsc[]">
-    </div>
-    <div class="select-group">
-        <div class="label-title">代理人對話</div>
-        <select name="avatar_dsc_type[]" class="select-s">
-            <option value="0">教師</option>
-            <option value="1">學生</option>
-        </select>
-        <input class="select-input" type="text" value="" name="avatar_dsc[]">
-    </div>
-</div>
-<!-- 雙代理人對話區  結束-->
 <!-- 選擇題選項區塊  開始-->
 <div class="select-group" id="module_option_item" style="display: none">
     <div class="label-title">選擇題選項</div>
@@ -454,7 +572,7 @@
     /**
      * 新增 正確答案區塊
      */
-    var correct_num =0 ;
+    var correct_num = count($item_data['correct_answer']) ;
     function add_correct_div() {
         var temp_obj = $('#correct_div').clone().attr('id','correct_'+correct_num).show();
         temp_obj.find('input[id="del_btn"]').attr('onclick','$("#correct_'+correct_num+'").remove()');
@@ -465,7 +583,7 @@
     /**
      * 新增 錯誤答案區塊
      */
-    var error_num =0 ;
+    var error_num = count($item_data['error_answer']) ;
     function add_error_div() {
         var temp_obj = $('#error_div').clone().attr('id','error_'+correct_num).show();
         temp_obj.find('input[id="del_btn"]').attr('onclick','$("#error_'+correct_num+'").remove()');
@@ -492,7 +610,7 @@
      * 增加一個選擇題選項輸入
      *
      */
-    var option_item_num = 0;
+    var option_item_num = [! count($item_data['model_item_options']) !];
     function add_multiple_choice_questions_div()
     {
         var temp_obj = $('#module_option_item').clone().attr('id','option_item_'+option_item_num).show();
@@ -502,22 +620,21 @@
 
     }
 
-    //新增試題資料
-    function add_item() {
+    //更新試題資料
+    function update_item() {
         var up_obj = get_item_objs();
         $.ajax({
-            url: '[! route("ad.questions.add") !]',
+            url: '[! route("ad.questions.update") !]',
             type:'POST',
             data: {
                 _token: '[! csrf_token() !]',
-                add_data:up_obj
+                update_data:up_obj
             },
             error: function(xhr) {
                 //alert('Ajax request 發生錯誤');
             },
             success: function(response) {
-                alert('新增試題成功!!');
-                location.reload();
+                alert('更新試題成功!!');
             }
         });
     }
@@ -525,12 +642,10 @@
     //取得上傳物件
     function get_item_objs() {
         var temp_obj = [];
-        temp_obj.push({'exam_paper_id':$('#vol').val()});
+        temp_obj.push({'id':'[! $item_id !]'});
         temp_obj.push({'title':CKEDITOR.instances.c_ckedit1.getData()});
-        temp_obj.push({'score':$('#score').val()});
         temp_obj.push({'model_item_id':$('#model_item_id').val()});
         temp_obj.push({'feedback_type':$('#feedback_type').val()});
-        temp_obj.push({'power_dsc':$('#power_dsc').val()});
         //正確答案區
         var correct_obj = [];
         var temp_array = [];
