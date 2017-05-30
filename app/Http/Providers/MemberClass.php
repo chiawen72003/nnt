@@ -276,6 +276,28 @@ class MemberClass
 
         return $t_obj;
     }
+    /**
+     * 指定學校-班級的所有學生資料[不包含分頁資料]
+     */
+    public function get_all_class_data()
+    {
+        $t_obj = null;
+        if($this->input_data['organization_id']  AND $this->input_data['grade'] AND $this->input_data['class'])
+        {
+            $temp_obj = UserInfo::leftJoin('user_status', 'user_status.user_id', '=', 'user_info.user_id')
+                ->where('user_info.organization_id', $this->input_data['organization_id'])
+                ->where('user_info.grade', $this->input_data['grade'])
+                ->where('user_info.class', $this->input_data['class'])
+                ->orderby('user_info.uid', 'ASC')
+                ->get();
+            foreach ($temp_obj as $v)
+            {
+                $t_obj[] = $v;
+            }
+        }
+
+        return $t_obj;
+    }
 
     /**
      * 移除一個學生
