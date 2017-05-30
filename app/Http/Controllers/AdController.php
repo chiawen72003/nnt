@@ -607,7 +607,7 @@ class AdController extends Controller
     }
 
     /**
-     * 下載 指定學校-班級的所有學生資料
+     * 下載 指定學校-班級的所有人員資料
      *
      */
     public function userSearchDownload()
@@ -621,7 +621,7 @@ class AdController extends Controller
         $member_tmp -> init($fp);
         $city_data = $school_tmp -> get_all_city_data();
         $school_data = $school_tmp -> get_school_data();
-        $class_student = $member_tmp -> get_all_class_student_data();
+        $class_student = $member_tmp -> get_all_class_data();
         $city_code = isset($fp['city_code'])?$fp['city_code']:null;
         $organization_id = isset($fp['organization_id'])?$fp['organization_id']:null;
         $grade = isset($fp['grade'])?$fp['grade']:null;
