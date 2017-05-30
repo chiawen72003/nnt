@@ -921,13 +921,14 @@ class AdController extends Controller
         $unit_obj = new UnitClass();
         $subject_obj = new SubjectClass();
         $exampaper_obj = new ExamPaperClass();
-        $exampaper_obj ->init(array('uid'=>$uid));
+        $exampaper_obj ->init(array('uid'=>$uid, 'id'=>$id));
         $questions_obj = new QuestionsItemClass();
         $questions_obj -> init(array('exam_paper_id'=>$id));
-        $data['unit_data'] = $unit_obj -> get_all_unit();
         $data['subject_data'] = $subject_obj -> subject_list();
-        $data['exampaper_data'] = $exampaper_obj->get_all_exampaper();
+        $data['exampaper_data'] = $exampaper_obj->get_exampaper();
         $data['exampaper_id'] = $id;
+        $unit_obj -> init(array('id'=>$data['exampaper_data'][0]['unit_list_id']));
+        $data['unit_data'] = $unit_obj -> get_unit();
         $data['questions'] = $questions_obj ->get_questions_data();
 
         return view('admin.questions.questions_list', $data);
