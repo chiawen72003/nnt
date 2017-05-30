@@ -10,8 +10,8 @@
                 <li><a class="current-page" href="[! route('ad.exampaper.vol.list.page') !]">編修試卷</a></li>
             </ul>
             <div class="exam-title">
-                試卷名稱：單代理人 數學(單代理人)第1冊第1單元【b506】－卷02
-                <input class="btn btn-delete" type="button" value="刪除試卷" onclick="del_exampaper()">
+                試卷名稱：
+                <input class="btn btn-delete" type="button" value="刪除試卷" onclick="del_exampaper()" id="page_title">
             </div>
             <form id="form-addexam-question">
                 @foreach($questions as $k => $v)
@@ -50,6 +50,40 @@
 </div>
 [! Html::script('js/jquery-1.11.3.js') !]
 <script>
+    $( document ).ready(function() {
+        create_title();
+    });
+
+    function create_title()
+    {
+        var dsc = '單代理人 數學()第[! $unit_data['vol'] !]冊第[! $unit_data['unit'] !]單元【b506】－卷02';
+        var vol = [! $unit_data['vol'] !];
+        var unit= [! $unit_data['unit'] !];
+        var module_type = [! $unit_data['module_type'] !];
+        var subject = '[! $subject_data[$unit_data['subject']] !]';
+        var paper_vol = '[! $exampaper_data[0]['paper_vol'] !]';
+        if(paper_vol.length == 1)
+        {
+            paper_vol = '0' + paper_vol
+        }
+
+        if(module_type == 1)
+        {
+            module_type = '單代理人';
+        }
+        if(module_type == 2)
+        {
+            module_type = '雙代理人';
+        }
+        if(module_type == 3)
+        {
+            module_type = '多代理人';
+        }
+        dsc = module_type + ' ' + subject +'(' + module_type + ')第'+vol+'冊第'+unit+'單元【b506】－卷' + paper_vol;
+
+        $('#page_title').before(dsc);
+    }
+
     //移除 一個試卷資料
     function del_exampaper()
     {
