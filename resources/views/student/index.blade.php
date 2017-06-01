@@ -21,7 +21,7 @@
 			<div class="boad-welcome-wrap">
 				<p>歡迎光臨！</p>
 				<p>您是<span class="txt-yellow">[! $user_data['uname'] !] </span>，身份：[! (isset($all_level[$user_data['access_level']]))?$all_level[$user_data['access_level']]:'' !]</p>
-				<p>台中市臺中教育大學[! $user_data['grade'] !]年[! $user_data['class'] !]班</p>
+				<p>[! $user_data['school_title'] !]</p>
 			</div>
 			<div class="img-chalk"></div>
 		</div>
