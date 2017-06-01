@@ -73,6 +73,18 @@ class MemberClass
                 $user_data['access_level'] = $this ->get_access_level($v['user_id']);
                 $return_data['check_result'] = true;
                 $return_data['user_data'] = $user_data;
+                $return_data['user_data']['school_title'] = '';
+                //組合出學校名稱資料
+                if( $return_data['user_data']['organization_id'] > '' )
+                {
+                    $school_tmp = new SchoolClass();
+                    $school_tmp -> init(array('organization_id' => $return_data['user_data']['organization_id']));
+                    $school_data = $school_tmp -> get_school_data();
+                    $city = $school_tmp -> get_all_city_data();
+                    $return_data['user_data']['school_title'] = $city[$school_data['city_code']] . $school_data['name'];
+                    $return_data['user_data']['school_title'] .= $return_data['user_data']['grade'] . '年';
+                    $return_data['user_data']['school_title'] .= $return_data['user_data']['class'] . '班';
+                }
             }
         }
 
