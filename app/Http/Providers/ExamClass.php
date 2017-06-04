@@ -68,20 +68,7 @@ class ExamClass
         }
         if(count($access_data) > 0)
         {
-            //已經受測且操作完成的試卷
-            $temp_obj = ExamRecord::where('student_id', $mem_data['uid'])
-                ->where('is_finish','1')
-                ->get();
-            foreach ($temp_obj as $value) {
-                $has_test_data[] = $value['exam_paper_id'];
-            }
-            //還沒有操作完成的試卷
-            if(count($has_test_data) > 0)
-            {
-                $can_test_data = array_diff($access_data,$has_test_data);
-            }else{
-                $can_test_data = $access_data;
-            }
+            $can_test_data = $access_data;
             //根據試卷id取得單元id
             $paper_obj = new ExamPaperClass();
             $paper_obj ->init(
@@ -128,20 +115,7 @@ class ExamClass
         }
         if(count($access_data) > 0)
         {
-            //已經受測且操作完成的試卷
-            $temp_obj = ExamRecord::where('student_id', $mem_data['uid'])
-                ->where('is_finish','1')
-                ->get();
-            foreach ($temp_obj as $value) {
-                $has_test_data[] = $value['exam_paper_id'];
-            }
-            //還沒有操作完成的試卷
-            if(count($has_test_data) > 0)
-            {
-                $can_test_data = array_diff($access_data,$has_test_data);
-            }else{
-                $can_test_data = $access_data;
-            }
+            $can_test_data = $access_data;
             //根據試卷id取得單元id
             $paper_obj = new ExamPaperClass();
             $paper_obj ->init(
@@ -361,21 +335,6 @@ class ExamClass
         return ;
     }
 
-
-    /**
-     * 取得 受測學生 觀看紀錄
-     *
-     * @param Array $mem_data 學生個人資料
-     *
-     * @return Array $list_data 可測驗的單元資料
-     */
-    public function get_review_data($mem_data)
-    {
-        $temp_obj = new ExamRecordClass();
-
-        return $temp_obj->get_review_data($mem_data['uid']);
-    }
-
     /**
      * 新增 操作紀錄
      *
@@ -463,7 +422,11 @@ class ExamClass
             ->orderBy('unit_list.subject')
             ->get();
         if(count($temp_obj) > 0){
-            $return_data = $temp_obj->toArray();
+            foreach ($temp_obj as $v)
+            {
+                $return_data[] = $v['subject'];
+            }
+
         }
 
         return $return_data;
