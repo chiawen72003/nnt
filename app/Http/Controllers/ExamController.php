@@ -82,23 +82,14 @@ class ExamController extends Controller
             'student_id'=>app('request')->session()->get('user_data')['uid'],
             'exam_paper_id'=>$paper_id,
         ));
-        $last_exam_record = $examrecord->get_one_record();
-        $data['begin_paper_index'] = 0;//起始試卷的index位置
+        $last_exam_record = $examrecord->get_temp_record();
         $data['begin_item_index'] = 0;//起始試題的index位置
 
         if(!is_null($last_exam_record)){
-            //如果已經操作完畢，就必須把紀錄重新清除在操作
-            if($last_exam_record['is_finish'] == 1){
-                $examrecord->set_clear_record();
-                $data['begin_paper_index'] = 0;//起始試卷的index位置
-                $data['begin_item_index'] = 0;//起始試題的index位置
-            }else{
-                $use_item = json_decode($last_exam_record['use_item'],true);
-                if(is_array($use_item)){
-                    foreach ($use_item as $v){
-                        $data['begin_paper_index'] = $v['paper_index'];//起始試卷的index位置
-                        $data['begin_item_index'] = $v['item_index'];//起始試題的index位置
-                    }
+            $use_item = json_decode($last_exam_record['use_item'],true);
+            if(is_array($use_item)){
+                foreach ($use_item as $v){
+                    $data['begin_item_index'] = $v['item_index'];//起始試題的index位置
                 }
             }
         }
@@ -193,19 +184,20 @@ class ExamController extends Controller
     /**
      * 成果查詢 第三層 查看學生操作某單元的細項資訊
      */
-    public function viewExamRecordList($examrecord_id)
+    public function viewExamRecordList($id)
     {
         $exam_class_obj = new ExamClass();
         $data = array();
         $mem_id = app('request')->session()->get('user_data.uid');
-        $data['exam_record'] = $exam_class_obj -> get_exam_record($mem_id,$examrecord_id);
-        $data['exam_paper_id'] = $examrecord_id;
+        $data['exam_record'] = $exam_class_obj -> get_exam_record($mem_id,$id);
+        $data['exam_paper_id'] = $id;
         $data['user_data'] = app('request')->session()->get('user_data');
-        $t = new ExamRecordClass(array(
-            'student_id' => app('request')->session()->get('user_data')['uid'],
-            'exam_paper_id' => $examrecord_id,
+        $t = new ExamRecordClass();
+        $t -> init(array(
+            'student_id' => app('request')->session()->get('user_data.uid'),
+            'id' => $id,
         ));
-        $t->set_has_view_record();
+        $t -> set_has_view_record();
 
         return view('student.exam.record_view_list', $data);
     }
