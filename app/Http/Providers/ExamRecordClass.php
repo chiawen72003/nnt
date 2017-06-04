@@ -3,10 +3,12 @@
 namespace App\Http\Providers;
 
 use App\Http\Models\ExamRecord;
+use App\Http\Models\ExamTempRecord;
 
 class ExamRecordClass
 {
     private $item_data = array(
+        'id' => null,
         'student_id' => null,
         'exam_paper_id' => null,
         'record' => array(),
@@ -43,6 +45,11 @@ class ExamRecordClass
     /**
      * 新增一筆紀錄
      *
+     * 1. 如果沒有操作紀錄時，在資料表exam_temp_record新增一筆暫存資料。
+     * 2. 有操作紀錄但尚未操作完成前，更新資料表exam_temp_record的暫存資料。
+     * 3. 測驗結束時，刪除資料表exam_temp_record的暫存資料。
+     * 4. 測驗結束時，完整測驗資料存入資料表exam_record內。
+     *
      */
     public function set_record()
     {
@@ -51,7 +58,7 @@ class ExamRecordClass
             AND $this->item_data['itemData']
             AND is_numeric($this->item_data['isFinish'])
         ) {
-            $t_obj = ExamRecord::where('exam_paper_id', $this->item_data['exam_paper_id'])
+            $t_obj = ExamTempRecord::where('exam_paper_id', $this->item_data['exam_paper_id'])
                 ->where('student_id', $this->item_data['student_id'])
                 ->get();
             if (count($t_obj) == 1) {
@@ -68,15 +75,41 @@ class ExamRecordClass
                     $v['use_item'] = json_encode($useitem);
                     $v['is_finish'] = $this->item_data['isFinish'];
                     $v->save();
+                    //如果 操作結束時，新增資料到exam_record內，並刪除temp的資料
+                    if( $v['is_finish'] == '1')
+                    {
+                        $record_obj = new ExamRecord();
+                        $record_obj -> student_id = $v['student_id'];
+                        $record_obj -> exam_paper_id = $v['exam_paper_id'];
+                        $record_obj -> record = $v['record'];
+                        $record_obj -> has_review = $v['has_review'];
+                        $record_obj -> use_item = $v['use_item'];
+                        $record_obj -> is_finish = $v['is_finish'];
+                        $record_obj -> save();
+                        $v -> delete();
+                    }
+
                 }
             } else {
-                $t_obj = new ExamRecord();
-                $t_obj->student_id = $this->item_data['student_id'];
-                $t_obj->exam_paper_id = $this->item_data['exam_paper_id'];
-                $t_obj->record = json_encode($this->item_data['record']);
-                $t_obj->use_item = json_encode($this->item_data['itemData']);
-                $t_obj->is_finish = $this->item_data['isFinish'];
-                $t_obj->save();
+                //預防只有一個試題就結束的狀況
+                if( $this->item_data['isFinish'] == '1')
+                {
+                    $t_obj = new ExamRecord();
+                    $t_obj->student_id = $this->item_data['student_id'];
+                    $t_obj->exam_paper_id = $this->item_data['exam_paper_id'];
+                    $t_obj->record = json_encode($this->item_data['record']);
+                    $t_obj->use_item = json_encode($this->item_data['itemData']);
+                    $t_obj->is_finish = $this->item_data['isFinish'];
+                    $t_obj->save();
+                }else{
+                    $t_obj = new ExamTempRecord();
+                    $t_obj->student_id = $this->item_data['student_id'];
+                    $t_obj->exam_paper_id = $this->item_data['exam_paper_id'];
+                    $t_obj->record = json_encode($this->item_data['record']);
+                    $t_obj->use_item = json_encode($this->item_data['itemData']);
+                    $t_obj->is_finish = $this->item_data['isFinish'];
+                    $t_obj->save();
+                }
             }
 
 
@@ -86,12 +119,12 @@ class ExamRecordClass
     }
 
     /**
-     * 取得指定的紀錄資料
+     * 取得一筆暫存的操作紀錄資料
      */
-    public function get_one_record()
+    public function get_temp_record()
     {
         $return_data = null;
-        $t_obj = ExamRecord::where('exam_paper_id', $this->item_data['exam_paper_id'])
+        $t_obj = ExamTempRecord::where('exam_paper_id', $this->item_data['exam_paper_id'])
             ->where('student_id', $this->item_data['student_id'])
             ->get();
         foreach ($t_obj as $v) {
@@ -126,7 +159,7 @@ class ExamRecordClass
      */
     public function set_has_view_record()
     {
-        $t_obj = ExamRecord::where('exam_paper_id', $this->item_data['exam_paper_id'])
+        $t_obj = ExamRecord::where('id', $this->item_data['id'])
             ->where('student_id', $this->item_data['student_id'])
             ->get();
         foreach ($t_obj as $v) {
