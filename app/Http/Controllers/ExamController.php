@@ -30,14 +30,14 @@ class ExamController extends Controller
      */
     public function examList()
     {
+        $mem_id = app('request')->session()->get('user_data.uid');
         $exam_class_obj = new ExamClass();
         $subject_obj = new SubjectClass();
         $data = array();
         $data['user_data'] = app('request')->session()->get('user_data');
         $data['list_data'] = $exam_class_obj -> get_exam_unit_list($data['user_data']);
         $data['subject_list'] = $subject_obj -> subject_list();
-        //todo 下面要重構單元完成的方法
-        //$data['exam_review_data'] = $exam_class_obj -> get_review_data($data['user_data']);
+        $data['has_record_subject'] = $exam_class_obj -> get_record_unit_all($mem_id);//已經有操作紀錄的科目
 
         return view('student.exam.list', $data);
     }
@@ -53,7 +53,6 @@ class ExamController extends Controller
         $subject_obj = new SubjectClass();
         $data = array();
         $data['user_data'] = app('request')->session()->get('user_data');
-        //todo 確認頁面是否正常
         $data['list_data'] = $exam_class_obj -> get_exam_paper_list($data['user_data'], $id);
         $data['subject_list'] = $subject_obj -> subject_list();
 
