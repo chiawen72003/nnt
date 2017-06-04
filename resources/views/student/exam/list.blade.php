@@ -17,16 +17,11 @@
                                 </a>
                                 <div class="select-button-wrrap">
                                     <a class="btn btn-yellow" href="[! route('mem.exam.paper.list',array($value['id'])) !]" >學習</a>
-                                    @if( isset($exam_review_data[$value['id']]) )
+                                    @if( in_array($value['subject'], $has_record_subject) )
                                         <a class="btn btn-gray"
                                            href="[! route('mem.achievement.list',[$value['subject']]) !]">觀看紀錄</a>
                                     @else
-                                        @if( $value['has_exam_record'] === false  )
-                                            <a class="btn btn-green" onclick="alert('請先完成整個單元測試!!');">觀看紀錄</a>
-                                        @else
-                                            <a class="btn btn-green"
-                                               href="[! route('mem.achievement.list',[$value['subject']]) !]">觀看紀錄</a>
-                                        @endif
+                                        <a class="btn btn-green" onclick="alert('請先完成一個試卷測試!!');">觀看紀錄</a>
                                     @endif
                                 </div>
                         </div>
