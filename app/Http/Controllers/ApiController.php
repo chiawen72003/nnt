@@ -37,6 +37,15 @@ class ApiController extends Controller
      */
     public function modelPage($id)
     {
+        $data = array();
+        $t_obj = new ModelItemClass();
+        $t_obj ->init(array('id' => $id));
+        $file_name = $t_obj -> get_model_filename();
+        if($file_name)
+        {
+            return view('student.exam.modules.'.$file_name, $data);
+        }
 
+        return '';
     }
 }
