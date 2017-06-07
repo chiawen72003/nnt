@@ -35,4 +35,22 @@ class ModelItemClass
         return $list;
     }
 
+    /**
+     * 回傳模組名稱
+     *
+     * @return mixed
+     */
+    public function get_model_filename()
+    {
+        $model_name = null;
+        $temp_obj = ModelItem::select('file_name')
+            ->where('id', $this->input_data['id'])
+            ->get();
+        foreach ($temp_obj as $v)
+        {
+            $model_name = $v['file_name'];
+        }
+
+        return $model_name;
+    }
 }
