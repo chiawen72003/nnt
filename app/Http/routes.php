@@ -157,3 +157,8 @@ Route::post('/Ad/Subject/Update', ['middleware' => 'AdSessionCheck','as' => 'ad.
 Route::post('/Ad/ExamPaper/Add/Data', ['middleware' => 'AdSessionCheck','as' => 'ad.exampaper.add.data', 'uses' => 'AdController@exampaperAddData']);
 Route::post('/Ad/Questions/Add/', ['middleware' => 'AdSessionCheck','as' => 'ad.questions.add', 'uses' => 'AdController@questionsAdd']);
 Route::delete('/Ad/Subject/Delete', ['middleware' => 'AdSessionCheck','as' => 'ad.subject.delete', 'uses' => 'AdController@subjectDelete']);
+
+
+//api接口 負責提供模組資料
+Route::get('/Api/Model/list', ['as' => 'api.model.list', 'uses' => 'ApiController@modelList']);
+Route::get('/Api/Model/Page/{id}', ['as' => 'api.model.page', 'uses' => 'ApiController@modelPage']);
