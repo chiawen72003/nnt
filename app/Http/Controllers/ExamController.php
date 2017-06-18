@@ -115,6 +115,7 @@ class ExamController extends Controller
         if ($data['exam_data']['load_module'] != null) {
 
             $data['exam_item'] = view('student.exam.modules.'.$data['exam_data']['load_module'] ,$data);
+            $data['exam_item'] .= view('student.exam.modules.'.$data['exam_data']['load_module'].'_script' ,$data);
         }
 
         return view('student.exam.test_page_inside', $data);
