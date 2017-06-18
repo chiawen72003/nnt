@@ -52,7 +52,7 @@
                             @foreach($list_data as $v)
                                 <tr>
                                     <td>[! substr($v['updated_at'],0,10) !]</td>
-                                    <td>[! $v['title'] !]</td>
+                                    <td>[! isset($subject_list[$v['unit']])?$subject_list[$v['unit']]:'' !]</td>
                                     <td>第[! $v['vol'] !]冊第[! $v['unit'] !]單元試卷[! $v['paper_vol'] !]</td>
                                     <td><a class="link-view" href="[! route('ad.examrecord.view',[$v['id'],$uid]) !]">檢視</a></td>
                                 </tr>
