@@ -572,7 +572,7 @@
     /**
      * 新增 正確答案區塊
      */
-    var correct_num = count($item_data['correct_answer']) ;
+    var correct_num = [! count($item_data['correct_answer']) !];
     function add_correct_div() {
         var temp_obj = $('#correct_div').clone().attr('id','correct_'+correct_num).show();
         temp_obj.find('input[id="del_btn"]').attr('onclick','$("#correct_'+correct_num+'").remove()');
@@ -583,7 +583,7 @@
     /**
      * 新增 錯誤答案區塊
      */
-    var error_num = count($item_data['error_answer']) ;
+    var error_num = [! count($item_data['error_answer']) !] ;
     function add_error_div() {
         var temp_obj = $('#error_div').clone().attr('id','error_'+correct_num).show();
         temp_obj.find('input[id="del_btn"]').attr('onclick','$("#error_'+correct_num+'").remove()');
