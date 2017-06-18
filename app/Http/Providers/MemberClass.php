@@ -415,6 +415,10 @@ class MemberClass
                                 'mobil' => !is_null($v['I'])?$v['I']:'',
                                 'address' => !is_null($v['J'])?$v['J']:'',
                                 'class_group' => !is_null($v['K'])?$v['K']:'',
+                                'organization_id' => $this ->input_data['organization_id'],
+                                'grade' => $this ->input_data['grade'],
+                                'class' => $this ->input_data['class'],
+                                'city_code' => $this ->input_data['city_code'],
                             );
                             $user_status[] = array(
                                 'user_id' => ($t_id + $x),
