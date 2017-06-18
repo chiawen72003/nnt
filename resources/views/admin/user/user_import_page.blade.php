@@ -122,6 +122,7 @@
         {
             if(is_Go){
                 is_Go = false;
+                alert('資料送出!!');
                 $('#addForm').submit();
             }
         }else{
