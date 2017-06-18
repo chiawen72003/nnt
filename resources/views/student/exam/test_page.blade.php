@@ -21,6 +21,15 @@
     var feedback_dsc = '';
     var can_update_record = false;//可否上傳操作紀錄，需要在答案分析時變true，換試卷後變成false
     var paper_id = '[! $paper_id !]';//試卷id
+    var option_record = [];//敘述型的操作紀錄，與其他系統通用
+    var option_obj = {
+        'dataType':'',
+        'dataType_Dsc':'',
+        'dataFunction':'',
+        'dataFunction_ObjID':'',
+        'dataFunction_Value':'',
+    };
+
 
     @foreach($questions_item_data as $key => $v)
         item_data.push(
