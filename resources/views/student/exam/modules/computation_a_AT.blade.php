@@ -12,7 +12,7 @@
 							@endforeach
 						@endif
 					@endif
-					<div class="answer-select-wrap">
+					<div class="answer-select-wrap" id="build_option_area">
 						<span>選擇題答案：</span><div class="answer-select" id="module_show_area"></div>
 					</div>
 				</form>
@@ -24,6 +24,21 @@
 	</div>
 </div>
 <script>
+	$( document ).ready(function() {
+		begin_build_option()
+	});
+
+	/**
+	 * 初始化選項物件
+	 */
+	function begin_build_option(){
+		for (var key in build_option)
+		{
+			var dsc = '<input class="input-select" type="button" id="module_option_'+ key +'" value="'+ build_option[key] +'" onclick="setOptionValue(\''+ key +'\')">';
+			$('#build_option_area').before(dsc);
+		}
+	}
+
     function setOptionValue(getIndex) {
         //紀錄動作
         var newOptionOBj =  $.extend(true,{}, option_obj);
