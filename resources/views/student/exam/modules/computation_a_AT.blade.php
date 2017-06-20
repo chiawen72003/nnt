@@ -32,11 +32,12 @@
 	 * 初始化選項物件
 	 */
 	function begin_build_option(){
-		for (var key in build_option)
-		{
-			var dsc = '<input class="input-select" type="button" id="module_option_'+ key +'" value="'+ build_option[key] +'" onclick="setOptionValue(\''+ key +'\')">';
-			$('#build_option_area').before(dsc);
-		}
+        var json_obj = JSON.parse ( build_option );
+        for (var x=0,y=0;x<json_obj.length; x++,y++)
+        {
+            var dsc = '<input class="input-select" type="button" id="module_option_'+ y +'" value="'+ json_obj[x] +'" onclick="setOptionValue(\''+ y +'\')">';
+            $('#build_option_area').before(dsc);
+        }
 	}
 
     function setOptionValue(getIndex) {
