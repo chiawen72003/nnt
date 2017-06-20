@@ -3,6 +3,9 @@
 namespace App\Http\Providers;
 
 use App\Http\Models\UnitList;
+use App\Http\Models\ExamRecord;
+use App\Http\Models\ExamPaper;
+use App\Http\Models\ExamPaperAccess;
 use \Input;
 
 class UnitClass
@@ -146,6 +149,9 @@ class UnitClass
     public function unit_delete()
     {
         UnitList::destroy($this->input_data['id']);
+        ExamRecord::where('unit_id', $this->input_data['id']) ->delete();
+        ExamPaper::where('unit_list_id', $this->input_data['id']) ->delete();
+        ExamPaperAccess::where('unit_list_id', $this->input_data['id']) ->delete();
 
         return ;
     }
