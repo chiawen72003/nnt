@@ -1,4 +1,5 @@
 <script>
+    var build_option = '[! isset($exam_data['model_item_options'])?json_encode($exam_data['model_item_options']):"[]" !]';
     var right_ans = [];//正確答案
     var error_ans = [];//錯誤答案
     @foreach($exam_data['correct_answer']['answer'] as $key => $value )
