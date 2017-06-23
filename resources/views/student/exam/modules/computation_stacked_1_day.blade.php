@@ -87,3 +87,80 @@
 		<input class="btn btn-green" type="button" value="送出" onclick="analysis()">
 	</div>
 </div>
+<script>
+
+	$( document ).ready(function() {
+		$('#input_0').focus();
+	});
+
+	var now_index = 0;
+	//設定index
+	function setIndex(getIndex) {
+		operating_record({'fun':'setIndex','value':getIndex});
+		now_index = getIndex;
+	}
+	//設定數值
+	function setValue(getValue){
+		operating_record({'fun':'setValue','value':getValue});
+		$('#input_'+now_index).val(getValue);
+		now_index++;
+		if( now_index == 38){
+			now_index = 0;
+		}
+		$('#input_'+now_index).focus();
+
+	}
+	//刪除數值
+	function unsetValue(){
+		operating_record({'fun':'unsetValue','value':''});
+		$('#input_'+now_index).val('');
+		now_index--;
+		if( now_index < 0){
+			now_index = 37;
+		}
+		$('#input_'+now_index).focus();
+	}
+	//歸零
+	function resetAll(){
+		operating_record({'fun':'resetAll','value':''});
+		for(var x=0;x<38;x++){
+			$('#input_'+ x).val('');
+		}
+		now_index = 0;
+		$('#input_0').focus();
+	}
+	//換下一列
+	function changeLine() {
+		operating_record({'fun':'changeLine','value':''});
+
+		if(now_index < 7){
+			now_index = 7;
+			$('#input_7').focus();
+		}else if(now_index < 14){
+			now_index = 14;
+			$('#input_14').focus();
+		}else if(now_index < 26){
+			now_index = 26;
+			$('#input_26').focus();
+		}else{
+			$('#input_'+ now_index).focus();
+		}
+	}
+	//回上一列
+	function backLine(){
+		operating_record({'fun':'backLine','value':''});
+
+		if(now_index > 25){
+			now_index = 14;
+			$('#input_14').focus();
+		}else if(now_index > 13){
+			now_index = 7;
+			$('#input_7').focus();
+		}else if(now_index > 6){
+			now_index = 0;
+			$('#input_0').focus();
+		}else{
+			$('#input_'+ now_index).focus();
+		}
+	}
+</script>
