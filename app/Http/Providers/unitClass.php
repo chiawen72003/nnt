@@ -93,7 +93,8 @@ class UnitClass
             'unit',
             'title',
             'grade',
-            'indicator_nums'
+            'indicator_nums',
+            'img'
         )
             ->where('id',$this->input_data['id'])
             ->get();
