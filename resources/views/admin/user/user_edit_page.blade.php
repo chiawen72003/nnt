@@ -89,8 +89,8 @@
                     //alert('Ajax request 發生錯誤');
                 },
                 success: function(response) {
-                    //lert('資料更新成功!!');
-                    //location.reload();
+                    alert('資料更新成功!!');
+                    location.reload();
                 }
             });
         }
