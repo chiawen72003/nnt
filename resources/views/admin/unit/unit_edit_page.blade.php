@@ -65,6 +65,10 @@
                         @endfor
                     </select>
                 </div>
+                <div class="select-group">
+                    <div class="label-title">示意圖</div>
+                    <input type="file" name="img" id="img" accept="image/*"><a href="[! url('/upfire/image/'.$old_data['img']) !]" target="_blank">查看舊檔</a>
+                </div>
                 <div class="form-button-wrap">
                     <input class="btn-yellow" type="button" onclick='history.back()' value="回上一頁" />
                     <input class="btn-yellow" type="button"  value="輸入完畢，更新結構" onclick="chk()"  />
