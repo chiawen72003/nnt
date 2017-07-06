@@ -130,8 +130,16 @@ class AdController extends Controller
         $data['unit'] = app('request')->get('unit');
         $data['title'] = app('request')->get('title');
         $data['indicator_nums'] = app('request')->get('indicator_nums');
+        if (Input::file('img') != null AND Input::file('img')->isValid()) {
+            $extension = Input::file('img')->getClientOriginalExtension(); // getting image extension
+            $fileName = time().'.'.$extension; // renameing image
+            Input::file('img')->move('upfire/image', $fileName); // uploading file to given path
+            $data['img'] = $fileName;
+        }
+
         $unit_class_obj -> init(array('id'=>$id));
         $unit_class_obj -> unit_update($data);
+
 
         return redirect()->route('ad.unit.list')->with('message', '單元結構更新完畢!');
     }
