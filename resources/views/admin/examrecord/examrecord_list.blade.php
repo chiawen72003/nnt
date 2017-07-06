@@ -94,7 +94,6 @@
         @endif
         @if($uid)
              get_student_data();
-             $('#uid').val('[! $uid !]');
         @endif
     });
 
@@ -131,6 +130,9 @@
     /**
      * 取得班級內所有學生資料
      */
+    var load_set = [! ($uid)?'true':'false' !];
+    var load_set_id = "[! ($uid)?$uid:'' !]";
+
     function get_student_data()
     {
         $("#uid option").remove();
@@ -156,6 +158,11 @@
                     for( var key in response )
                     {
                         $("#uid").append($("<option></option>").attr("value", key).text(response[key]));
+                    }
+
+                    if(load_set){
+                        $('#uid').val(load_set_id);
+                        load_set = false;
                     }
                 }
             });
