@@ -25,7 +25,7 @@
 </div>
 <script>
 	$( document ).ready(function() {
-		begin_build_option()
+		//begin_build_option()
 	});
 
 	/**
