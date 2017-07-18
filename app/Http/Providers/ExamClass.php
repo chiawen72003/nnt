@@ -14,7 +14,7 @@ class ExamClass
 {
     const _SPLIT_SYMBOL = '@XX@';
     private $use_data = array(
-        'url_path' => 'http://210.240.188.161/chineseautotutor/Multi_Agent_test_show.php?a=b',
+        'url_path' => 'http://210.240.188.161/chineseautotutor/Single_Agent_test_show_1115.php?',
         'paper_id' => null,
         'cs_id' => null,
         'paper_vol' => null,
@@ -154,6 +154,8 @@ class ExamClass
                 'questions_item.correct_answer',
                 'questions_item.error_answer',
                 'questions_item.model_item_options',
+                'questions_item.avatar_type',
+                'questions_item.avatar_dsc',
                 'model_item.file_name'
             )
             ->get();
@@ -170,7 +172,7 @@ class ExamClass
             $return_data['error_answer']['keyword'] = $error_answer[3]['keyword'];
             $return_data['load_module'] = $v['file_name'];
             $return_data['model_item_options'] = json_decode($v['model_item_options'],true);
-
+            $return_data['iframe_path'] = $this -> get_iframe_path($v['avatar_type'], $v['avatar_dsc']);
         }
 
         return $return_data;
@@ -179,37 +181,33 @@ class ExamClass
 	/**
 	* 組合電腦代理人的網址
 	*
+    * @param  $avatar_type 代理人頭像的編號，單代理人一筆資料，雙代理人兩筆資料
+    * @param  $avatar_dsc 代理人對話資料
 	*/
-    public  function get_iframe_path($publisher_id, $feedback_array, $feedback_order, $computer_agent)
+    public  function get_iframe_path($avatar_type, $avatar_dsc)
     {
-        $selected_item = 1;
-        $feedback_talk_url = '';
-        $feedback_order_url = '';
+        $avatar = json_decode($avatar_type, true);
+        $avatar_dsc = json_decode($avatar_dsc, true);
         $url_path = $this -> use_data['url_path'];
-        for ($x = 1, $y = 0; $x < 7; $x++, $y++) {
-            $feedback_talk_url .= '&text' . $x . '=';
-            isset($feedback_array[$y]) ? $feedback_talk_url .= $feedback_array[$y] : '';
-            if (isset($feedback_order[$y]) and $feedback_order[$y] == 0) {
-                $feedback_order_url .= '&select' . $x . '=char2';
-            } else if (isset($feedback_order[$y]) and $feedback_order[$y] == 1) {
-                $feedback_order_url .= '&select' . $x . '=char1';
-            } else {
-                $feedback_order_url .= '&select' . $x . '=char2';
-            }
-        }
-        //單代理人
-        if ($publisher_id == 19) {
-            $computer_item = isset($computer_agent[0]) ? $computer_agent[0] : ''; //單代理人頭像選擇
-            $url_path .= '&select=char2&select2=char2&select3=char2' . $feedback_talk_url . '&text7=MAT_' . $this -> use_data['cs_id'] . sprintf("%02d", $this -> use_data['paper_vol']) . "_" . $selected_item . '&agent_role=' . $computer_item;
-        }
-        //多代理人
-        if ($publisher_id == 20) {
-            $url_path .= $feedback_order_url . $feedback_talk_url . '&text7=MAT_' . $this -> use_data['cs_id'] . sprintf("%02d", $this -> use_data['paper_vol']) . "_" . $selected_item;
-        }
-        //雙代理人
-        if ($publisher_id == 21) {
-            $url_path .= $feedback_order_url . $feedback_talk_url . '&text7=MAT_' . $this -> use_data['cs_id'] . sprintf("%02d", $this -> use_data['paper_vol']) . "_" . $selected_item;
-        }
+       //單代理人
+       if (count($avatar) == 1) {
+           $url_path .= 'text7=ss121419';
+           $url_path .= '&agent_role=Char'.$avatar[0];
+           $url_path .= '&text1='.urlencode($avatar_dsc[1]['dsc'][0]);
+           $url_path .= '&text2='.urlencode($avatar_dsc[1]['dsc'][1]);
+           $url_path .= '&text3='.urlencode($avatar_dsc[1]['dsc'][2]);
+           $url_path .= '&select=char2&select2=char2&select3=char2';
+       }
+       /*
+       //多代理人
+       if ($publisher_id == 20) {
+           $url_path .= $feedback_order_url . $feedback_talk_url . '&text7=MAT_' . $this -> use_data['cs_id'] . sprintf("%02d", $this -> use_data['paper_vol']) . "_" . $selected_item;
+       }
+       //雙代理人
+       if ($publisher_id == 21) {
+           $url_path .= $feedback_order_url . $feedback_talk_url . '&text7=MAT_' . $this -> use_data['cs_id'] . sprintf("%02d", $this -> use_data['paper_vol']) . "_" . $selected_item;
+       }
+       */
 
         return $url_path;
     }
