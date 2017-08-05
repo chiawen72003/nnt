@@ -66,11 +66,11 @@
                 </div>
                 <div class="select-group">
                     <div class="label-title">回饋對話(教師)</div>
-                    <input class="select-input" type="text" value="">
+                    <input class="select-input" id="table_dsc_tea" type="text" value="">
                 </div>
                 <div class="select-group">
                     <div class="label-title">回饋對話(學生)</div>
-                    <input class="select-input" type="text" value="">
+                    <input class="select-input" id="table_dsc_stu" type="text" value="">
                 </div>
                 <!-- 電腦代理人設定區塊-->
                 <div id="div_people_pic_setting">
@@ -295,7 +295,14 @@
     @endforeach
 
 
-        CKEDITOR.replace('c_ckedit1', {});
+    CKEDITOR.replace('c_ckedit1', {
+        filebrowserBrowseUrl : '[! $ck_finder_path !]/ckfinder.html',
+        filebrowserImageBrowseUrl : '[! $ck_finder_path !]/ckfinder.html?type=Images',
+        filebrowserFlashBrowseUrl : '[! $ck_finder_path !]/ckfinder.html?type=Flash',
+        filebrowserUploadUrl : '[! $ck_finder_path !]/core/connector/php/connector.php?command=QuickUpload&type=Files',
+        filebrowserImageUploadUrl : '[! $ck_finder_path !]/core/connector/php/connector.php?command=QuickUpload&type=Images',
+        filebrowserFlashUploadUrl : '[! $ck_finder_path !]/core/connector/php/connector.php?command=QuickUpload&type=Flash'
+    });
     $( document ).ready(function() {
 
 
@@ -622,6 +629,12 @@
             }
         });
         temp_obj.push({'model_item_options':temp_array});
+
+        //回饋對話
+        temp_array = [];
+        temp_array.push($('#table_dsc_tea').val());
+        temp_array.push($('#table_dsc_stu').val());
+        temp_obj.push({'table_dsc':temp_array});
 
         return temp_obj;
     }
