@@ -251,9 +251,9 @@ class AdController extends Controller
         $data['subject_data'] = $subject_obj -> subject_list();
         $data['feedback_list'] = $t->get_list_data();
         $data['exampaper_data'] = $exampaper_obj->get_all_exampaper();
-        $data['ck_finder_path'] = url('/admin/js/ckfinder');
         //設定ckfinder
         //https://dotblogs.com.tw/jellycheng/archive/2013/09/11/118175.aspx
+        $data['ck_finder_path'] = url('/admin/js/ckfinder');
         session_start();
         $_SESSION['ckfiner_key'] = true;
         $_SESSION['dirroot'] = url('/cc_upload').'/';//讀取路徑
@@ -285,9 +285,9 @@ class AdController extends Controller
         $data['exampaper_data'] = $exampaper_obj->get_all_exampaper();
         $data['item_data'] = $questions_item_obj->get_one_item_data();
         $data['item_id'] = $id;
-        $data['ck_finder_path'] = url('/admin/js/ckfinder');
         //設定ckfinder
         //https://dotblogs.com.tw/jellycheng/archive/2013/09/11/118175.aspx
+        $data['ck_finder_path'] = url('/admin/js/ckfinder');
         session_start();
         $_SESSION['ckfiner_key'] = true;
         $_SESSION['dirroot'] = url('/cc_upload').'/';//讀取路徑
@@ -855,6 +855,13 @@ class AdController extends Controller
     {
         $data = array();
         $data['user_data'] = app('request')->session()->get('user_data');
+        //設定ckfinder
+        //https://dotblogs.com.tw/jellycheng/archive/2013/09/11/118175.aspx
+        $data['ck_finder_path'] = url('/admin/js/ckfinder');
+        session_start();
+        $_SESSION['ckfiner_key'] = true;
+        $_SESSION['dirroot'] = url('/cc_upload').'/news/';//讀取路徑
+        $_SESSION['upload_path'] = public_path('/cc_upload').'/news/';//儲存實體路徑
 
         return view('admin.news_add_page', $data);
     }
@@ -870,6 +877,13 @@ class AdController extends Controller
         $newsobj = new NewsClass();
         $newsobj -> init(array('id'=>$id));
         $data['news_data'] = $newsobj -> get_old_data();
+        //設定ckfinder
+        //https://dotblogs.com.tw/jellycheng/archive/2013/09/11/118175.aspx
+        $data['ck_finder_path'] = url('/admin/js/ckfinder');
+        session_start();
+        $_SESSION['ckfiner_key'] = true;
+        $_SESSION['dirroot'] = url('/cc_upload').'/news/';//讀取路徑
+        $_SESSION['upload_path'] = public_path('/cc_upload').'/news/';//儲存實體路徑
 
         return view('admin.news_edit_page', $data);
     }
