@@ -32,7 +32,14 @@
     [! Html::script('admin/js/jquery-1.10.1.min.js') !]
     [! Html::script('admin/js/ckeditor/ckeditor.js') !]
 <script>
-    CKEDITOR.replace('dsc', {});
+    CKEDITOR.replace('dsc', {
+        filebrowserBrowseUrl : '[! $ck_finder_path !]/ckfinder.html',
+        filebrowserImageBrowseUrl : '[! $ck_finder_path !]/ckfinder.html?type=Images',
+        filebrowserFlashBrowseUrl : '[! $ck_finder_path !]/ckfinder.html?type=Flash',
+        filebrowserUploadUrl : '[! $ck_finder_path !]/core/connector/php/connector.php?command=QuickUpload&type=Files',
+        filebrowserImageUploadUrl : '[! $ck_finder_path !]/core/connector/php/connector.php?command=QuickUpload&type=Images',
+        filebrowserFlashUploadUrl : '[! $ck_finder_path !]/core/connector/php/connector.php?command=QuickUpload&type=Flash'
+    });
     var is_send = false;
     function checkData()
     {
