@@ -63,6 +63,7 @@ class QuestionsItemClass
         $add_obj->correct_answer = json_encode($this->item_data['correct_answer']);
         $add_obj->error_answer = json_encode($this->item_data['error_answer']);
         $add_obj->power_dsc = $this->item_data['power_dsc'];
+        $add_obj->table_dsc = json_encode($this->item_data['table_dsc']);
         $add_obj->save();
 
         //增加電腦代理人資訊
@@ -110,6 +111,7 @@ class QuestionsItemClass
         $add_obj->avatar_dsc = json_encode($this->item_data['avatar_dsc']);
         $add_obj->correct_answer = json_encode($this->item_data['correct_answer']);
         $add_obj->error_answer = json_encode($this->item_data['error_answer']);
+        $add_obj->table_dsc = json_encode($this->item_data['table_dsc']);
         $add_obj->save();
 
         return $add_obj->id;
@@ -225,7 +227,11 @@ class QuestionsItemClass
                 $t = json_decode($return_data['model_item_options'],true);
                 $return_data['model_item_options'] = $t;
             }
-
+            if(isset($return_data['table_dsc']))
+            {
+                $t = json_decode($return_data['table_dsc'],true);
+                $return_data['table_dsc'] = $t;
+            }
         }
 
         //dd($return_data);
