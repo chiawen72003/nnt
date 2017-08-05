@@ -251,6 +251,13 @@ class AdController extends Controller
         $data['subject_data'] = $subject_obj -> subject_list();
         $data['feedback_list'] = $t->get_list_data();
         $data['exampaper_data'] = $exampaper_obj->get_all_exampaper();
+        $data['ck_finder_path'] = url('/admin/js/ckfinder');
+        //設定ckfinder
+        //https://dotblogs.com.tw/jellycheng/archive/2013/09/11/118175.aspx
+        session_start();
+        $_SESSION['ckfiner_key'] = true;
+        $_SESSION['dirroot'] = url('/cc_upload').'/';//讀取路徑
+        $_SESSION['upload_path'] = public_path('/cc_upload').'/';//儲存實體路徑
 
         return view('admin.questions.questions_item_add', $data);
     }
@@ -278,6 +285,13 @@ class AdController extends Controller
         $data['exampaper_data'] = $exampaper_obj->get_all_exampaper();
         $data['item_data'] = $questions_item_obj->get_one_item_data();
         $data['item_id'] = $id;
+        $data['ck_finder_path'] = url('/admin/js/ckfinder');
+        //設定ckfinder
+        //https://dotblogs.com.tw/jellycheng/archive/2013/09/11/118175.aspx
+        session_start();
+        $_SESSION['ckfiner_key'] = true;
+        $_SESSION['dirroot'] = url('/cc_upload').'/';//讀取路徑
+        $_SESSION['upload_path'] = public_path('/cc_upload').'/';//儲存實體路徑
 
         return view('admin.questions.questions_item_edit', $data);
     }
