@@ -146,6 +146,7 @@ class ExamClass
             'error_answer' => null,
             'load_module' => null,
             'iframe_path' => '',
+            'table_dsc' => '',
         );
         $t = QuestionsItem::where('questions_item.id', $this -> use_data['item_id'])
             ->leftJoin('model_item', 'model_item.id', '=', 'questions_item.model_item_id')
@@ -156,6 +157,7 @@ class ExamClass
                 'questions_item.model_item_options',
                 'questions_item.avatar_type',
                 'questions_item.avatar_dsc',
+                'questions_item.table_dsc',
                 'model_item.file_name'
             )
             ->get();
@@ -173,6 +175,9 @@ class ExamClass
             $return_data['load_module'] = $v['file_name'];
             $return_data['model_item_options'] = json_decode($v['model_item_options'],true);
             $return_data['iframe_path'] = $this -> get_iframe_path($v['avatar_type'], $v['avatar_dsc']);
+            $return_data['avatar_dsc'] = json_decode($v['avatar_dsc'],true);
+            $return_data['avatar_type'] = json_decode($v['avatar_type'],true);
+            $return_data['table_dsc'] = json_decode($v['table_dsc'],true);
         }
 
         return $return_data;
