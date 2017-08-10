@@ -52,6 +52,7 @@ class Kernel extends HttpKernel
         'LoginDataCheck' => \App\Http\Middleware\LoginDataCheck::class,
         'MemSessionCheck' => \App\Http\Middleware\MemSessionCheck::class,
         'AdSessionCheck' => \App\Http\Middleware\AdSessionCheck::class,
+        'CommonSessionCheck' => \App\Http\Middleware\CommonSessionCheck::class,
         'IsLoginCheck' => \App\Http\Middleware\IsLoginCheck::class,
         'IsAdLoginCheck' => \App\Http\Middleware\IsAdLoginCheck::class,
     ];
