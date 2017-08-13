@@ -3,7 +3,24 @@
 
 <div id="page-container">
     <div id="page-body">
+        <h1 class="section-title title-question-number" id="item_num"></h1>
+        <div class="question-wrap clearfix">
+            <div id="question-left">
+                <div id="exam_title">
+                </div>
+            </div>
+            <div id="question-right">
+                <iframe width=400 height=125 frameborder=0 scrolling=no
+                        src="" id="iframe_head"></iframe>
+                <div id="qustion-voicetext-wrap">
+                    <div id="qustion-voicetext-inner">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="model_item_area">
         <!-- 測驗資料會透過ajax塞到此處 -->
+        </div>
     </div>
 </div>
 [! Html::script('js/jquery-1.11.3.js') !]
@@ -86,7 +103,7 @@
         var has_model = false;
         for(var x=0;x<model_obj.length;x++){
             if(model_obj[x].id == item_id ){
-                $('#page-body').html('').append(model_obj[x].model_data);
+                $('#model_item_area').html('').append(model_obj[x].model_data);
                 has_model = true;
                 module_is_load = true;
             }
@@ -104,7 +121,7 @@
                         'id':item_id,
                         'model_data':data
                     });
-                    $('#page-body').html('').append(data);
+                    $('#model_item_area').html('').append(data);
                     module_is_load = true;
                 }
             });
