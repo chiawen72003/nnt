@@ -34,13 +34,23 @@ class MemberController extends Controller
         if ($check_data['check_result']) {
             $user_data = $check_data['user_data'];
             session(['user_data' => $user_data]);
-            //判斷身份別
+            session(['user_type' => 'admin']);
+            //判斷身份別 學生
             if(in_array($user_data['access_level'],array(1,2,3,8,9)))
             {
+                session(['user_type' => 'student']);
 
                 return redirect()->route('mem.index');
             }
+            //判斷身份別 教師
+            if(in_array($user_data['access_level'],array(21,22,23,31)))
+            {
+                session(['user_type' => 'teacher']);
 
+                return redirect()->route('ad.examrecord.list.page');
+            }
+
+            //管理員
             return redirect()->route('ad.news.list');
         }
 
