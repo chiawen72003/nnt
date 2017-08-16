@@ -34,6 +34,11 @@
         var ans = $('#module_text_area').val();
         student_ans = $('#module_text_area').val();
 
+        //將學生作答資料放入對話區
+        var std_ans = '學生：' + student_ans;
+        $('#qustion-voicetext-inner').append(std_ans);
+        $('#qustion-voicetext-inner').scrollTop(9999999);;
+
         //絕對答案或關鍵字分析，index由0開始所以需要減1
         for(var x=0;x<right_ans.length;x++){
             if(right_ans[x].answer > '' && right_ans[x].answer == ans){
