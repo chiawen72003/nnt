@@ -35,7 +35,7 @@
         student_ans = $('#module_text_area').val();
 
         //將學生作答資料放入對話區
-        var std_ans = '學生：' + student_ans;
+        var std_ans = '學生：' + student_ans + '<br>';
         $('#qustion-voicetext-inner').append(std_ans);
         $('#qustion-voicetext-inner').scrollTop(9999999);;
 
