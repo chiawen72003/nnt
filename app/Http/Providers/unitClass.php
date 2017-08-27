@@ -96,8 +96,11 @@ class UnitClass
             'indicator_nums',
             'img'
         )
-            ->where('id',$this->input_data['id'])
-            ->get();
+            ->where('id',$this->input_data['id']);
+        if(isset($this->input_data['uid'])){
+            $temp_obj = $temp_obj ->where('uid',$this->input_data['uid']);
+        }
+        $temp_obj = $temp_obj->get();
         if($temp_obj)
         {
             foreach ($temp_obj as $unit_data){
@@ -146,13 +149,15 @@ class UnitClass
      * 移除一個單元
      *
      * @param int/string $getID 要移除單元的id
+     * @todo 需要整理ExamRecord  ExamPaperAccess 刪除的方式
      */
     public function unit_delete()
     {
+
         UnitList::destroy($this->input_data['id']);
-        ExamRecord::where('unit_id', $this->input_data['id']) ->delete();
+        //ExamRecord::where('unit_id', $this->input_data['id']) ->delete();
         ExamPaper::where('unit_list_id', $this->input_data['id']) ->delete();
-        ExamPaperAccess::where('unit_list_id', $this->input_data['id']) ->delete();
+        //ExamPaperAccess::where('unit_list_id', $this->input_data['id']) ->delete();
 
         return ;
     }
