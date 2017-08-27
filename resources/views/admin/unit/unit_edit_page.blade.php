@@ -1,4 +1,4 @@
-@extends('admin.layout.layout')
+@extends('admin.layout.'.$layout_set)
 @section('content')
 <div id="page-container">
     <div id="page-body">
