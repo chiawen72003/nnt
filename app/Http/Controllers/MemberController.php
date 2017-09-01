@@ -47,7 +47,7 @@ class MemberController extends Controller
             {
                 session(['user_type' => 'teacher']);
 
-                return redirect()->route('ad.examrecord.list.page');
+                return redirect()->route('ta.examrecord.list.page');
             }
 
             //管理員
