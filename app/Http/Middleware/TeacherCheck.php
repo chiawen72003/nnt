@@ -4,10 +4,10 @@ namespace App\Http\Middleware;
 
 use Closure;
 
-class CommonSessionCheck
+class TeacherCheck
 {
     private $com_level = array(
-        21,22,23,31,91,92
+        21,22,23,31
     );
     public function handle($request, Closure $next, $guard = null)
     {
