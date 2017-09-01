@@ -23,10 +23,10 @@
     </div>
     <div id="boad-wrap" class="boad-wrap">
         <div id="boad-nav">
-            <a href="[! route('ad.examrecord.list.page') !]" title="學習紀錄查詢">學習紀錄查詢</a>
-            <a href="[! route('ad.unit.list') !]" title="建立結構">建立結構</a>
-            <a href="[! route('ad.exampaper.add.page') !]" title="建立試題">建立試題</a>
-            <a href="[! route('ad.logout') !]" title="登出系統">登出</a>
+            <a href="[! route('ta.examrecord.list.page') !]" title="學習紀錄查詢">學習紀錄查詢</a>
+            <a href="[! route('ta.unit.list') !]" title="建立結構">建立結構</a>
+            <a href="[! route('ta.exampaper.add.page') !]" title="建立試題">建立試題</a>
+            <a href="[! route('ta.logout') !]" title="登出系統">登出</a>
         </div>
         <div class="boad-detail-wrap">
             <p>教師：<span class="txt-yellow">autotutor</span></p>
