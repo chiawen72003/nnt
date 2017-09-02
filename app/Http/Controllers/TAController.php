@@ -28,10 +28,12 @@ class TAController extends Controller
         '3' => '多代理人',
     );
     private $uid = '0';
+    private $uname = '';
 
     public function __construct()
     {
         $this -> uid = app('request')->session()->get('user_data.uid');
+        $this -> uname = app('request')->session()->get('user_data.uname');
     }
 
     /**
@@ -41,6 +43,7 @@ class TAController extends Controller
     {
         $fp = Input::all();
         $data = array();
+        $data['uname'] = $this -> uname;
         $data['user_data'] = app('request')->session()->get('user_data');
         $school_tmp = new SchoolClass();
         $member_tmp = new MemberClass();
@@ -63,7 +66,6 @@ class TAController extends Controller
             $data['list_data'] = $exam_class_obj -> get_record_list_all($data['uid']);
         }
 
-
         return view('teacher.examrecord.examrecord_list', $data);
     }
 
@@ -74,6 +76,7 @@ class TAController extends Controller
     {
         $exam_class_obj = new ExamClass();
         $data = array();
+        $data['uname'] = $this -> uname;
         $data['exam_record'] = $exam_class_obj -> get_exam_record($uid,$id);
         $data['uid'] = $uid;
 
@@ -129,8 +132,9 @@ class TAController extends Controller
     {
         $unit_class_obj = new UnitClass();
         $subject_obj = new SubjectClass();
+        $unit_class_obj -> init(array('uid' => $this -> uid));
         $data = array();
-        $unit_class_obj -> init(array('uid'=>app('request')->session()->get('user_data.uid')));
+        $data['uname'] = $this -> uname;
         $data['user_data'] = app('request')->session()->get('user_data');
         $data['list_data'] = $unit_class_obj -> get_all_unit();
         $data['subject_list'] = $subject_obj -> subject_list();
@@ -147,6 +151,7 @@ class TAController extends Controller
     {
         $subject_obj = new SubjectClass();
         $data = array();
+        $data['uname'] = $this -> uname;
         $data['title'] = '新增 ';
         $data['subject_list'] = $subject_obj -> subject_list();
 
@@ -161,9 +166,10 @@ class TAController extends Controller
     {
         $unit_class_obj = new UnitClass();
         $subject_obj = new SubjectClass();
-        $data = array();
         $unit_class_obj ->init(array('id' => $id));
-        $unit_class_obj -> init(array('uid'=>app('request')->session()->get('user_data.uid')));
+        $unit_class_obj -> init(array('uid'=> $this -> uid));
+        $data = array();
+        $data['uname'] = $this -> uname;
         $data['title'] = '編輯 ';
         $data['subject_list'] = $subject_obj -> subject_list();
         $data['old_data'] = $unit_class_obj -> get_unit();
@@ -254,9 +260,10 @@ class TAController extends Controller
     {
         $unit_obj = new UnitClass();
         $subject_obj = new SubjectClass();
-        $data = array();
         $subject_obj -> init(array('uid' => $this -> uid ));
         $unit_obj -> init(array('uid' => $this -> uid ));
+        $data = array();
+        $data['uname'] = $this -> uname;
         $data['unit_id'] = '';
         $data['subject_access'] = $subject_obj -> get_access_subject();//目前開放的科目
         $data['subject_data'] = $subject_obj -> subject_list();
@@ -272,20 +279,15 @@ class TAController extends Controller
      */
     public function questionsAddPage()
     {
-        $uid = app('request')->session()->get('user_data')['uid'];
-        $data = array();
-        $data['layout_set'] = 'layout';
         $unit_obj = new UnitClass();
         $subject_obj = new SubjectClass();
         $exampaper_obj = new ExamPaperClass();
-        $exampaper_obj ->init(array('uid'=>$uid));
-        if(!in_array(app('request')->session()->get('user_data.access_level'),array('91','92')))
-        {
-            $subject_obj -> init(array('uid'=>app('request')->session()->get('user_data.uid')));
-            $unit_obj -> init(array('uid'=>app('request')->session()->get('user_data.uid')));
-            $data['layout_set'] = 'tea_layout';
-        }
         $t = new FeedbackListClass();
+        $exampaper_obj ->init(array('uid'=>$this -> uid));
+        $subject_obj -> init(array('uid'=> $this -> uid));
+        $unit_obj -> init(array('uid'=> $this -> uid));
+        $data = array();
+        $data['uname'] = $this -> uname;
         $data['unit_data'] = $unit_obj -> get_all_unit();
         $data['subject_data'] = $subject_obj -> subject_list();
         $data['feedback_list'] = $t->get_list_data();
@@ -306,19 +308,14 @@ class TAController extends Controller
      */
     public function exampaperVolListPage()
     {
-        $uid = app('request')->session()->get('user_data')['uid'];
-        $data = array();
-        $data['layout_set'] = 'layout';
         $unit_obj = new UnitClass();
         $subject_obj = new SubjectClass();
         $exampaper_obj = new ExamPaperClass();
-        $exampaper_obj ->init(array('uid'=>$uid));
-        if(!in_array(app('request')->session()->get('user_data.access_level'),array('91','92')))
-        {
-            $subject_obj -> init(array('uid'=>app('request')->session()->get('user_data.uid')));
-            $unit_obj -> init(array('uid'=>app('request')->session()->get('user_data.uid')));
-            $data['layout_set'] = 'tea_layout';
-        }
+        $exampaper_obj ->init(array('uid'=>$this -> uid));
+        $subject_obj -> init(array('uid'=>$this -> uid));
+        $unit_obj -> init(array('uid'=> $this->uid));
+        $data = array();
+        $data['uname'] = $this -> uname;
         $data['unit_data'] = $unit_obj -> get_all_unit();
         $data['subject_data'] = $subject_obj -> subject_list();
         $data['exampaper_data'] = $exampaper_obj->get_all_exampaper();
@@ -390,7 +387,6 @@ class TAController extends Controller
      */
     public function questionsListPage($id)
     {
-        $data = array();
         $unit_obj = new UnitClass();
         $subject_obj = new SubjectClass();
         $exampaper_obj = new ExamPaperClass();
@@ -399,6 +395,8 @@ class TAController extends Controller
         $questions_obj -> init(array('exam_paper_id'=>$id));
         $subject_obj -> init(array('uid' => $this -> uid));
         $unit_obj -> init(array('uid' => $this -> uid));
+        $data = array();
+        $data['uname'] = $this -> uname;
         $data['subject_data'] = $subject_obj -> subject_list();
         $data['exampaper_data'] = $exampaper_obj->get_exampaper();
         $data['exampaper_id'] = $id;
@@ -431,16 +429,17 @@ class TAController extends Controller
      */
     public function questionsEdit($id)
     {
-        $data = array();
         $unit_obj = new UnitClass();
         $subject_obj = new SubjectClass();
         $exampaper_obj = new ExamPaperClass();
-        $exampaper_obj ->init(array('uid' => $this -> uid));
+        $t = new FeedbackListClass();
         $questions_item_obj = new QuestionsItemClass();
+        $exampaper_obj ->init(array('uid' => $this -> uid));
         $questions_item_obj ->init(array('id'=>$id));
         $subject_obj -> init(array('uid' => $this -> uid));
         $unit_obj -> init(array('uid' => $this -> uid));
-        $t = new FeedbackListClass();
+        $data = array();
+        $data['uname'] = $this -> uname;
         $data['unit_data'] = $unit_obj -> get_all_unit();
         $data['subject_data'] = $subject_obj -> subject_list();
         $data['feedback_list'] = $t->get_list_data();
