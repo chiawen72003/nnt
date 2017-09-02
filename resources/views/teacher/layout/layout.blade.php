@@ -29,7 +29,7 @@
             <a href="[! route('ta.logout') !]" title="登出系統">登出</a>
         </div>
         <div class="boad-detail-wrap">
-            <p>教師：<span class="txt-yellow">autotutor</span></p>
+            <p>教師：<span class="txt-yellow">[! $uname !]</span></p>
         </div>
         <div class="img-chalk"></div>
     </div>
