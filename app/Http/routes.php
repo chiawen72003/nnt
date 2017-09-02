@@ -134,7 +134,7 @@ Route::get('/Ad/ExamPaper/Add/Page', ['middleware' => 'AdSessionCheck','as' => '
 Route::get('/Ad/Subject/List', ['middleware' => 'AdSessionCheck','as' => 'ad.subject.list', 'uses' => 'AdController@subjectList']);
 
 //管理員端 學習紀錄查詢
-Route::get('/Ad/ExamRecord/List/page', ['middleware' => 'AdSessionCheck','as' => 'ad.examrecord.list.page', 'uses' => 'AdController@ExamRecordListPage']);
+Route::get('/Ad/ExamRecord/List/page', ['middleware' => ['AdSessionCheck'],'as' => 'ad.examrecord.list.page', 'uses' => 'AdController@ExamRecordListPage']);
 Route::get('/Ad/ExamRecord/View/{id}/{uid}', ['middleware' => 'AdSessionCheck','as' => 'ad.examrecord.view', 'uses' => 'AdController@ExamRecordView']);
 Route::get('/Ad/ExamRecord/Download/Record/{id}/{uid}', ['middleware' => 'AdSessionCheck','as' => 'ad.examrecord.download.record', 'uses' => 'AdController@getDownloadRecord']);
 Route::post('/Ad/ExamRecord/Student', ['middleware' => 'AdSessionCheck','as' => 'ad.examrecord.student', 'uses' => 'AdController@ExamRecordStudent']);
@@ -162,3 +162,35 @@ Route::delete('/Ad/Subject/Delete', ['middleware' => 'AdSessionCheck','as' => 'a
 //api接口 負責提供模組資料
 Route::get('/Api/Model/list', ['as' => 'api.model.list', 'uses' => 'ApiController@modelList']);
 Route::get('/Api/Model/Page/{id}', ['as' => 'api.model.page', 'uses' => 'ApiController@modelPage']);
+
+/**
+ * 教師用
+ */
+//登出
+Route::get('/Ta/LogOut', ['as' => 'ta.logout', 'uses' => 'MemberController@LogOut']);
+
+//學習紀錄查詢
+Route::get('/Ta/ExamRecord/List/page', ['middleware' => ['TeacherCheck'],'as' => 'ta.examrecord.list.page', 'uses' => 'TAController@ExamRecordListPage']);
+Route::get('/Ta/ExamRecord/View/{id}/{uid}', ['middleware' => 'TeacherCheck','as' => 'ta.examrecord.view', 'uses' => 'TAController@ExamRecordView']);
+Route::get('/Ta/ExamRecord/Download/Record/{id}/{uid}', ['middleware' => 'TeacherCheck','as' => 'ta.examrecord.download.record', 'uses' => 'TAController@getDownloadRecord']);
+Route::post('/Ta/ExamRecord/Student', ['middleware' => 'TeacherCheck','as' => 'ta.examrecord.student', 'uses' => 'TAController@ExamRecordStudent']);
+
+//建立結構(單元)
+Route::get('/Ta/Unit/List', ['middleware' => 'TeacherCheck','as' => 'ta.unit.list', 'uses' => 'TAController@unitList']);
+Route::get('/Ta/Unit/Add/Page', ['middleware' => 'TeacherCheck','as' => 'ta.unit.add.page', 'uses' => 'TAController@unitAddPage']);
+Route::get('/Ta/Unit/Edit/Page/{id}', ['middleware' => 'TeacherCheck','as' => 'ta.unit.edit.page', 'uses' => 'TAController@unitEditPage']);
+Route::post('/Ta/Unit/Delete', ['middleware' => 'TeacherCheck','as' => 'ta.unit.delete', 'uses' => 'TAController@unitDelete']);
+Route::post('/Ta/Unit/Add/Data', ['middleware' => 'TeacherCheck','as' => 'ta.unit.add.data', 'uses' => 'TAController@unitAddData']);
+Route::post('/Ta/Unit/Update/Data', ['middleware' => 'TeacherCheck','as' => 'ta.unit.update.data', 'uses' => 'TAController@unitUpdateData']);
+
+//建立試卷頁面
+Route::get('/Ta/ExamPaper/Add/Page', ['middleware' => 'TeacherCheck','as' => 'ta.exampaper.add.page', 'uses' => 'TAController@examPaperAddPage']);
+Route::get('/Ta/ExamPaper/Vol/List/Page', ['middleware' => 'TeacherCheck','as' => 'ta.exampaper.vol.list.page', 'uses' => 'TAController@exampaperVolListPage']);
+Route::post('/Ta/ExamPaper/Add/Data', ['middleware' => 'TeacherCheck','as' => 'ta.exampaper.add.data', 'uses' => 'TAController@exampaperAddData']);
+Route::get('/Ta/Questions/Add/Page', ['middleware' => 'TeacherCheck','as' => 'ta.questions.add.page', 'uses' => 'TAController@questionsAddPage']);
+Route::post('/Ta/Questions/Add/', ['middleware' => 'TeacherCheck','as' => 'ta.questions.add', 'uses' => 'TAController@questionsAdd']);
+Route::get('/Ta/Questions/List/Page/{id}', ['middleware' => 'TeacherCheck','as' => 'ta.questions.list.page', 'uses' => 'TAController@questionsListPage']);
+Route::post('/Ta/Questions/Delete', ['middleware' => 'TeacherCheck','as' => 'ta.questions.delete', 'uses' => 'TAController@questionsDelete']);
+Route::post('/Ta/ExamPaper/Delete', ['middleware' => 'TeacherCheck','as' => 'ta.exampaper.delete', 'uses' => 'TAController@exampaperDelete']);
+Route::get('/Ta/Questions/Edit/{id}', ['middleware' => 'TeacherCheck','as' => 'ta.questions.edit', 'uses' => 'TAController@questionsEdit']);
+Route::post('/Ta/Questions/Update/', ['middleware' => 'TeacherCheck','as' => 'ta.questions.update', 'uses' => 'TAController@questionsUpdate']);
