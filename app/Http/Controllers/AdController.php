@@ -41,14 +41,12 @@ class AdController extends Controller
     public function unitList()
     {
         $unit_class_obj = new UnitClass();
-        $data = array();
-        $data['layout_set'] = 'layout';
         if(!in_array(app('request')->session()->get('user_data.access_level'),array('91','92')))
         {
             $unit_class_obj -> init(array('uid'=>app('request')->session()->get('user_data.uid')));
-            $data['layout_set'] = 'tea_layout';
         }
         $subject_obj = new SubjectClass();
+        $data = array();
         $data['user_data'] = app('request')->session()->get('user_data');
         $data['list_data'] = $unit_class_obj -> get_all_unit();
         $data['subject_list'] = $subject_obj -> subject_list();
@@ -65,11 +63,6 @@ class AdController extends Controller
     {
         $subject_obj = new SubjectClass();
         $data = array();
-        $data['layout_set'] = 'layout';
-        if(!in_array(app('request')->session()->get('user_data.access_level'),array('91','92')))
-        {
-            $data['layout_set'] = 'tea_layout';
-        }
         $data['title'] = '新增 ';
         $data['subject_list'] = $subject_obj -> subject_list();
 
@@ -86,19 +79,9 @@ class AdController extends Controller
         $unit_class_obj ->init(array('id' => $id));
         $subject_obj = new SubjectClass();
         $data = array();
-        $data['layout_set'] = 'layout';
-        if(!in_array(app('request')->session()->get('user_data.access_level'),array('91','92')))
-        {
-            $unit_class_obj -> init(array('uid'=>app('request')->session()->get('user_data.uid')));
-            $data['layout_set'] = 'tea_layout';
-        }
         $data['title'] = '編輯 ';
         $data['subject_list'] = $subject_obj -> subject_list();
         $data['old_data'] = $unit_class_obj -> get_unit();
-        if(count($data['old_data']) == 0){
-
-            return redirect()->route('ad.logout');
-        }
 
         return view('admin.unit.unit_edit_page', $data);
     }
@@ -1009,12 +992,7 @@ class AdController extends Controller
     {
         $fp = Input::all();
         $data = array();
-        $data['layout_set'] = 'layout';
         $data['user_data'] = app('request')->session()->get('user_data');
-        if(!in_array(app('request')->session()->get('user_data.access_level'),array('91','92')))
-        {
-            $data['layout_set'] = 'tea_layout';
-        }
         $school_tmp = new SchoolClass();
         $member_tmp = new MemberClass();
         $member_tmp -> init($fp);
@@ -1047,11 +1025,6 @@ class AdController extends Controller
     {
         $exam_class_obj = new ExamClass();
         $data = array();
-        $data['layout_set'] = 'layout';
-        if(!in_array(app('request')->session()->get('user_data.access_level'),array('91','92')))
-        {
-            $data['layout_set'] = 'tea_layout';
-        }
         $data['exam_record'] = $exam_class_obj -> get_exam_record($uid,$id);
         $data['uid'] = $uid;
 
