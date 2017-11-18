@@ -49,6 +49,7 @@ class SubjectClass
     public function get_list()
     {
         $temp_obj = Subject::select('id', 'name')
+            ->orderBy('id', 'asc')
             ->paginate(20);
 
         return $temp_obj;
