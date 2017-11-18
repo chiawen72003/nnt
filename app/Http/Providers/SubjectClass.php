@@ -49,7 +49,7 @@ class SubjectClass
     public function get_list()
     {
         $temp_obj = Subject::select('id', 'name')
-            ->paginate(5);
+            ->paginate(20);
 
         return $temp_obj;
     }
