@@ -392,7 +392,7 @@ class AdController extends Controller
         $data['user_data'] = app('request')->session()->get('user_data');
         $data['list_data'] = $subject_obj -> get_list();
 
-        return view('admin.subject_list', $data);
+        return view('admin.subject.subject_list', $data);
     }
 
     /**
@@ -410,20 +410,6 @@ class AdController extends Controller
     }
 
     /**
-     * 更新一筆科目的資料
-     *
-     */
-    public function subjectUpdate()
-    {
-        $fp = Input::all();
-        $subject_obj = new SubjectClass();
-        $subject_obj -> init($fp);
-        $subject_obj -> update_data();
-
-        return '';
-    }
-
-    /**
      * 移除一個科目
      *
      */
@@ -434,7 +420,7 @@ class AdController extends Controller
         $subject_obj -> init($fp);
         $subject_obj -> delete_data();
 
-        return ;
+        return json_encode(array('message'=>'success'));
     }
 
     /**
