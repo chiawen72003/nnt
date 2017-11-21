@@ -193,3 +193,9 @@ Route::post('/Ta/Questions/Delete', ['middleware' => 'TeacherCheck','as' => 'ta.
 Route::post('/Ta/ExamPaper/Delete', ['middleware' => 'TeacherCheck','as' => 'ta.exampaper.delete', 'uses' => 'TAController@exampaperDelete']);
 Route::get('/Ta/Questions/Edit/{id}', ['middleware' => 'TeacherCheck','as' => 'ta.questions.edit', 'uses' => 'TAController@questionsEdit']);
 Route::post('/Ta/Questions/Update/', ['middleware' => 'TeacherCheck','as' => 'ta.questions.update', 'uses' => 'TAController@questionsUpdate']);
+
+//教學劇本設計 前端編輯頁面
+Route::get('/Ta/Script/Add/page', ['middleware' => 'TeacherCheck','as' => 'ta.script.add.page', 'uses' => 'TAController@scriptAddPage']);
+
+//教學劇本設計 前端api 新增資料
+Route::get('/Ta/Script/Add', ['middleware' => 'TeacherCheck','as' => 'ta.script.add', 'uses' => 'TAController@scriptAdd']);
