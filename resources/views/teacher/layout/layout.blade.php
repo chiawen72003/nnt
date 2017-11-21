@@ -26,6 +26,7 @@
             <a href="[! route('ta.examrecord.list.page') !]" title="學習紀錄查詢">學習紀錄查詢</a>
             <a href="[! route('ta.unit.list') !]" title="建立結構">建立結構</a>
             <a href="[! route('ta.exampaper.add.page') !]" title="建立試題">建立試題</a>
+            <a href="[! route('ta.script.add.page') !]" title="教學劇本設計路徑">教學劇本設計路徑</a>
             <a href="[! route('ta.logout') !]" title="登出系統">登出</a>
         </div>
         <div class="boad-detail-wrap">
