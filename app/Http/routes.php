@@ -195,7 +195,10 @@ Route::get('/Ta/Questions/Edit/{id}', ['middleware' => 'TeacherCheck','as' => 't
 Route::post('/Ta/Questions/Update/', ['middleware' => 'TeacherCheck','as' => 'ta.questions.update', 'uses' => 'TAController@questionsUpdate']);
 
 //教學劇本設計 前端編輯頁面
-Route::get('/Ta/Script/Add/page', ['middleware' => 'TeacherCheck','as' => 'ta.script.add.page', 'uses' => 'TAController@scriptAddPage']);
+Route::get('/Ta/Script/Add/Page', ['middleware' => 'TeacherCheck','as' => 'ta.script.add.page', 'uses' => 'TAController@scriptAddPage']);
 
 //教學劇本設計 前端api 新增資料
-Route::get('/Ta/Script/Add', ['middleware' => 'TeacherCheck','as' => 'ta.script.add', 'uses' => 'TAController@scriptAdd']);
+Route::post('/Ta/Script/Add', ['middleware' => 'TeacherCheck','as' => 'ta.script.add', 'uses' => 'TAController@scriptAdd']);
+
+//教學劇本設計 後端教師列表頁面
+Route::get('/Ad/Script/Ta/Page', ['middleware' => 'AdSessionCheck','as' => 'ad.script.ta.page', 'uses' => 'AdController@scriptTaPage']);
