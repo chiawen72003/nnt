@@ -19,6 +19,7 @@ use App\Http\Providers\SubjectClass;
 use App\Http\Providers\UnitClass;
 use App\Http\Providers\ExamPaperClass;
 use App\Http\Providers\PhpExcel;
+use App\Http\Providers\ScriptClass;
 
 class AdController extends Controller
 {
@@ -1099,5 +1100,18 @@ class AdController extends Controller
         $t_tmp = new ExamPaperAccessClass();
         $t_tmp -> init($fp);
         $t_tmp -> update_data();
+    }
+
+    /**
+     * 教學劇本設計 後端教師列表頁面
+     */
+    public function scriptTaPage()
+    {
+        $item = new ScriptClass();
+        $data = array();
+        $data['user_data'] = app('request')->session()->get('user_data');
+        $data['list_data'] = $item -> teacher_list();
+
+        return view('admin.script.teacher_list', $data);
     }
 }
