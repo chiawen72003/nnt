@@ -16,7 +16,7 @@ use App\Http\Providers\QuestionsItemClass;
 use App\Http\Providers\SchoolClass;
 use App\Http\Providers\SubjectClass;
 use App\Http\Providers\UnitClass;
-
+use App\Http\Providers\ScriptClass;
 
 
 class TAController extends Controller
@@ -29,6 +29,9 @@ class TAController extends Controller
     );
     private $uid = '0';
     private $uname = '';
+    private $result_msg = array(
+        'message' => 'success'
+    );
 
     public function __construct()
     {
@@ -470,5 +473,32 @@ class TAController extends Controller
         $questions_obj ->delete_by_exam_paper_id();
 
         return ;
+    }
+
+    /**
+     *教學劇本設計 前端 編輯頁面
+     *
+     */
+    public function scriptAddPage()
+    {
+        $data = array();
+
+        return view('teacher.script.edit', $data);
+    }
+
+    /**
+     *教學劇本設計 前端api 新增資料
+     *
+     */
+    public function scriptAdd()
+    {
+        $script_class_obj = new ScriptClass();
+        $data = array();
+        $data['uid'] = app('request')->session()->get('user_data.uid');
+        $data['item_key'] = app('request')->get('item_key');
+        $data['dsc'] = app('request')->get('dsc');
+        $result = $script_class_obj -> scriptAdd($data);
+
+        return json_encode($result);
     }
 }
