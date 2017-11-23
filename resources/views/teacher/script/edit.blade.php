@@ -21,7 +21,7 @@
           <div class="path-bg">
           <!-- step1 -->
           <div class="step step1">
-            <a class="item bg-black open-modal is-right " style="height: 65px;" id="obj_1" obj_title = "閱讀文本">
+            <a class="item bg-black open-modal" style="height: 65px;" id="obj_1" obj_title = "閱讀文本">
               閱讀文本
               <span class="popovers">
                 點擊編輯文本
@@ -89,7 +89,7 @@
           </div>
           <!-- step-top -->
           <div class="step step-top" style="left: 244px;top: -27px;">
-            <a class="item is-error bg-green border-green  open-modal" id="obj_32" obj_title = "正確答案">正確答案<span>Good</span></a>
+            <a class="item bg-green border-green  open-modal" id="obj_32" obj_title = "正確答案">正確答案<span>Good</span></a>
             <a class="item big-item bg-blue notched open-modal" style="left: 163px" id="obj_33" obj_title = "教師正向回饋">教師正向回饋<span>Pos Fdbk</span></a>
             <a class="item bg-black open-modal" style="left: 361px;" id="obj_34" obj_title = "教師提問">教師提問<span>Question</span></a>
             <a class="item bg-white open-modal" style="left: 524px;" id="obj_35" obj_title = "學生回答2">學生回答2<span>User Answer</span></a>
@@ -122,7 +122,12 @@
     </div><!-- overlay -->
     [! Html::script('js/jquery-1.11.3.js') !]
     <script>
-		var item_data = [];
+        var item_data = [];//目前頁面上物件的內容資料
+        var chk_data = [];//批閱資料
+        var is_right = 'is-right';
+        var active = 'is-active';
+        var is_error = 'is-error';
+        //設定物件內容
         function setScriptItem(item_key, dsc)
         {
             var has_data = false;
@@ -138,11 +143,16 @@
                     {
                       'item_key':item_key,
                       'dsc':dsc,
+                      'updated_at':0,
                     }
                 );
             }
         }
 
+        /*
+        * 取得 編輯物件的內文
+        * 依使用者編輯時間跟批閱時間做比較，取時間點越近的一筆
+        */
         function getScriptItemDsc(item_key)
         {
             var dsc='';
@@ -150,6 +160,25 @@
             {
                 if(item_data[x]['item_key'] == item_key){
                     dsc = item_data[x]['dsc'];
+                    for(var y=0;y<chk_data.length;y++){
+                      if(chk_data[y]['item_key'] == item_key && chk_data[y]['updated_at'] > item_data[x]['updated_at']){
+                         dsc = chk_data[y]['dsc'];
+                      }
+                    }
+                }
+            }
+
+            return dsc;
+        }
+
+        //設定編輯物件的時間戳記
+         function setScriptItemTimestamp(item_key, updated_at)
+        {
+            var dsc='';
+            for(var x=0;x<item_data.length;x++)
+            {
+                if(item_data[x]['item_key'] == item_key){
+                    item_data[x]['updated_at'] = updated_at;
                 }
             }
 
@@ -158,8 +187,6 @@
 
       $(function(){
         var elements = $('.modal-overlay, .modal');
-        var active = 'is-active';
-        var is_right = 'is-right';
 		var item_title = $('#edit_title');
 		var item_edit = $('#edit_area');
         var item_key = '';
@@ -198,17 +225,16 @@
 			  },
 			  success: function(response) {
 			      if(response['message'] == 'success'){
-			          $('#'+response['item_key']).addClass(is_right);
-                      item_edit.val('');
-                  }
-                  /*
-                  for( var x=0;x<total;x++ )
-                  {
-                    response[x]['subject']
-                  }
-                  */
+              //設定 存檔的小圖案 顯示
+              $('#'+response['item_key']).addClass(is_right);
+              //移除 批閱的小圖案
+              $('#'+response['item_key']).removeClass(is_error);
+              //設定 存檔時間戳記
+              setScriptItemTimestamp(response['item_key'], response['updated_at']);
+            }
 			  }
 			});
+            //把編輯的資料存入暫存物件內，下次編輯時直接載入
             setScriptItem(item_key, item_edit.val());
             item_edit.val('');
         });
@@ -220,9 +246,121 @@
           }
         });
       });
-        //css的 is-right => 代表使用者已經有存檔資料
-        //css的 is-error => 代表後台管理者有批閱的回覆資料
+      //檢查是否有新的批閱資料 => 間隔 60秒檢查一次
+      function chk_update(){
+        $.ajax({
+          url: "[! route('ta.script.chkupdate') !]",
+          type:'GET',
+          dataType: "json",
+          data: {
+          _token: '[! csrf_token() !]',
+        },
+        error: function(xhr) {
+        //alert('Ajax request 發生錯誤');
+        },
+        success: function(response) {
+          if(response['message'] == 'success'){
+            //設定 存檔的小圖案 顯示
+            for(var x=0;x<response['chkData'].length;x++){
+                setChkItem(response['chkData'][x]['item_key'], response['chkData'][x]['dsc'], response['chkData'][x]['updated_at']);
+            }
+            //呼叫方法更新批閱小圖示
+            resetChkIcon();
+          }
+        }
+        });
+      }
 
+      //設定 批閱資料
+     function setChkItem(item_key, dsc, updated_at)
+      {
+          var has_data = false;
+          for(var x=0;x<chk_data.length;x++)
+          {
+              if(chk_data[x]['item_key'] == item_key && updated_at > chk_data[x]['updated_at']){
+                  has_data = true;
+                  chk_data[x]['dsc'] = dsc;
+                  chk_data[x]['updated_at'] = updated_at;
+              }
+          }
+          if(!has_data){
+              chk_data.push(
+                  {
+                    'item_key':item_key,
+                    'dsc':dsc,
+                    'updated_at':updated_at,
+                  }
+              );
+          }
+      }
+
+      //取得 批閱內容
+      function getChkItemDsc(item_key)
+      {
+          var dsc='';
+          for(var x=0;x<chk_data.length;x++)
+          {
+              if(chk_data[x]['item_key'] == item_key){
+                  dsc = chk_data[x]['dsc'];
+              }
+          }
+
+          return dsc;
+      }
+
+      //更新批閱小圖示
+      function resetChkIcon(){
+        var chk_updated_at = 0;
+        var t_key = '';
+          for(var x=0;x<item_data.length;x++){
+            chk_updated_at = item_data[x]['updated_at'];
+            t_key = item_data[x]['item_key'];
+            for(var y=0;y<chk_data.length;y++){
+              if( chk_data[y]['item_key'] && chk_data[y]['updated_at'] > chk_updated_at){
+                $('#'+t_key).addClass(is_error);
+              }
+            }
+          }
+      }
+
+      //初始化 編輯物件跟批閱資料
+      function setDefault(){
+        $.ajax({
+          url: "[! route('ta.script.defaultdate') !]",
+          type:'GET',
+          dataType: "json",
+          data: {
+          _token: '[! csrf_token() !]',
+        },
+        error: function(xhr) {
+        //alert('Ajax request 發生錯誤');
+        },
+        success: function(response) {
+          if(response['message'] == 'success'){
+            var teacher = response['script_data']['teacher'];
+            var admin = response['script_data']['admin'];
+            for(var x=0;x<teacher.length;x++){
+                setScriptItem(teacher[x]['item_key'], teacher[x]['dsc']);
+                setScriptItemTimestamp(teacher[x]['item_key'], teacher[x]['updated_at']);
+                //設定 存檔的小圖案 顯示
+                $('#'+teacher[x]['item_key']).addClass(is_right);
+            }
+            for(var x=0;x<admin.length;x++){
+                setChkItem(admin[x]['item_key'], admin[x]['dsc'], admin[x]['updated_at']);
+            }
+            //呼叫方法更新批閱小圖示
+            resetChkIcon();
+          }
+        }
+        });
+      }
+
+      $( document ).ready(function() {
+          setDefault();
+          console.log(item_data);
+          console.log(chk_data);
+      });
+      //todo 怎麼再使用者編輯資料時顯示差異資料
     </script>
   </body>
 </html>
