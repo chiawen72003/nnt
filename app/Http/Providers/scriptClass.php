@@ -32,18 +32,52 @@ class ScriptClass
     }
 
     /**
+     * 回傳指定uid的填寫資料(包含教師填寫的資料跟管理員填寫的資料)
+     *
+     * @param int $user_id 
+     */
+    public function getUserScriptData($user_id)
+    {
+        //教師寫的資料
+         $t = ScriptData::where('uid', $user_id)
+            ->select(
+                'item_key',
+                'dsc',
+                'updated_at'
+            )
+            ->orderBy('id','desc')
+            ->groupBy('item_key')
+            ->get();
+        foreach ($t as $v){
+            $this->result_data['teacher'][] = $v;
+        }
+        //管理員寫的資料
+        $t = ScriptAdminData::where('uid', $user_id)
+            ->select(
+                'item_key',
+                'dsc',
+                'updated_at'
+            )
+            ->orderBy('id','desc')
+            ->groupBy('item_key')
+            ->get();
+        foreach ($t as $v){
+            $this->result_data['admin'][] = $v;
+        }
+        $this -> result_msg['script_data'] = $this->result_data;
+
+        return $this->result_msg;
+    }
+
+    /**
      * 根據item_key回傳資料(包含教師填寫的資料跟管理員填寫的資料)
      *
      * @param array $insert_data 要新增的資料
      */
     public function getScriptData($user_id,$item_key)
     {
-        $data = array(
-            'ta' => array(),
-            'ad' => array(),
-        );
         //教師寫的資料
-         $t = ScriptData::where('user_id', $user_id)
+         $t = ScriptData::where('uid', $user_id)
             ->where('item_key', $item_key)
             ->select(
                 'user_id',
@@ -57,7 +91,7 @@ class ScriptClass
             $this->result_data['teacher'] = $v;
         }
         //管理員寫的資料
-        $t = ScriptAdminData::where('user_id', $user_id)
+        $t = ScriptAdminData::where('uid', $user_id)
             ->where('item_key', $item_key)
             ->select(
                 'user_id',
@@ -89,6 +123,7 @@ class ScriptClass
         }
         $temp_obj->save();
         $this -> result_msg['item_key'] = $insert_data['item_key'];
+        $this -> result_msg['timestamp'] = time();
 
         return $this->result_msg;
     }
@@ -139,4 +174,37 @@ class ScriptClass
 
         return $t_obj;
     }
+
+
+    /**
+     * 取得最新的批閱資料
+     *
+     */
+    public function getChkData($data = array())
+    {
+        $t_obj = array();
+        if(isset($data['uid'])){
+            $t = ScriptAdminData::where('uid', $data['uid'])
+            ->select(
+            'item_key',
+            'dsc',
+            'updated_at'
+            )
+            ->orderBy('id','desc')
+            ->groupBy('item_key')
+            ->get();
+            foreach ($t as $v){
+                $t_obj[] = array(
+                    'item_key' => $v['item_key'],
+                    'dsc' => $v['dsc'],
+                    'updated_at' => $v['updated_at'],
+                );
+            }
+        }
+        $this->result_msg['chkData'] = $t_obj; 
+
+        return $$this->result_msg;
+    }
+
+
 }
