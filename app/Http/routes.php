@@ -199,6 +199,10 @@ Route::get('/Ta/Script/Add/Page', ['middleware' => 'TeacherCheck','as' => 'ta.sc
 
 //教學劇本設計 前端api 新增資料
 Route::post('/Ta/Script/Add', ['middleware' => 'TeacherCheck','as' => 'ta.script.add', 'uses' => 'TAController@scriptAdd']);
+//教學劇本設計 前端api 取得最新的批閱資料
+Route::get('/Ta/Script/ChkUpdate', ['middleware' => 'TeacherCheck','as' => 'ta.script.chkupdate', 'uses' => 'TAController@scriptChkUpdate']);
+//教學劇本設計 前端api 取得使用者已經填寫的資料，包含批閱資料
+Route::get('/Ta/Script/DefaultDate', ['middleware' => 'TeacherCheck','as' => 'ta.script.defaultdate', 'uses' => 'TAController@scriptDefaultDate']);
 
 //教學劇本設計 後端教師列表頁面
 Route::get('/Ad/Script/Ta/Page', ['middleware' => 'AdSessionCheck','as' => 'ad.script.ta.page', 'uses' => 'AdController@scriptTaPage']);
