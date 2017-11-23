@@ -501,4 +501,32 @@ class TAController extends Controller
 
         return json_encode($result);
     }
+
+    /**
+     *教學劇本設計 前端api 取得最新的批閱資料
+     *
+     */
+    public function scriptChkUpdate()
+    {
+        $script_class_obj = new ScriptClass();
+        $data = array();
+        $data['uid'] = app('request')->session()->get('user_data.uid');
+        $result = $script_class_obj -> getChkData($data);
+
+        return json_encode($result);
+    }
+
+    /**
+     *教學劇本設計 前端api 取得使用者已經填寫的資料，包含批閱資料
+     *
+     */
+    public function scriptDefaultDate()
+    {
+        $script_class_obj = new ScriptClass();
+        $uid = app('request')->session()->get('user_data.uid');
+        $result = $script_class_obj -> getUserScriptData($uid);
+
+        return json_encode($result);
+    }
+
 }
