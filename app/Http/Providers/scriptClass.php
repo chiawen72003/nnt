@@ -32,6 +32,31 @@ class ScriptClass
     }
 
     /**
+     * 統計指定uid的文章數量(只針對教師填寫的資料)
+     *
+     * @param int $user_id
+     */
+    public function getTeacherScriptNum($user_id)
+    {
+        $result_data = array();
+        //教師寫的資料
+        $t = ScriptData::where('uid', $user_id)
+            ->select(
+                'item_key',
+                'updated_at'
+            )
+            ->get();
+        foreach ($t as $v){
+            if(!isset($result_data[$v['item_key']])){
+                $result_data[$v['item_key']] = 0;
+            }
+            $result_data[$v['item_key']]++;
+        }
+
+        return $result_data;
+    }
+
+    /**
      * 回傳指定uid的填寫資料(包含教師填寫的資料跟管理員填寫的資料)
      *
      * @param int $user_id 
@@ -160,7 +185,7 @@ class ScriptClass
             ->leftJoin('user_info', 'user_info.uid', '=', 'script_data.uid')
             ->leftJoin('user_status', 'user_status.user_id', '=', 'user_info.user_id')
             ->whereIn('user_status.access_level', array('21','22','23'))
-            ->groupBy('script_data.ui')
+            ->groupBy('script_data.uid')
             ->orderBy('user_info.uname')
             ->paginate(20);
         foreach ($temp_obj as $v)
