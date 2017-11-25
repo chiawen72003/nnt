@@ -208,3 +208,7 @@ Route::get('/Ta/Script/DefaultDate', ['middleware' => 'TeacherCheck','as' => 'ta
 Route::get('/Ad/Script/Ta/Page', ['middleware' => 'AdSessionCheck','as' => 'ad.script.ta.page', 'uses' => 'AdController@scriptTaPage']);
 //教學劇本設計 後端教學劇本設計資料列表
 Route::get('/Ad/Script/List', ['middleware' => 'AdSessionCheck','as' => 'ad.script.list', 'uses' => 'AdController@scriptList']);
+//教學劇本設計 後端教學劇本設計資料列表
+Route::get('/Ad/Script/Review', ['middleware' => 'AdSessionCheck','as' => 'ad.script.review', 'uses' => 'AdController@scriptReview']);
+//教學劇本設計 後端 新增批閱資料
+Route::post('/Ad/Script/Add', ['middleware' => 'AdSessionCheck','as' => 'ad.script.add', 'uses' => 'AdController@scriptAdd']);
