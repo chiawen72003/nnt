@@ -1125,7 +1125,7 @@ class AdController extends Controller
         $data['user_data'] = app('request')->session()->get('user_data');
         if(isset($fp['uid'])){
             $item = new ScriptClass();
-            $data['script_data'] = $item -> getUserScriptData($fp['uid']);
+            $data['script_data'] = $item -> getTeacherScriptNum($fp['uid']);
         }
 
         return view('admin.script.script_list', $data);
