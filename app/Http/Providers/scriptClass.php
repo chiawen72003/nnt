@@ -105,7 +105,7 @@ class ScriptClass
          $t = ScriptData::where('uid', $user_id)
             ->where('item_key', $item_key)
             ->select(
-                'user_id',
+                'uid',
                 'item_key',
                 'dsc'
             )
@@ -119,7 +119,7 @@ class ScriptClass
         $t = ScriptAdminData::where('uid', $user_id)
             ->where('item_key', $item_key)
             ->select(
-                'user_id',
+                'uid',
                 'item_key',
                 'dsc'
             )
