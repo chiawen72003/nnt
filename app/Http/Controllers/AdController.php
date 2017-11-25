@@ -1114,4 +1114,20 @@ class AdController extends Controller
 
         return view('admin.script.teacher_list', $data);
     }
+
+    /**
+     * 教學劇本設計 後端教學劇本設計資料列表
+     */
+    public function scriptList()
+    {
+        $fp = Input::all();
+        $data = array();
+        $data['user_data'] = app('request')->session()->get('user_data');
+        if(isset($fp['uid'])){
+            $item = new ScriptClass();
+            $data['script_data'] = $item -> getUserScriptData($fp['uid']);
+        }
+
+        return view('admin.script.script_list', $data);
+    }
 }
