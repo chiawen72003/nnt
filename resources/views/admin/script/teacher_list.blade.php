@@ -20,7 +20,7 @@
                                 <td>[! $v['uname'] !]</td>
                                 <td></td>
                                 <td>
-                                    <a class="icon-action icon-edit" href=""></a>
+                                    <a class="icon-action icon-edit" href="[! route('ad.script.list', array('uid'=>$v['uid'])) !]"></a>
                                 </td>
                             </tr>
                         @endforeach
