@@ -8,7 +8,10 @@
             <div id="question-left">
                 <div id="exam_title">
                 </div>
-                <p id="question-tip-text" class="question-tip-text">* 請記得滑動下拉功能，查看題目是否已結束。</p>
+                <div class="question-button-wrap">
+                    <button id="prev" class="btn btn-green prev">上一頁</button>
+                    <button id="next" class="btn btn-green next">下一頁</button>
+                </div>
             </div>
             <div id="question-right">
                 <iframe width=400 height=125 frameborder=0 scrolling=no
@@ -24,8 +27,10 @@
         </div>
     </div>
 </div>
+
 [! Html::script('js/jquery-1.11.3.js') !]
 [! Html::script('js/webtoolkit.base64.js') !]
+
 <script>
     var token = "[! csrf_token() !]";
     var model_obj = [];//模組資料
@@ -86,6 +91,9 @@
             item_id = new_item_id;
             operating_array = [];//重置操作紀錄
             load_module_page(item_id);
+            $section.stop().animate({
+                scrollTop: 0
+            });
         }else{
             update_record('1');
             item_id = 0;
@@ -204,6 +212,72 @@
         @if($is_view_record)
         replay_record();
         @endif
+    });
+
+    //下面處理文章過長時，可以點擊上下頁按鈕來移動文章
+    $.fn.scrollStopped = function(callback) {
+        var $this = $(this),
+            self = this;
+        $this.scroll(function() {
+            if ($this.data('scrollTimeout')) {
+                clearTimeout($this.data('scrollTimeout'));
+            }
+            $this.data('scrollTimeout', setTimeout(callback, 250, self));
+        });
+    };
+    $section = $('#exam_title'),
+
+    $(function() {
+        var $win = $(window),
+            $body = $('body'),
+            $prev = $('.prev'),
+            $next = $('.next'),
+            sh = 0,
+            st = 0,
+            sb = 0,
+            hPage = 400;//頁面滑動時要移動的量
+            phase = 1,
+            triggerEvt = ('touchend' in window) ? 'touchend' : ' click';
+        if ($section.prop('scrollHeight') > 400) {
+            $('.question-button-wrap').addClass('show');//todo 需要顯示、不顯示的css
+            calcDimension();
+            $section.scrollStopped(checkCtrl);//上下頁滑動完以後，檢查是否顯示按鈕
+            //$win.on('resize', calcDimension);
+            $body.on(triggerEvt, '.prev, .next', function() {
+                st = $section.scrollTop();//現在scroltop的位置
+                if ($(this).hasClass('prev')) {
+                    phase = -1;
+                } else {
+                    phase = 1;
+                }
+                $section.stop().animate({
+                    scrollTop: st + hPage * phase
+                });
+            });
+        }
+
+        /**
+         * 判斷是否顯示上、下頁按鈕
+         *
+         */
+        function checkCtrl() {
+            $prev.removeClass('disabled');
+            $next.removeClass('disabled');
+            st = $section.scrollTop();
+            if (st >= sb) {
+                $next.addClass('disabled');
+            } else if (st <= 0) {
+                $prev.addClass('disabled');
+            }
+        }
+
+        /**
+         * 初始化 設定值
+         */
+        function calcDimension() {
+            //todo 需要計算此高度
+            sb = $section.prop('scrollHeight') - 50;//st大於此值時，就不顯示下一頁按鈕
+        }
     });
 </script>
 @stop
