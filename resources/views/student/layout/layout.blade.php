@@ -24,7 +24,7 @@
     <div id="boad-wrap" class="boad-wrap">
         <div id="boad-nav">
             <a href="[! route('mem.news') !]">系統公告</a>
-            <a href="[! route('mem.exam.pg') !]">學習</a>
+            <a href="[! route('mem.exam') !]">學習</a>
             <a href="[! route('mem.achievement') !]">成果查詢</a>
             <a href="[! route('mem.logout') !]">登出</a>
         </div>
