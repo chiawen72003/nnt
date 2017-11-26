@@ -36,7 +36,42 @@
     [! Form::close() !]
 
     [! Html::script('js/jquery-1.11.3.js') !]
+    [! Html::script('js/sweetalert2.min.js') !]
     <script>
+        var show = [];
 
+        $( document ).ready(function() {
+            showData();
+        });
+
+        //資料初始化
+        function showData(){
+            var title = '';
+            var def_title = '提醒您，下列單元尚未操作完畢!!\r\n';
+            @if(isset($list_data) and count($list_data) > 0)
+                @foreach($list_data as $value)
+                    @if( !in_array($value['subject'], $has_record_subject) )
+                        title = title + "[! isset($subject_list[$value['subject']])?$subject_list[$value['subject']]:'' !]\r\n";
+                    @endif
+                @endforeach
+            @endif
+            if(title > ''){
+                //提示學生目前還有哪些單元還沒有做
+                swal({
+                    title: def_title + title,
+                    text: '',
+                    timer: 10000,
+                    confirmButtonColor: "#378e2c"
+                }).then(
+                    function () {},
+                    // handling the promise rejection
+                    function (dismiss) {
+                        if (dismiss === 'timer') {
+                            console.log('I was closed by the timer')
+                        }
+                    }
+                )
+            }
+        }
     </script>
 @stop
