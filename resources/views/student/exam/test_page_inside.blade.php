@@ -26,5 +26,14 @@ $('#exam_title').html(t_data);
 $('#iframe_head').attr('src','[! $exam_data['iframe_path'] !]');
 t_data = $('#hide_qustion_voicetext_inner').html();
 $('#qustion-voicetext-inner').append(t_data);
-$('#qustion-voicetext-inner').scrollTop(9999999);;
+$('#qustion-voicetext-inner').scrollTop(9999999);
+
+
+/**
+ * 題目文字註記
+ *
+ */
+ if (document.getElementById("exam_title").scrollHeight > $('#exam_title').height()) {
+    $('#question-tip-text').show();
+ }
 </script>

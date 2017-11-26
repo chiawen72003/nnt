@@ -8,6 +8,7 @@
             <div id="question-left">
                 <div id="exam_title">
                 </div>
+                <p id="question-tip-text" class="question-tip-text">* 請記得滑動下拉功能，查看題目是否已結束。</p>
             </div>
             <div id="question-right">
                 <iframe width=400 height=125 frameborder=0 scrolling=no
@@ -203,7 +204,6 @@
         @if($is_view_record)
         replay_record();
         @endif
-
     });
 </script>
 @stop
