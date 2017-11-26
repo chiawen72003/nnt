@@ -5,6 +5,7 @@
     <title>Document</title>
     [! Html::style('style/reset.css') !]
     [! Html::style('style/style.css') !]
+    [! Html::style('style/sweetalert2.min.css') !]
     <script>
         window.onload = function (){
             var docHeight = document.body.offsetHeight,
