@@ -112,7 +112,7 @@
           <textarea class="path-edit" id='edit_area' ></textarea>
         </div><!-- content -->
         <div class="modal-footer">
-          <div class="modal-date">最後編輯日期：2017/11/14 上午 12:38</div>
+          <div class="modal-date" id="last_edit">最後編輯日期：2017/11/14 上午 12:38</div>
           <div class="modal-button">
             <button class="btn-clear">取消編輯</button>
             <button class="btn-submit">確認送出</button>
@@ -155,20 +155,27 @@
         */
         function getScriptItemDsc(item_key)
         {
-            var dsc='';
+            var result_val = [
+                {
+                    'dsc':'',
+                    'updated_at':'',
+                }
+            ];
             for(var x=0;x<item_data.length;x++)
             {
                 if(item_data[x]['item_key'] == item_key){
-                    dsc = item_data[x]['dsc'];
+                    result_val[0]['dsc'] = item_data[x]['dsc'];
+                    result_val[0]['updated_at'] = item_data[x]['updated_at'];
                     for(var y=0;y<chk_data.length;y++){
                       if(chk_data[y]['item_key'] == item_key && chk_data[y]['updated_at'] > item_data[x]['updated_at']){
-                         dsc = chk_data[y]['dsc'];
+                          result_val[0]['dsc'] = item_data[x]['dsc'];
+                         // result_val[0]['updated_at'] = item_data[x]['updated_at'];
                       }
                     }
                 }
             }
 
-            return dsc;
+            return result_val;
         }
 
         //設定編輯物件的時間戳記
@@ -188,17 +195,20 @@
       $(function(){
         var elements = $('.modal-overlay, .modal');
 		var item_title = $('#edit_title');
-		var item_edit = $('#edit_area');
+        var item_edit = $('#edit_area');
+        var last_edit = $('#last_edit');
         var item_key = '';
         var user_dsc = '';
 
 		//開啟編輯視窗
         $('.open-modal').click(function(){
 			var title = '編輯：' + $(this).attr("obj_title");
+			var last_edit_title='最後編輯日期：';
 			item_key =  this.id;
             user_dsc = getScriptItemDsc(item_key);
             item_title.html(title);
-			item_edit.val(user_dsc);
+            item_edit.val(user_dsc[0]['dsc']);
+            last_edit.html(last_edit_title + user_dsc[0]['updated_at']);
 			elements.addClass(active);
         });
 
@@ -223,16 +233,18 @@
 			  error: function(xhr) {
 				//alert('Ajax request 發生錯誤');
 			  },
-			  success: function(response) {
-			      if(response['message'] == 'success'){
-              //設定 存檔的小圖案 顯示
-              $('#'+response['item_key']).addClass(is_right);
-              //移除 批閱的小圖案
-              $('#'+response['item_key']).removeClass(is_error);
-              //設定 存檔時間戳記
-              setScriptItemTimestamp(response['item_key'], response['updated_at']);
-            }
-			  }
+                success: function(response)
+                {
+                    if(response['message'] == 'success')
+                    {
+                        //設定 存檔的小圖案 顯示
+                        $('#'+response['item_key']).addClass(is_right);
+                        //移除 批閱的小圖案
+                        $('#'+response['item_key']).removeClass(is_error);
+                        //設定 存檔時間戳記
+                        setScriptItemTimestamp(response['item_key'], response['updated_at']);
+                    }
+                }
 			});
             //把編輯的資料存入暫存物件內，下次編輯時直接載入
             setScriptItem(item_key, item_edit.val());
@@ -316,7 +328,7 @@
             chk_updated_at = item_data[x]['updated_at'];
             t_key = item_data[x]['item_key'];
             for(var y=0;y<chk_data.length;y++){
-              if( chk_data[y]['item_key'] && chk_data[y]['updated_at'] > chk_updated_at){
+              if( chk_data[y]['item_key'] == t_key && chk_data[y]['updated_at'] > chk_updated_at){
                 $('#'+t_key).addClass(is_error);
               }
             }
