@@ -110,6 +110,7 @@
         </div>
         <div class="modal-content">
           <textarea class="path-edit" id='edit_area' ></textarea>
+          <div class="path-load"></div>
         </div><!-- content -->
         <div class="modal-footer">
           <div class="modal-date" id="last_edit">最後編輯日期：2017/11/14 上午 12:38</div>
@@ -121,7 +122,9 @@
       </div><!-- modal -->
     </div><!-- overlay -->
     [! Html::script('js/jquery-1.11.3.js') !]
+    [! Html::script('js/diff_match_patch.js') !]
     <script>
+        var path_load = $('.path-load');
         var item_data = [];//目前頁面上物件的內容資料
         var chk_data = [];//批閱資料
         var is_right = 'is-right';
@@ -168,8 +171,10 @@
                     result_val[0]['updated_at'] = item_data[x]['updated_at'];
                     for(var y=0;y<chk_data.length;y++){
                       if(chk_data[y]['item_key'] == item_key && chk_data[y]['updated_at'] > item_data[x]['updated_at']){
-                          result_val[0]['dsc'] = item_data[x]['dsc'];
-                         // result_val[0]['updated_at'] = item_data[x]['updated_at'];
+                          //處理批閱差異顯示
+                          launch(item_data[x]['dsc'],chk_data[y]['dsc']);
+                          result_val[0]['dsc'] = chk_data[y]['dsc'];
+                         // result_val[0]['updated_at'] = chk_data[y]['updated_at'];
                       }
                     }
                 }
@@ -202,6 +207,7 @@
 
 		//開啟編輯視窗
         $('.open-modal').click(function(){
+            path_load.html('');
 			var title = '編輯：' + $(this).attr("obj_title");
 			var last_edit_title='最後編輯日期：';
 			item_key =  this.id;
@@ -372,7 +378,30 @@
           console.log(item_data);
           console.log(chk_data);
       });
-      //todo 怎麼再使用者編輯資料時顯示差異資料
+
+      //下面處理批閱差異顯示
+      var dmp = new diff_match_patch();
+      function launch($source, $diff) {
+          var text1 = $source;
+          var text2 = $diff;
+          //dmp.Diff_Timeout = parseFloat(document.getElementById('timeout').value);
+         // dmp.Diff_EditCost = parseFloat(document.getElementById('editcost').value);
+
+         // var ms_start = (new Date()).getTime();
+          var d = dmp.diff_main(text1, text2);
+         // var ms_end = (new Date()).getTime();
+          //效果處理：效率清理
+          if (false) {
+              dmp.diff_cleanupSemantic(d);
+          }
+
+          //效果處理：不清理
+          if (false) {
+              dmp.diff_cleanupEfficiency(d);
+          }
+          var ds = dmp.diff_prettyHtml(d);
+          path_load.html(ds);
+      }
     </script>
   </body>
 </html>
