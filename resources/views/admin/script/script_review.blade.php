@@ -7,7 +7,7 @@
                 <div class="select-group">
                     <div class="label-title">教師填寫內容</div>
                     <div class="edit-wrap">
-                        <textarea name="dsc" id="dsc">[! $script_data['script_data']['teacher']['dsc'] !]</textarea>
+                        <textarea name="dsc" id="dsc" class="multiple-select" style="height: 300px;">[! $script_data['script_data']['teacher']['dsc'] !]</textarea>
                     </div>
                 </div>
                 <div class="form-button-wrap">
