@@ -63,6 +63,7 @@ class ScriptClass
      */
     public function getUserScriptData($user_id)
     {
+        $t_array = array();
         //教師寫的資料
          $t = ScriptData::where('uid', $user_id)
             ->select(
@@ -70,24 +71,29 @@ class ScriptClass
                 'dsc',
                 'updated_at'
             )
-            ->orderBy('id','desc')
-            ->groupBy('item_key')
+            ->orderBy('id','DESC')
             ->get();
         foreach ($t as $v){
-            $this->result_data['teacher'][] = $v;
+            if(!isset($t_array[$v['item_key']])){
+                $this->result_data['teacher'][] = $v;
+                $t_array[$v['item_key']] = true;
+            }
         }
         //管理員寫的資料
+        $t_array = array();
         $t = ScriptAdminData::where('uid', $user_id)
             ->select(
                 'item_key',
                 'dsc',
                 'updated_at'
             )
-            ->orderBy('id','desc')
-            ->groupBy('item_key')
+            ->orderBy('id','DESC')
             ->get();
         foreach ($t as $v){
-            $this->result_data['admin'][] = $v;
+            if(!isset($t_array[$v['item_key']])) {
+                $this->result_data['admin'][] = $v;
+                $t_array[$v['item_key']] = true;
+            }
         }
         $this -> result_msg['script_data'] = $this->result_data;
 
@@ -208,6 +214,7 @@ class ScriptClass
     public function getChkData($data = array())
     {
         $t_obj = array();
+        $t_array = array();
         if(isset($data['uid'])){
             $t = ScriptAdminData::where('uid', $data['uid'])
             ->select(
@@ -216,14 +223,16 @@ class ScriptClass
             'updated_at'
             )
             ->orderBy('id','desc')
-            ->groupBy('item_key')
             ->get();
             foreach ($t as $v){
-                $t_obj[] = array(
-                    'item_key' => $v['item_key'],
-                    'dsc' => $v['dsc'],
-                    'updated_at' => $v['updated_at'],
-                );
+                if(!isset($t_array[$v['item_key']])){
+                    $t_obj[] = array(
+                        'item_key' => $v['item_key'],
+                        'dsc' => $v['dsc'],
+                        'updated_at' => $v['updated_at'],
+                    );
+                    $t_array[$v['item_key']] = true;
+                }
             }
         }
         $this->result_msg['chkData'] = $t_obj; 
