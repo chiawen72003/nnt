@@ -335,6 +335,7 @@
             t_key = item_data[x]['item_key'];
             for(var y=0;y<chk_data.length;y++){
               if( chk_data[y]['item_key'] == t_key && chk_data[y]['updated_at'] > chk_updated_at){
+                $('#'+t_key).removeClass(is_right);
                 $('#'+t_key).addClass(is_error);
               }
             }
