@@ -30,7 +30,6 @@
                             <td>主要問題</td>
                             <td>[! (isset($script_data['obj_2']))?$script_data['obj_2']:'0'!]</td>
                             <td><a class="icon-action icon-edit" href="[! route('ad.script.review', array('uid'=>$uid,'item_key'=>'obj_2')) !]"></a></td>
-                            <td></td>
                         </tr>
                         <tr>
                             <td></td>
