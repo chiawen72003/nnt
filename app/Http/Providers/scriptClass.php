@@ -155,7 +155,7 @@ class ScriptClass
         }
         $temp_obj->save();
         $this -> result_msg['item_key'] = $insert_data['item_key'];
-        $this -> result_msg['timestamp'] = time();
+        $this -> result_msg['updated_at'] = time();
 
         return $this->result_msg;
     }
