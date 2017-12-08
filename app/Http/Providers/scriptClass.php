@@ -238,7 +238,7 @@ class ScriptClass
         }
         $this->result_msg['chkData'] = $t_obj; 
 
-        return $$this->result_msg;
+        return $this->result_msg;
     }
 
     /**
