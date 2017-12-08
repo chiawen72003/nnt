@@ -202,7 +202,7 @@ Route::post('/Ta/Script/Add', ['middleware' => 'TeacherCheck','as' => 'ta.script
 //教學劇本設計 前端api 取得最新的批閱資料
 Route::get('/Ta/Script/ChkUpdate', ['middleware' => 'TeacherCheck','as' => 'ta.script.chkupdate', 'uses' => 'TAController@scriptChkUpdate']);
 //教學劇本設計 前端api 取得使用者已經填寫的資料，包含批閱資料
-Route::get('/Ta/Script/DefaultDate', ['middleware' => 'TeacherCheck','as' => 'ta.script.defaultdate', 'uses' => 'TAController@scriptDefaultDate']);
+Route::get('/Ta/Script/DefaultData', ['middleware' => 'TeacherCheck','as' => 'ta.script.defaultdata', 'uses' => 'TAController@scriptDefaultData']);
 
 //教學劇本設計 後端教師列表頁面
 Route::get('/Ad/Script/Ta/Page', ['middleware' => 'AdSessionCheck','as' => 'ad.script.ta.page', 'uses' => 'AdController@scriptTaPage']);
@@ -212,3 +212,7 @@ Route::get('/Ad/Script/List', ['middleware' => 'AdSessionCheck','as' => 'ad.scri
 Route::get('/Ad/Script/Review', ['middleware' => 'AdSessionCheck','as' => 'ad.script.review', 'uses' => 'AdController@scriptReview']);
 //教學劇本設計 後端 新增批閱資料
 Route::post('/Ad/Script/Add', ['middleware' => 'AdSessionCheck','as' => 'ad.script.add', 'uses' => 'AdController@scriptAdd']);
+//教學劇本設計-提示 列表
+Route::get('/Ad/Script/Prompt', ['middleware' => 'AdSessionCheck','as' => 'ad.script.prompt', 'uses' => 'AdController@scriptPrompt']);
+Route::get('/Ad/Script/Prompt/Edit', ['middleware' => 'AdSessionCheck','as' => 'ad.script.prompt.edit', 'uses' => 'AdController@scriptPromptEdit']);
+Route::post('/Ad/Script/Prompt/Update', ['middleware' => 'AdSessionCheck','as' => 'ad.script.prompt.update', 'uses' => 'AdController@scriptPromptUpdate']);

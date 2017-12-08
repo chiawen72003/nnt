@@ -1162,4 +1162,59 @@ class AdController extends Controller
 
         return json_encode($result);
     }
+
+
+    /**
+     * 教學劇本設計-提示 列表頁面
+     */
+    public function scriptPrompt()
+    {
+        $item = new ScriptClass();
+        $data = array();
+        $data['user_data'] = app('request')->session()->get('user_data');
+        $data['list_data'] = $item->getPrompt(true);
+
+        return view('admin.script.prompt_list', $data);
+    }
+
+    /**
+     * 教學劇本設計-提示 編輯
+     */
+    public function scriptPromptEdit()
+    {
+        $fp = Input::all();
+        $data = array();
+        $data['user_data'] = app('request')->session()->get('user_data');
+        $data['item_key'] = '';
+        if (isset($fp['item_key'])) {
+            $item = new ScriptClass();
+            $data['prompt_data'] = $item->getPromptData($fp['item_key']);
+            $data['item_key'] = $fp['item_key'];
+            //設定ckfinder
+            //https://dotblogs.com.tw/jellycheng/archive/2013/09/11/118175.aspx
+            $data['ck_finder_path'] = url('/admin/js/ckfinder');
+            session_start();
+            $_SESSION['ckfiner_key'] = true;
+            $_SESSION['dirroot'] = url('/cc_upload') . '/';//讀取路徑
+            $_SESSION['upload_path'] = public_path('/cc_upload') . '/';//儲存實體路徑
+        }
+
+        return view('admin.script.prompt_edit', $data);
+    }
+
+    /**
+     * 更新一筆提示的資料
+     *
+     */
+    public function scriptPromptUpdate()
+    {
+        $t_obj = new ScriptClass();
+        $data = array();
+        $data['item_key'] = app('request')->get('item_key');
+        $data['dsc'] = app('request')->get('dsc');
+        $t_obj->init($data);
+        $t_obj->setPromptData();
+
+        return redirect()->route('ad.script.prompt');
+    }
 }

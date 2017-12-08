@@ -520,11 +520,12 @@ class TAController extends Controller
      *教學劇本設計 前端api 取得使用者已經填寫的資料，包含批閱資料
      *
      */
-    public function scriptDefaultDate()
+    public function scriptDefaultData()
     {
         $script_class_obj = new ScriptClass();
         $uid = app('request')->session()->get('user_data.uid');
         $result = $script_class_obj -> getUserScriptData($uid);
+        $result['prompt'] = $script_class_obj -> getPrompt();
 
         return json_encode($result);
     }

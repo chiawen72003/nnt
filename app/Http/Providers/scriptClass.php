@@ -4,6 +4,7 @@ namespace App\Http\Providers;
 
 use App\Http\Models\ScriptData;//教師填寫的資料
 use App\Http\Models\ScriptAdminData;//管理員填寫的資料
+use App\Http\Models\ScriptPrompt;//提示資料
 use \Input;
 
 class ScriptClass
@@ -240,5 +241,62 @@ class ScriptClass
         return $$this->result_msg;
     }
 
+    /**
+     * 取得最新的批閱資料
+     *
+     */
+    public function getPrompt($set_key = false)
+    {
+        $t_obj = array();
+        $t = ScriptPrompt::select(
+        'item_key',
+        'dsc'
+        )
+        ->orderBy('item_key','asc')
+        ->get();
+        if($set_key){
+            foreach ($t as $v){
+                $t_obj[$v['item_key']] = $v['dsc'];
+            }
+        }else{
+            foreach ($t as $v){
+                $t_obj[] = $v;
+            }
+        }
 
+        return $t_obj;
+    }
+
+    /**
+     * 取得單一批閱資料 根據item_key回傳提示資料
+     *
+     * @param array $insert_data 要新增的資料
+     */
+    public function getPromptData($item_key)
+    {
+       $t_obj = array();
+        $t = ScriptPrompt::where('item_key', $item_key)
+        ->select(
+        'id',
+        'item_key',
+        'dsc'
+        )
+        ->get();
+        foreach ($t as $v){
+            $t_obj[] = $v;
+        }
+        
+
+        return $t_obj;
+    }
+
+    public function setPromptData(){
+        if($this->input_data['item_key'] AND $this->input_data['dsc'])
+        {
+            ScriptPrompt::where('item_key',$this->input_data['item_key'])
+                ->update(['dsc' => $this->input_data['dsc']]);
+        }
+
+        return ;
+    }
 }
