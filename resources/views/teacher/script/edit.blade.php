@@ -273,7 +273,6 @@
           type:'GET',
           dataType: "json",
           data: {
-          _token: '[! csrf_token() !]',
         },
         error: function(xhr) {
         //alert('Ajax request 發生錯誤');
@@ -289,6 +288,8 @@
           }
         }
         });
+
+        setTimeout("chk_update()", 60000);//60秒更新一次
       }
 
       //設定 批閱資料
@@ -382,6 +383,7 @@
 
       $( document ).ready(function() {
           setDefault();
+          setTimeout("chk_update()", 60000);//60秒更新一次
       });
 
       //下面處理批閱差異顯示
