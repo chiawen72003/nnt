@@ -382,8 +382,6 @@
 
       $( document ).ready(function() {
           setDefault();
-          console.log(item_data);
-          console.log(chk_data);
       });
 
       //下面處理批閱差異顯示
