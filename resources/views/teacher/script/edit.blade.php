@@ -123,6 +123,47 @@
         </div>
       </div><!-- modal -->
     </div><!-- overlay -->
+    <!-- Start Option Box -->
+    <div class="option-box">
+      <div class="content">
+        <table>
+          <tr>
+            <th>項次</th>
+            <th>核心能力</th>
+            <th>對應院級核心能力</th>
+            <th>對應校級核心能力</th>
+          </tr>
+          <tr>
+            <td>A1</td>
+            <td>閱讀能力</td>
+            <td>寫作能力</td>
+            <td>語文素養</td>
+          </tr>
+          <tr>
+            <td>A1</td>
+            <td>閱讀能力</td>
+            <td>寫作能力</td>
+            <td>語文素養</td>
+          </tr>
+          <tr>
+            <td>A1</td>
+            <td>閱讀能力</td>
+            <td>寫作能力</td>
+            <td>語文素養</td>
+          </tr>
+          <tr>
+            <td>A1</td>
+            <td>閱讀能力</td>
+            <td>寫作能力</td>
+            <td>語文素養</td>
+          </tr>
+        </table>
+      </div>
+      <div class="customizer">
+        <span>能力指標對照表</span>
+      </div>
+    </div>
+    <!-- End Option Box -->
     [! Html::script('js/jquery-1.11.3.js') !]
     [! Html::script('js/diff_match_patch.js') !]
     <script>
@@ -382,6 +423,19 @@
       }
 
       $( document ).ready(function() {
+          // Top Section Width & Height
+          $('.top').width($(window).width());
+          $('.top').height($(window).height());
+
+          $(window).resize(function() {
+              $('.top').width($(window).width());
+              $('.top').height($(window).height());
+          });
+
+          // Option Box
+          $('.customizer').click(function() {
+              $('.option-box').toggleClass('open');
+          });
           setDefault();
           setTimeout("chk_update()", 60000);//60秒更新一次
       });
