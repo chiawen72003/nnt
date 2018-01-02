@@ -225,7 +225,7 @@
             $this.data('scrollTimeout', setTimeout(callback, 250, self));
         });
     };
-    $section = $('#exam_title'),
+    $section = $('#exam_title');
 
     $(function() {
         var $win = $(window),
