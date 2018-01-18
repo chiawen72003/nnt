@@ -242,7 +242,7 @@ class ScriptClass
     }
 
     /**
-     * 取得最新的批閱資料
+     * 取得教學劇本各欄位的提示資料
      *
      */
     public function getPrompt($set_key = false)
