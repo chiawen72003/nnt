@@ -9,7 +9,7 @@ use \Input;
 
 class ScriptClass
 {
-    private $input_data = array(
+    private $init = array(
         'id' => null,
         'uid' => null,
         'unlock' => null,
@@ -25,10 +25,17 @@ class ScriptClass
         'admin' => array(),
     );
 
+    public function __construct($data = array())
+    {
+        foreach ($data as $key => $value) {
+            $this->init[$key] = $value;
+        }
+    }
+
     public function init($data = array())
     {
         foreach ($data as $key => $value) {
-            $this->input_data[$key] = $value;
+            $this->init[$key] = $value;
         }
     }
 
@@ -47,8 +54,8 @@ class ScriptClass
                 'updated_at'
             )
             ->get();
-        foreach ($t as $v){
-            if(!isset($result_data[$v['item_key']])){
+        foreach ($t as $v) {
+            if (!isset($result_data[$v['item_key']])) {
                 $result_data[$v['item_key']] = 0;
             }
             $result_data[$v['item_key']]++;
@@ -60,22 +67,22 @@ class ScriptClass
     /**
      * 回傳指定uid的填寫資料(包含教師填寫的資料跟管理員填寫的資料)
      *
-     * @param int $user_id 
+     * @param int $user_id
      */
     public function getUserScriptData($user_id)
     {
         $t_array = array();
         //教師寫的資料
-         $t = ScriptData::where('uid', $user_id)
+        $t = ScriptData::where('uid', $user_id)
             ->select(
                 'item_key',
                 'dsc',
                 'updated_at'
             )
-            ->orderBy('id','DESC')
+            ->orderBy('id', 'DESC')
             ->get();
-        foreach ($t as $v){
-            if(!isset($t_array[$v['item_key']])){
+        foreach ($t as $v) {
+            if (!isset($t_array[$v['item_key']])) {
                 $this->result_data['teacher'][] = $v;
                 $t_array[$v['item_key']] = true;
             }
@@ -88,15 +95,15 @@ class ScriptClass
                 'dsc',
                 'updated_at'
             )
-            ->orderBy('id','DESC')
+            ->orderBy('id', 'DESC')
             ->get();
-        foreach ($t as $v){
-            if(!isset($t_array[$v['item_key']])) {
+        foreach ($t as $v) {
+            if (!isset($t_array[$v['item_key']])) {
                 $this->result_data['admin'][] = $v;
                 $t_array[$v['item_key']] = true;
             }
         }
-        $this -> result_msg['script_data'] = $this->result_data;
+        $this->result_msg['script_data'] = $this->result_data;
 
         return $this->result_msg;
     }
@@ -106,20 +113,20 @@ class ScriptClass
      *
      * @param array $insert_data 要新增的資料
      */
-    public function getScriptData($user_id,$item_key)
+    public function getScriptData($user_id, $item_key)
     {
         //教師寫的資料
-         $t = ScriptData::where('uid', $user_id)
+        $t = ScriptData::where('uid', $user_id)
             ->where('item_key', $item_key)
             ->select(
                 'uid',
                 'item_key',
                 'dsc'
             )
-            ->orderBy('id','desc')
+            ->orderBy('id', 'desc')
             ->limit(1)
             ->get();
-        foreach ($t as $v){
+        foreach ($t as $v) {
             $this->result_data['teacher'] = $v;
         }
         //管理員寫的資料
@@ -130,14 +137,14 @@ class ScriptClass
                 'item_key',
                 'dsc'
             )
-            ->orderBy('id','desc')
+            ->orderBy('id', 'desc')
             ->limit(1)
             ->get();
-        foreach ($t as $v){
+        foreach ($t as $v) {
             $this->result_data['admin'] = $v;
         }
-        $this -> result_msg['item_key'] = $item_key;
-        $this -> result_msg['script_data'] = $this->result_data;
+        $this->result_msg['item_key'] = $item_key;
+        $this->result_msg['script_data'] = $this->result_data;
 
         return $this->result_msg;
     }
@@ -150,12 +157,12 @@ class ScriptClass
     public function scriptAdd($insert_data)
     {
         $temp_obj = new ScriptData();
-        foreach ($insert_data as $key => $value){
+        foreach ($insert_data as $key => $value) {
             $temp_obj->$key = $value;
         }
         $temp_obj->save();
-        $this -> result_msg['item_key'] = $insert_data['item_key'];
-        $this -> result_msg['updated_at'] = time();
+        $this->result_msg['item_key'] = $insert_data['item_key'];
+        $this->result_msg['updated_at'] = time();
 
         return $this->result_msg;
     }
@@ -168,11 +175,11 @@ class ScriptClass
     public function scriptAdminAdd($insert_data)
     {
         $temp_obj = new ScriptAdminData();
-        foreach ($insert_data as $key => $value){
+        foreach ($insert_data as $key => $value) {
             $temp_obj->$key = $value;
         }
         $temp_obj->save();
-        $this -> result_msg['item_key'] = $insert_data['item_key'];
+        $this->result_msg['item_key'] = $insert_data['item_key'];
 
         return $this->result_msg;
     }
@@ -189,19 +196,17 @@ class ScriptClass
         );
         $temp_obj =
             ScriptData::select('user_info.user_id', 'user_info.uid', 'user_info.uname')
-            ->leftJoin('user_info', 'user_info.uid', '=', 'script_data.uid')
-            ->leftJoin('user_status', 'user_status.user_id', '=', 'user_info.user_id')
-            ->whereIn('user_status.access_level', array('21','22','23'))
-            ->groupBy('script_data.uid')
-            ->orderBy('user_info.uname')
-            ->paginate(20);
-        foreach ($temp_obj as $v)
-        {
+                ->leftJoin('user_info', 'user_info.uid', '=', 'script_data.uid')
+                ->leftJoin('user_status', 'user_status.user_id', '=', 'user_info.user_id')
+                ->whereIn('user_status.access_level', array('21', '22', '23'))
+                ->groupBy('script_data.uid')
+                ->orderBy('user_info.uname')
+                ->paginate(20);
+        foreach ($temp_obj as $v) {
             $t_obj['teacher_data'][] = $v->toArray();
         }
-        if(count($temp_obj) > 0)
-        {
-            $t_obj['page_data'] = $temp_obj -> links();
+        if (count($temp_obj) > 0) {
+            $t_obj['page_data'] = $temp_obj->links();
         }
 
         return $t_obj;
@@ -216,17 +221,17 @@ class ScriptClass
     {
         $t_obj = array();
         $t_array = array();
-        if(isset($data['uid'])){
+        if (isset($data['uid'])) {
             $t = ScriptAdminData::where('uid', $data['uid'])
-            ->select(
-            'item_key',
-            'dsc',
-            'updated_at'
-            )
-            ->orderBy('id','desc')
-            ->get();
-            foreach ($t as $v){
-                if(!isset($t_array[$v['item_key']])){
+                ->select(
+                    'item_key',
+                    'dsc',
+                    'updated_at'
+                )
+                ->orderBy('id', 'desc')
+                ->get();
+            foreach ($t as $v) {
+                if (!isset($t_array[$v['item_key']])) {
                     $t_obj[] = array(
                         'item_key' => $v['item_key'],
                         'dsc' => $v['dsc'],
@@ -236,7 +241,7 @@ class ScriptClass
                 }
             }
         }
-        $this->result_msg['chkData'] = $t_obj; 
+        $this->result_msg['chkData'] = $t_obj;
 
         return $this->result_msg;
     }
@@ -249,17 +254,17 @@ class ScriptClass
     {
         $t_obj = array();
         $t = ScriptPrompt::select(
-        'item_key',
-        'dsc'
+            'item_key',
+            'dsc'
         )
-        ->orderBy('item_key','asc')
-        ->get();
-        if($set_key){
-            foreach ($t as $v){
+            ->orderBy('item_key', 'asc')
+            ->get();
+        if ($set_key) {
+            foreach ($t as $v) {
                 $t_obj[$v['item_key']] = $v['dsc'];
             }
-        }else{
-            foreach ($t as $v){
+        } else {
+            foreach ($t as $v) {
                 $t_obj[] = $v;
             }
         }
@@ -274,29 +279,85 @@ class ScriptClass
      */
     public function getPromptData($item_key)
     {
-       $t_obj = array();
+        $t_obj = array();
         $t = ScriptPrompt::where('item_key', $item_key)
-        ->select(
-        'id',
-        'item_key',
-        'dsc'
-        )
-        ->get();
-        foreach ($t as $v){
+            ->select(
+                'id',
+                'item_key',
+                'dsc'
+            )
+            ->get();
+        foreach ($t as $v) {
             $t_obj[] = $v;
         }
-        
+
 
         return $t_obj;
     }
 
-    public function setPromptData(){
-        if($this->input_data['item_key'] AND $this->input_data['dsc'])
-        {
-            ScriptPrompt::where('item_key',$this->input_data['item_key'])
-                ->update(['dsc' => $this->input_data['dsc']]);
+    public function setPromptData()
+    {
+        if ($this->init['item_key'] AND $this->init['dsc']) {
+            ScriptPrompt::where('item_key', $this->init['item_key'])
+                ->update(['dsc' => $this->init['dsc']]);
         }
 
-        return ;
+        return;
+    }
+
+    /**
+     * 回傳指定教師劇本的Excel格式資料
+     */
+    public function getExcelData()
+    {
+        $return_data = array();
+        $map_data = config('script_map.excel_map');
+        $t_array = array();
+        $items = array();
+        //教師寫的資料
+        $t = ScriptData::where('uid', $this->init['uid'])
+            ->select(
+                'item_key',
+                'dsc',
+                'updated_at'
+            )
+            ->orderBy('id', 'DESC')
+            ->get();
+        foreach ($t as $v) {
+            if (!isset($t_array[$v['item_key']])) {
+                $items[$v['item_key']] = array(
+                    'dsc' => $v['dsc'],
+                    'updated_at' => $v['updated_at'],
+                );
+                $t_array[$v['item_key']] = true;
+            }
+        }
+        //管理員寫的資料
+        $t_array = array();
+        $t = ScriptAdminData::where('uid', $this->init['uid'])
+            ->select(
+                'item_key',
+                'dsc',
+                'updated_at'
+            )
+            ->orderBy('id', 'DESC')
+            ->get();
+        foreach ($t as $v) {
+            if (!isset($t_array[$v['item_key']])) {
+                $t_array[$v['item_key']] = true;
+                if(isset($items[$v['item_key']]) && $v['updated_at'] > $items[$v['item_key']]['updated_at'] ){
+                    $items[$v['item_key']] = array(
+                        'dsc' => $v['dsc'],
+                        'updated_at' => $v['updated_at'],
+                    );
+                }
+            }
+        }
+
+        foreach ($map_data as $k => $v){
+            $return_data[$v] = isset($items[$k])?$items[$k]['dsc']:'';
+        }
+
+        return $return_data;
     }
 }

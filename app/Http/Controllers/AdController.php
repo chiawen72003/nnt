@@ -1108,6 +1108,30 @@ class AdController extends Controller
         return view('admin.script.teacher_list', $data);
     }
 
+
+    /**
+     * 教學劇本設計 匯出教師填寫的資料
+     */
+    public function scriptTaExcel()
+    {
+        $fp = Input::all();
+        $data = array();
+        $data['user_data'] = app('request')->session()->get('user_data');
+        if (isset($fp['uid'])) {
+            $excel_tab_title = config('script_map.excel_tab_title');
+            $item = new ScriptClass(array(
+                'uid' => $fp['uid'],
+            ));
+            $excel_data = $item->getExcelData();
+            $excel_obj = new PhpExcel();
+            $excel_obj->init(array(
+                'tab_title' => $excel_tab_title
+            ));
+            $excel_obj ->set_excel_data($excel_data);
+            $excel_obj ->get_script_file();
+        }
+    }
+
     /**
      * 教學劇本設計 後端教學劇本設計資料列表
      */

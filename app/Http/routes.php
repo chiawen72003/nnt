@@ -206,6 +206,8 @@ Route::get('/Ta/Script/DefaultData', ['middleware' => 'TeacherCheck','as' => 'ta
 
 //教學劇本設計 後端教師列表頁面
 Route::get('/Ad/Script/Ta/Page', ['middleware' => 'AdSessionCheck','as' => 'ad.script.ta.page', 'uses' => 'AdController@scriptTaPage']);
+//教學劇本設計 後端教師列表頁面
+Route::get('/Ad/Script/Ta/Excel', ['middleware' => 'AdSessionCheck','as' => 'ad.script.ta.excel', 'uses' => 'AdController@scriptTaExcel']);
 //教學劇本設計 後端教學劇本設計資料列表
 Route::get('/Ad/Script/List', ['middleware' => 'AdSessionCheck','as' => 'ad.script.list', 'uses' => 'AdController@scriptList']);
 //教學劇本設計 後端教學劇本設計資料列表

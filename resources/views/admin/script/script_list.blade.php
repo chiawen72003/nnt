@@ -7,6 +7,7 @@
             <div class="news-wrap">
                 <form id="form-addnews">
                     <div class="links-wrap">
+                        <a class="top-link" href="[! route('ad.script.ta.excel') !]?uid=[! $uid !]" target="_blank" >匯出Excel</a>
                         <a class="top-link" href="[! route('ad.script.ta.page') !]" >回上一頁</a>
                     </div>
                     <table class="table-manager">
