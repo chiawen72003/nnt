@@ -135,14 +135,16 @@ class PhpExcel
     {
         header('Content-type: application/vnd.ms-excel');
         header('Content-Disposition: attachment; filename="' . $this->file_name . '"');
-        $sheet = $this->spreadsheet_obj->getActiveSheet();
+        //外部讀取檔案
+        $spreadsheet = IOFactory::load(public_path().'\demo_file\script_demo.xls');
+        $sheet = $spreadsheet->getActiveSheet();
         foreach ($this->input_data['tab_title'] as $k => $v) {
             $sheet->setCellValue($k, $v);
         }
         foreach ($this->excel_data as $k => $v) {
             $sheet->setCellValue($k, $v);
         }
-        $writer = new Excel5($this->spreadsheet_obj);
+        $writer = new Excel5($spreadsheet);
         $writer->save('php://output');
     }
 
