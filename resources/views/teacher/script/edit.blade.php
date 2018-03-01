@@ -18,6 +18,9 @@
       </div>
       <div id="page-container">
         <div id="page-body">
+          <div class="path-download">
+            <a href="[! route('ta.script.excel') !]" target="_blank" class="download-excel"></a>
+          </div>
           <div class="path-bg">
           <!-- step1 -->
           <div class="step step1">

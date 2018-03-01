@@ -530,4 +530,22 @@ class TAController extends Controller
         return json_encode($result);
     }
 
+    /**
+     * 教學劇本設計 匯出教師填寫的資料
+     */
+    public function scriptTaExcel()
+    {
+        $uid = app('request')->session()->get('user_data.uid');
+        $excel_tab_title = config('script_map.excel_tab_title');
+        $item = new ScriptClass(array(
+            'uid' => $uid,
+        ));
+        $excel_data = $item->getExcelData();
+        $excel_obj = new PhpExcel();
+        $excel_obj->init(array(
+            'tab_title' => $excel_tab_title
+        ));
+        $excel_obj ->set_excel_data($excel_data);
+        $excel_obj ->get_script_file();
+    }
 }
