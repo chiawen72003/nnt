@@ -27,80 +27,82 @@
             <a class="item bg-black open-modal" style="height: 65px;" id="obj_1" obj_title = "閱讀文本">
               閱讀文本
               <span class="popovers" id="Prompt_obj_1"></span>
+              <span class="tip">最多五個字...</span>
             </a>
-            <a class="item bg-blue arrow open-modal" style="top: 75px;" id="obj_2" obj_title = "主要問題">
+            <a class="item bg-blue arrow open-modal" style="top: 90px;" id="obj_2" obj_title = "主要問題">
               主要問題
               <span class="popovers" id="Prompt_obj_2"></span>
+              <span class="tip">最多五個字...</span>
               <span>Main Question</span>
             </a>
-            <a class="item bg-white item-go  open-modal" style="top: 150px; left: 30px;height: 65px;" id="obj_3" obj_title = "學生作答1">
+            <a class="item bg-white item-go  open-modal" style="top: 180px; left: 30px;height: 65px;" id="obj_3" obj_title = "學生作答1">
               學生作答1
-              <span class="popovers" id="Prompt_obj_3"></span>
+              <span class="popovers" id="Prompt_obj_3"></span><span class="tip">最多五個字...</span>
             </a>
           </div>
           <!-- step2 -->
           <div class="step step2" style="left: 244px;top: 129px;">
             <a class="item bg-red border-red open-modal" id="obj_4" obj_title = "被誘導錯答">被誘導錯答
-              <span class="popovers" id="Prompt_obj_4"></span>
+              <span class="popovers" id="Prompt_obj_4"></span><span class="tip">最多五個字...</span>
             </a>
-            <a class="item bg-red border-red open-modal" style="top: 82px;" id="obj_5" obj_title = "不好的答案">不好的答案<span class="popovers" id="Prompt_obj_5"></span></a>
-            <a class="item bg-red border-red open-modal" style="top: 165px;" id="obj_6" obj_title = "其他答案">其他答案<span class="popovers" id="Prompt_obj_6"></span></a>
-            <a class="item bg-red border-red open-modal" style="top: 270px;" id="obj_7" obj_title = "空白">空白<span class="popovers" id="Prompt_obj_7"></span><span>Blank</span></a>
+            <a class="item bg-red border-red open-modal" style="top: 92px;" id="obj_5" obj_title = "不好的答案">不好的答案<span class="popovers" id="Prompt_obj_5"></span><span class="tip">最多五個字...</span></a>
+            <a class="item bg-red border-red open-modal" style="top: 178px;" id="obj_6" obj_title = "其他答案">其他答案<span class="popovers" id="Prompt_obj_6"></span><span class="tip">最多五個字...</span></a>
+            <a class="item bg-red border-red open-modal" style="top: 270px;" id="obj_7" obj_title = "空白">空白<span class="popovers" id="Prompt_obj_7"></span><span class="tip">最多五個字...</span><span>Blank</span></a>
           </div>
           <!-- step3 -->
           <div class="step step3" style="left: 407px;top: 129px;">
-            <a class="item big-item bg-blue notched open-modal" id="obj_8" obj_title = "教師正向回饋">教師正向回饋<span class="popovers" id="Prompt_obj_8"></span><span>Pos Fdbk</span></a>
-            <a class="item big-item bg-blue notched open-modal" style="top: 82px;" id="obj_9" obj_title = "後設認知的回饋">後設認知的回饋<span class="popovers" id="Prompt_obj_9"></span></a>
-            <a class="item big-item bg-blue notched open-modal" style="top: 158px;" id="obj_10" obj_title = "教師中性回饋">教師中性回饋<span class="popovers" id="Prompt_obj_10"></span><span>Neut Fdbk</span></a>
-            <a class="item big-item bg-blue notched open-modal" style="top: 270px;" id="obj_11" obj_title = "教師激發反應">教師激發反應<span class="popovers" id="Prompt_obj_11"></span><span>Pump</span></a>
+            <a class="item big-item bg-blue notched open-modal" id="obj_8" obj_title = "教師正向回饋">教師正向回饋<span class="popovers" id="Prompt_obj_8"></span><span class="tip">最多五個字...</span><span>Pos Fdbk</span></a>
+            <a class="item big-item bg-blue notched open-modal" style="top: 92px;" id="obj_9" obj_title = "後設認知的回饋">後設認知的回饋<span class="popovers" id="Prompt_obj_9"></span><span class="tip">最多五個字...</span></a>
+            <a class="item big-item bg-blue notched open-modal" style="top: 172px;" id="obj_10" obj_title = "教師中性回饋">教師中性回饋<span class="popovers" id="Prompt_obj_10"></span><span class="tip">最多五個字...</span><span>Neut Fdbk</span></a>
+            <a class="item big-item bg-blue notched open-modal" style="top: 270px;" id="obj_11" obj_title = "教師激發反應">教師激發反應<span class="popovers" id="Prompt_obj_11"></span><span class="tip">最多五個字...</span><span>Pump</span></a>
           </div>
           <!-- step4 -->
           <div class="step step4" style="left: 606px;top: 84px;">
-            <a class="item big-item bg-black  open-modal" id="obj_12" obj_title = "教師總結摘要">教師總結摘要<span class="popovers" id="Prompt_obj_12"></span><span>Summary</span></a>
-            <a class="item big-item bg-white border-style1  open-modal" style="top: 95px;" id="obj_13" obj_title = "符合預期答案">符合預期答案<span class="popovers" id="Prompt_obj_13"></span><span>Get Expectation</span></a>
+            <a class="item big-item bg-black  open-modal" id="obj_12" obj_title = "教師總結摘要">教師總結摘要<span class="popovers" id="Prompt_obj_12"></span><span class="tip">最多五個字...</span><span>Summary</span></a>
+            <a class="item big-item bg-white border-style1  open-modal" style="top: 95px;" id="obj_13" obj_title = "符合預期答案">符合預期答案<span class="popovers" id="Prompt_obj_13"></span><span class="tip">最多五個字...</span><span>Get Expectation</span></a>
           </div>
           <!-- step5 -->
           <div class="step step5" style="left: 790px;top: 84px;">
-            <a class="item bg-black  open-modal" id="obj_14" obj_title = "總結對話">總結對話<span class="popovers" id="Prompt_obj_14"></span><span>Closing</span></a>
-            <a class="item bg-blue border-yellow2  open-modal" style="top: 95px;" id="obj_15" obj_title = "提供線索">提供線索<span class="popovers" id="Prompt_obj_15"></span><span>Hint</span></a>
+            <a class="item bg-black  open-modal" id="obj_14" obj_title = "總結對話">總結對話<span class="popovers" id="Prompt_obj_14"></span><span class="tip">最多五個字...</span><span>Closing</span></a>
+            <a class="item bg-blue border-yellow2  open-modal" style="top: 95px;" id="obj_15" obj_title = "提供線索">提供線索<span class="popovers" id="Prompt_obj_15"></span><span class="tip">最多五個字...</span><span>Hint</span></a>
           </div>
           <!-- step6 -->
           <div class="step step6" style="left: 939px;top: 84px;">
-            <a class="item bg-yellow border-yellow arrow  open-modal" id="obj_16" obj_title = "對話結束">對話結束<span class="popovers" id="Prompt_obj_16"></span><span>End</span></a>
-            <a class="item bg-white  open-modal" style="top: 95px;" id="obj_17" obj_title = "學生回答2">學生回答2<span class="popovers" id="Prompt_obj_7"></span><span>User Answer</span></a>
+            <a class="item bg-yellow border-yellow arrow  open-modal" id="obj_16" obj_title = "對話結束">對話結束<span class="popovers" id="Prompt_obj_16"></span><span class="tip">最多五個字...</span><span>End</span></a>
+            <a class="item bg-white  open-modal" style="top: 95px;" id="obj_17" obj_title = "學生回答2">學生回答2<span class="popovers" id="Prompt_obj_7"></span><span class="tip">最多五個字...</span><span>User Answer</span></a>
           </div>
           <!-- step7 -->
-          <div class="step step7" style="left: 1104px;top: 105px;">
-            <a class="item bg-red border-red  open-modal" id="obj_18" obj_title = "不好的答案">不好的答案<span class="popovers" id="Prompt_obj_18"></span><span>Bad</span></a>
-            <a class="item bg-red border-red  open-modal" style="top: 78px;" id="obj_19" obj_title = "其他答案">其他答案<span class="popovers" id="Prompt_obj_19"></span><span>Otherwise</span></a>
-            <a class="item bg-green border-green  open-modal" style="top: 162px;" id="obj_20" obj_title = "正確答案">正確答案<span class="popovers" id="Prompt_obj_20"></span><span>Good</span></a>
+          <div class="step step7" style="left: 1104px;top: 84px;">
+            <a class="item bg-red border-red  open-modal" id="obj_18" obj_title = "不好的答案">不好的答案<span class="popovers" id="Prompt_obj_18"></span><span class="tip">最多五個字...</span><span>Bad</span></a>
+            <a class="item bg-red border-red  open-modal" style="top: 92px;" id="obj_19" obj_title = "其他答案">其他答案<span class="popovers" id="Prompt_obj_19"></span><span class="tip">最多五個字...</span><span>Otherwise</span></a>
+            <a class="item bg-green border-green  open-modal" style="top: 184px;" id="obj_20" obj_title = "正確答案">正確答案<span class="popovers" id="Prompt_obj_20"></span><span class="tip">最多五個字...</span><span>Good</span></a>
           </div>
           <!-- step8 -->
-          <div class="step step8" style="left: 1269px;top: 105px;">
-            <a class="item big-item bg-blue notched  open-modal" id="obj_21" obj_title = "教師正向回饋">教師正向回饋<span class="popovers" id="Prompt_obj_21"></span><span>Pos Fdbk</span></a>
-            <a class="item big-item bg-blue notched  open-modal" style="top: 78px;" id="obj_22" obj_title = "教師中性回饋">教師中性回饋<span class="popovers" id="Prompt_obj_22"></span><span>Neut Fdbk</span></a>
-            <a class="item big-item bg-blue notched  open-modal" style="top: 164px;" id="obj_23" obj_title = "教師激發反應">教師激發反應<span class="popovers" id="Prompt_obj_23"></span><span>Pump</span></a>
-            <a class="item bg-blue border-yellow2  open-modal" style="top: 47px;left:214px" id="obj_24" obj_title = "教師明確提示">教師明確提示<span class="popovers" id="Prompt_obj_24"></span><span>Prompt</span></a>
-            <a class="item bg-white  open-modal" style="top: 152px;left:214px" id="obj_25" obj_title = "學生回答3">學生回答3<span class="popovers" id="Prompt_obj_25"></span>span>User Answer</span></a>
+          <div class="step step8" style="left: 1269px;top: 84px;">
+            <a class="item big-item bg-blue notched  open-modal" id="obj_21" obj_title = "教師正向回饋">教師正向回饋<span class="popovers" id="Prompt_obj_21"></span><span class="tip">最多五個字...</span><span>Pos Fdbk</span></a>
+            <a class="item big-item bg-blue notched  open-modal" style="top: 92px;" id="obj_22" obj_title = "教師中性回饋">教師中性回饋<span class="popovers" id="Prompt_obj_22"></span><span class="tip">最多五個字...</span><span>Neut Fdbk</span></a>
+            <a class="item big-item bg-blue notched  open-modal" style="top: 183px;" id="obj_23" obj_title = "教師激發反應">教師激發反應<span class="popovers" id="Prompt_obj_23"></span><span class="tip">最多五個字...</span><span>Pump</span></a>
+            <a class="item big-item bg-blue border-yellow2  open-modal" style="top: 47px;left:200px" id="obj_24" obj_title = "教師明確提示">教師明確提示<span class="popovers" id="Prompt_obj_24"></span><span class="tip">最多五個字...</span><span>Prompt</span></a>
+            <a class="item big-item bg-white open-modal" style="top: 152px;left:200px" id="obj_25" obj_title = "學生回答3">學生回答3<span class="popovers" id="Prompt_obj_25"></span><span class="tip">最多五個字...</span><span>User Answer</span></a>
           </div>
           <!-- step-bottom -->
-          <div class="step step-bottom" style="left: 823px;top: 417px;">
-            <a class="item bg-black border-yellow2 arrow  open-modal" id="obj_26" obj_title = "教師判定">教師判定<span class="popovers" id="Prompt_obj_26"></span><span>Tutor Assertion</span></a>
-            <a class="item bg-black  open-modal" style="left: 150px;" id="obj_27" obj_title = "教師提供答案">教師提供答案<span class="popovers" id="Prompt_obj_27"></span><span>Tutor Answer</span></a>
-            <a class="item big-item bg-blue notched  open-modal" style="left: 330px;top: -43px;" id="obj_28" obj_title = "教師正向回饋">教師正向回饋<span class="popovers" id="Prompt_obj_28"></span><span>Pos Fdbk</span></a>
-            <a class="item big-item bg-blue notched  open-modal" style="left: 330px;top: 35px;" id="obj_29" obj_title = "教師正向回饋">教師正向回饋<span class="popovers" id="Prompt_obj_29"></span><span>Pos Fdbk</span></a>
-            <a class="item bg-green border-green  open-modal" style="left: 531px;top: -43px;" id="obj_30" obj_title = "正確答案">正確答案<span class="popovers" id="Prompt_obj_30"></span>span>Good</span></a>
-            <a class="item bg-red border-red  open-modal" style="left: 531px;top: 35px;" id="obj_31" obj_title = "錯誤答案">錯誤答案<span class="popovers" id="Prompt_obj_31"></span><span>Bad</span></a>
+          <div class="step step-bottom" style="left: 823px;top: 435px;">
+            <a class="item bg-black border-yellow2 arrow  open-modal" id="obj_26" obj_title = "教師判定">教師判定<span class="popovers" id="Prompt_obj_26"></span><span class="tip">最多五個字...</span><span>Tutor Assertion</span></a>
+            <a class="item bg-black  open-modal" style="left: 150px;" id="obj_27" obj_title = "教師提供答案">教師提供答案<span class="popovers" id="Prompt_obj_27"></span><span class="tip">最多五個字...</span><span>Tutor Answer</span></a>
+            <a class="item big-item bg-blue notched  open-modal" style="left: 330px;top: -43px;" id="obj_28" obj_title = "教師正向回饋">教師正向回饋<span class="popovers" id="Prompt_obj_28"></span><span class="tip">最多五個字...</span><span>Pos Fdbk</span></a>
+            <a class="item big-item bg-blue notched  open-modal" style="left: 330px;top: 50px;" id="obj_29" obj_title = "教師正向回饋">教師正向回饋<span class="popovers" id="Prompt_obj_29"></span><span class="tip">最多五個字...</span><span>Pos Fdbk</span></a>
+            <a class="item bg-green border-green  open-modal" style="left: 531px;top: -43px;" id="obj_30" obj_title = "正確答案">正確答案<span class="popovers" id="Prompt_obj_30"></span><span class="tip">最多五個字...</span><span>Good</span></a>
+            <a class="item bg-red border-red  open-modal" style="left: 531px;top: 50px;" id="obj_31" obj_title = "錯誤答案">錯誤答案<span class="popovers" id="Prompt_obj_31"></span><span class="tip">最多五個字...</span><span>Bad</span></a>
           </div>
           <!-- step-top -->
           <div class="step step-top" style="left: 244px;top: -27px;">
-            <a class="item bg-green border-green  open-modal" id="obj_32" obj_title = "正確答案">正確答案<span class="popovers" id="Prompt_obj_32"></span><span>Good</span></a>
-            <a class="item big-item bg-blue notched open-modal" style="left: 163px" id="obj_33" obj_title = "教師正向回饋">教師正向回饋<span class="popovers" id="Prompt_obj_33"></span><span>Pos Fdbk</span></a>
-            <a class="item bg-black open-modal" style="left: 361px;" id="obj_34" obj_title = "教師提問">教師提問<span class="popovers" id="Prompt_obj_34"></span><span>Question</span></a>
-            <a class="item bg-white open-modal" style="left: 524px;" id="obj_35" obj_title = "學生回答2">學生回答2<span class="popovers" id="Prompt_obj_35"></span><span>User Answer</span></a>
-            <a class="item big-item bg-blue notched open-modal" style="left: 688px" id="obj_36" obj_title = "教師正向回饋">教師正向回饋<span class="popovers" id="Prompt_obj_36"></span><span>Pos Fdbk</span></a>
-            <a class="item bg-black open-modal" style="left: 887px;" id="obj_37" obj_title = "教師總結">教師總結<span class="popovers" id="Prompt_obj_37"></span><span>Summary</span></a>
-            <a class="item bg-yellow border-yellow arrow open-modal" style="left: 1044px;" id="obj_38" obj_title = "對話結束">對話結束<span class="popovers" id="Prompt_obj_38"></span><span>End</span></a>
+            <a class="item bg-green border-green  open-modal" id="obj_32" obj_title = "正確答案">正確答案<span class="popovers" id="Prompt_obj_32"></span><span class="tip">最多五個字...</span><span>Good</span></a>
+            <a class="item big-item bg-blue notched open-modal" style="left: 163px" id="obj_33" obj_title = "教師正向回饋">教師正向回饋<span class="popovers" id="Prompt_obj_33"></span><span class="tip">最多五個字...</span><span>Pos Fdbk</span></a>
+            <a class="item bg-black open-modal" style="left: 361px;" id="obj_34" obj_title = "教師提問">教師提問<span class="popovers" id="Prompt_obj_34"></span><span class="tip">最多五個字...</span><span>Question</span></a>
+            <a class="item bg-white open-modal" style="left: 524px;" id="obj_35" obj_title = "學生回答2">學生回答2<span class="popovers" id="Prompt_obj_35"></span><span class="tip">最多五個字...</span><span>User Answer</span></a>
+            <a class="item big-item bg-blue notched open-modal" style="left: 688px" id="obj_36" obj_title = "教師正向回饋">教師正向回饋<span class="popovers" id="Prompt_obj_36"></span><span class="tip">最多五個字...</span><span>Pos Fdbk</span></a>
+            <a class="item bg-black open-modal" style="left: 887px;" id="obj_37" obj_title = "教師總結">教師總結<span class="popovers" id="Prompt_obj_37"></span><span class="tip">最多五個字...</span><span>Summary</span></a>
+            <a class="item bg-yellow border-yellow arrow open-modal" style="left: 1044px;" id="obj_38" obj_title = "對話結束">對話結束<span class="popovers" id="Prompt_obj_38"></span><span class="tip">最多五個字...</span><span>End</span></a>
           </div>
           </div>
         </div>
